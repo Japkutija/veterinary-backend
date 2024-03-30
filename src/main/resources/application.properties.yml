@@ -1,0 +1,10 @@
+spring:
+  jpa:
+    database: MYSQL
+  application:
+    name: Veterinary Clinic Backend Service
+  datasource:
+    url: jdbc:mysql://localhost:3306/veterinary
+    username: root
+    password: admin
+    driver-class-name: com.mysql.cj.jdbc.Driver
