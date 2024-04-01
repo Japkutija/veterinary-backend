@@ -28,7 +28,7 @@ public class Treatment {
 
     @Column(name = "diagnosis", nullable = false, length = 255)
     @NotNull
-    private Text diagnosis;
+    private String diagnosis;
 
     @Column(name = "treatment_discipline", nullable = false, length = 50)
     @NotNull
