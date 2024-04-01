@@ -37,14 +37,14 @@ public class Pet {
     @NotNull
     private String nickname;
 
-    @Column(name = "species", nullable = false, length = 50)
+    /*@Column(name = "species", nullable = false, length = 50)
     @NotNull
-    private String species;
+    private String species;*/
 
-    @Column(name = "breed", nullable = false, length = 50)
+    /*@Column(name = "breed", nullable = false, length = 50)
     @NotNull
     private String breed;
-
+*/
 
     @Enumerated(EnumType.STRING)
     @Column(name = "gender", nullable = false)
@@ -69,10 +69,23 @@ public class Pet {
     private Owner owner;
 
     @OneToMany(mappedBy = "pet", cascade = CascadeType.ALL, orphanRemoval = true)
-    // If the vaccination is removed from the list, it will be removed from the database
     private List<Vaccination> vaccinations = new ArrayList<>();
 
     @OneToMany(mappedBy = "pet", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Appointment> appointments = new ArrayList<>();
+
+    @OneToMany(mappedBy = "pet", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<MedicalRecord> medicalRecords = new ArrayList<>();
+
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "species_id", nullable = false)
+    @NotNull
+    private Species species;
+
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "breed_id", nullable = false)
+    @NotNull
+    private Breed breed;
+
 
 }

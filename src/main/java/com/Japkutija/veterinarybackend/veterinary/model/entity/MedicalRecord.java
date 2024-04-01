@@ -2,6 +2,7 @@ package com.Japkutija.veterinarybackend.veterinary.model.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
+import lombok.Data;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 import org.w3c.dom.Text;
@@ -11,6 +12,7 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "medical_record")
+@Data
 public class MedicalRecord {
 
     @Id
