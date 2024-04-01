@@ -56,4 +56,7 @@ public class Owner {
     @OneToMany(mappedBy = "owner")
     private List<Pet> pets = new ArrayList<>();
 
+    @OneToMany(mappedBy = "owner")
+    private List<Bill> bills = new ArrayList<>();
+
 }

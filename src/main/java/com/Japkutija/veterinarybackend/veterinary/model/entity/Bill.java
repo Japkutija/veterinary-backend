@@ -25,7 +25,7 @@ public class Bill {
     @Column(name = "bill_uuid", nullable = false, unique = true)
     @JdbcTypeCode(SqlTypes.VARCHAR)
     @NotNull
-    private UUID billUuid;
+    private UUID uuid;
 
     @Column(name = "bill_number", nullable = false, unique = true)
     @NotNull
@@ -43,5 +43,9 @@ public class Bill {
     @Column(name = "status", nullable = false, length = 50)
     @NotNull
     private BillStatus status;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "owner_id", nullable = false)
+    private Owner owner;
 
 }
