@@ -72,4 +72,7 @@ public class Pet {
     // If the vaccination is removed from the list, it will be removed from the database
     private List<Vaccination> vaccinations = new ArrayList<>();
 
+    @OneToMany(mappedBy = "pet", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Appointment> appointments = new ArrayList<>();
+
 }
