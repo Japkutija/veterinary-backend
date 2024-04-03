@@ -1,0 +1,17 @@
+treatment_id,diagnosis,outcome,treatment_date,treatment_discipline,treatment_uuid,pet_id
+1,Mild cough,Recovered,2022-01-10,General Checkup,7f19b159-f46b-4ab6-af43-7490e2c6ba38,1
+2,Limping right leg,Physical Therapy,2022-01-15,Orthopedics,f54efdf0-bd75-4533-8274-5b5b918e737d,1
+3,Allergic reaction,Condition Improved,2022-01-20,Dermatology,5f3052ee-f013-44ad-8bf0-8215d4eb2a4b,2
+4,Dental cleaning,Successful,2022-01-25,Dentistry,82d67df0-d4c0-45f5-9e52-074d7a176d11,3
+5,Routine vaccination,No side effects,2022-02-01,Preventive Care,d9ad3cfe-9c93-4c9f-807f-a886aad8d0c6,3
+6,Overweight,Diet plan initiated,2022-02-05,Nutrition,e5e6e5b9-2de1-4325-bb8e-4d2e86c64817,4
+7,Skin infection,Fully healed,2022-02-10,Dermatology,6159ffdc-d6dc-4650-a462-3cd1f2926f8d,4
+8,Annual check-up,Good health,2022-02-15,General Checkup,38286144-5c54-471b-b3b8-0c44c3f8b2fa,5
+9,Ear infection,Treated with antibiotics,2022-02-20,Otolaryngology,2024763f-addf-47a6-b1b1-b62fa7dfe6a0,5
+10,Eye discharge,Condition managed,2022-02-25,Ophthalmology,1aaedeca-b300-45ac-af8a-1071112dad1f,6
+11,Spay surgery,Recovered,2022-03-01,Surgery,33b6aa23-4928-4819-b7c9-d909fda182dc,6
+12,Neutering,Healing,2022-03-05,Surgery,644b0d7d-2320-496e-a024-9d0da3e2826c,7
+13,Gastrointestinal upset,Resolved,2022-03-10,Internal Medicine,79083b68-edf8-45b4-8b7b-8d605ef4981a,7
+14,Routine vaccination,No side effects,2022-03-15,Preventive Care,81c3172c-7a28-42b8-b061-c10202cf8bef,8
+15,Foreign body ingestion,Surgery successful,2022-03-20,Surgery,3b6fec94-40ab-4dd9-a190-d0cafbfe87d8,8
+16,Anxiety,Behavioral therapy started,2022-03-25,Behavioral,5e54314b-3dbb-48c4-8bd8-172e2fb1842d,9

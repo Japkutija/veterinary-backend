@@ -37,7 +37,7 @@ public class Inventory {
     @Positive
     private int quantityInStock;
 
-    @Column(name = "reoder_level", nullable = false)
+    @Column(name = "reorder_level", nullable = false)
     @NotNull
     @Positive
     private int reorderLevel;
