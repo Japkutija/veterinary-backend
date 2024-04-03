@@ -8,7 +8,7 @@ import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
 import java.math.BigDecimal;
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.UUID;
 
 @Entity
@@ -33,7 +33,7 @@ public class Bill {
 
     @Column(name = "date_of_issue", nullable = false)
     @NotNull
-    private Date dateOfIssue;
+    private LocalDate dateOfIssue;
 
     @Column(name = "total_amount", nullable = false, precision = 10, scale = 2)
     @NotNull

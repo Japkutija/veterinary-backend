@@ -1,0 +1,4 @@
+appointment_id,appointment_date,appointment_time,reason, status,appointment_uuid,bill_id,pet_id
+1,2024-04-02
+2,,,,,,,
+3,,,,,,,
