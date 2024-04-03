@@ -6,6 +6,7 @@ import lombok.Data;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.UUID;
 
@@ -31,7 +32,7 @@ public class Vaccination {
 
     @Column(name = "date_of_vaccination", nullable = false)
     @NotNull
-    private Date dateOfVaccination;
+    private LocalDate dateOfVaccination;
 
     @Column(name = "validity", nullable = false)
     @NotNull
