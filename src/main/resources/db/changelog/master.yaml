@@ -12,6 +12,10 @@ databaseChangeLog:
   - include:
       file: classpath:db/changelog/006-create-vaccination-table.yaml
   - include:
-      file: classpath:db/changelog/007-create-appointment.yaml
+      file: classpath:db/changelog/007-create-appointment-table.yaml
   - include:
-      file: classpath:db/changelog/008-create-medical-record.yaml
+      file: classpath:db/changelog/008-create-medical-record-table.yaml
+  - include:
+      file: classpath:db/changelog/009-create-inventory-table.yaml
+  - include:
+      file: classpath:db/changelog/010-create-treatment-table.yaml

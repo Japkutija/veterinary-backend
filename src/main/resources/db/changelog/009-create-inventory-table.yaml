@@ -1,0 +1,41 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-inventory-table
+      author: Japkutija
+      changes:
+        - createTable:
+            tableName: inventory
+            columns:
+              - column:
+                  name: inventory_id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: inventory_uuid
+                  type: uuid
+                  constraints:
+                    nullable: false
+                    unique: true
+              - column:
+                  name: item_name
+                  type: varchar(50)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: item_description
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: quantity_in_stock
+                  type: integer
+                  constraints:
+                    nullable: false
+              - column:
+                  name: reorder_level
+                  type: integer
+                  constraints:
+                    nullable: false
