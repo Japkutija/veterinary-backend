@@ -11,3 +11,5 @@ databaseChangeLog:
       file: classpath:db/changelog/005-create-bill-table.yaml
   - include:
       file: classpath:db/changelog/006-create-vaccination-table.yaml
+  - include:
+      file: classpath:db/changelog/007-create-appointment.yaml
