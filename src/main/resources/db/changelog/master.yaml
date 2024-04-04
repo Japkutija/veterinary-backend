@@ -19,3 +19,5 @@ databaseChangeLog:
       file: classpath:db/changelog/009-create-inventory-table.yaml
   - include:
       file: classpath:db/changelog/010-create-treatment-table.yaml
+  - include:
+        file: classpath:db/changelog/011-add-foreign-key-constraints.yaml
