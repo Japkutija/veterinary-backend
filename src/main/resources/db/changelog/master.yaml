@@ -7,3 +7,5 @@ databaseChangeLog:
       file: classpath:db/changelog/003-create-breed-table.yaml
   - include:
       file: classpath:db/changelog/004-create-pet-table.yaml
+  - include:
+      file: classpath:db/changelog/005-create-bill-table.yaml
