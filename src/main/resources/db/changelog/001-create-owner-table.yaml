@@ -1,0 +1,78 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1
+      author: Japkutija
+      changes:
+        - createTable:
+            tableName: owner
+            columns:
+              - column:
+                  name: owner_id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: owner_uuid
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+                    unique: true
+              - column:
+                  name: first_name
+                  type: varchar(50)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: last_name
+                  type: varchar(50)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: email
+                  type: varchar(50)
+              - column:
+                  name: phone_number
+                  type: varchar(20)
+              - column:
+                  name: address
+                  type: varchar(255)
+              - column:
+                  name: EMSO
+                  type: varchar(13)
+                  constraints:
+                    unique: true
+              - column:
+                  name: date_of_birth
+                  type: date
+                  constraints:
+                    nullable: false
+
+  - changeSet:
+      id: 2-add-foreign-key-constraint-to-pets
+      author: Japkutija
+      changes:
+        - addForeignKeyConstraint:
+            baseTableName: pets
+            baseColumnNames: owner_id
+            referencedTableName: owner
+            referencedColumnNames: owner_id
+            constraintName: fk_pets_owner
+            onDelete: CASCADE
+            onUpdate: CASCADE
+
+  - changeSet:
+      id: 3-add-foreign-key-constraint-to-bills
+      author: Japkutija
+      changes:
+        - addForeignKeyConstraint:
+            baseTableName: bills
+            baseColumnNames: owner_id
+            referencedTableName: owner
+            referencedColumnNames: owner_id
+            constraintName: fk_bills_owner
+            onDelete: CASCADE
+            onUpdate: CASCADE
+                
+
