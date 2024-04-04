@@ -1,0 +1,46 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-treatment-table
+      author: Japkutija
+      changes:
+        - createTable:
+            tableName: treatment
+            columns:
+              - column:
+                  name: treatment_id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: treatment_uuid
+                  type: uuid
+                  constraints:
+                    nullable: false
+                    unique: true
+              - column:
+                  name: diagnosis
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: treatment_discipline
+                  type: varchar(50)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: treatment_date
+                  type: date
+                  constraints:
+                    nullable: false
+              - column:
+                  name: outcome
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: pet_id
+                  type: bigint
+                  constraints:
+                    nullable: false
