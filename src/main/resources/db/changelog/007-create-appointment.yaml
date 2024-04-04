@@ -1,6 +1,56 @@
 databaseChangeLog:
   - changeSet:
-      id: 0
-      author: admin
+      id: 1-create-appointment-table
+      author: Japkutija
       changes:
-        -
+        - createTable:
+            tableName: appointment
+            columns:
+              - column:
+                  name: appointment_id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: appointment_uuid
+                  type: uuid
+                  constraints:
+                    nullable: false
+                    unique: true
+              - column:
+                  name: appointment_date
+                  type: date
+                  constraints:
+                    nullable: false
+              - column:
+                  name: appointment_time
+                  type: timestamp
+                  constraints:
+                    nullable: false
+              - column:
+                  name: reason
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: status
+                  type: varchar(50)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: pet_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+              - column:
+                  name: owner_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+              - column:
+                  name: bill_id
+                  type: bigint
+                  constraints:
+                    nullable: false
