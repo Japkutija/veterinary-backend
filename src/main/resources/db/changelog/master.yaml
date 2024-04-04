@@ -1,6 +1,5 @@
 databaseChangeLog:
-  - changeSet:
-      id: 0
-      author: admin
-      changes:
-        -s
+  - include:
+      file: classpath:db/changelog/001-create-owner-table.yaml
+  - include:
+      file: classpath:db/changelog/002-create-species-table.yaml

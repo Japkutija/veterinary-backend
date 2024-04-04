@@ -1,0 +1,28 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-species-table
+      author: your_username
+      changes:
+        - createTable:
+            tableName: species
+            columns:
+              - column:
+                  name: species_id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: species_uuid
+                  type: varchar(36)
+                  constraints:
+                    nullable: false
+                    unique: true
+              - column:
+                  name: species_name
+                  type: varchar(50)
+                  constraints:
+                    nullable: false
+
+
