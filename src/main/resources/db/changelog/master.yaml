@@ -4,4 +4,6 @@ databaseChangeLog:
   - include:
       file: classpath:db/changelog/002-create-species-table.yaml
   - include:
-        file: classpath:db/changelog/003-create-breed-table.yaml
+      file: classpath:db/changelog/003-create-breed-table.yaml
+  - include:
+      file: classpath:db/changelog/004-create-pet-table.yaml
