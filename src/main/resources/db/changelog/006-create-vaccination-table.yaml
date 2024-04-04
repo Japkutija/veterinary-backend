@@ -1,0 +1,41 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-vaccination-table
+      author: Japkutija
+      changes:
+        - createTable:
+            tableName: vaccination
+            columns:
+              - column:
+                  name: vaccination_id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: vaccination_uuid
+                  type: uuid
+                  constraints:
+                    nullable: false
+                    unique: true
+              - column:
+                  name: vaccine_type
+                  type: varchar(50)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: date_of_vaccination
+                  type: date
+                  constraints:
+                    nullable: false
+              - column:
+                  name: validity
+                  type: date
+                  constraints:
+                    nullable: false
+              - column:
+                  name: pet_id
+                  type: bigint
+                  constraints:
+                    nullable: false
