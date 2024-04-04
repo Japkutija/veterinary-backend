@@ -3,3 +3,5 @@ databaseChangeLog:
       file: classpath:db/changelog/001-create-owner-table.yaml
   - include:
       file: classpath:db/changelog/002-create-species-table.yaml
+  - include:
+        file: classpath:db/changelog/003-create-breed-table.yaml

@@ -1,28 +1,31 @@
 databaseChangeLog:
   - changeSet:
-      id: create-species-table
-      author: your_username
+      id: 1-create-breed-table
+      author: Japkutija
       changes:
         - createTable:
-            tableName: species
+            tableName: breed
             columns:
               - column:
-                  name: species_id
+                  name: breed_id
                   type: bigint
                   autoIncrement: true
                   constraints:
                     primaryKey: true
                     nullable: false
               - column:
-                  name: species_uuid
+                  name: breed_uuid
                   type: uuid
                   constraints:
                     nullable: false
                     unique: true
               - column:
-                  name: species_name
+                  name: breed_name
                   type: varchar(50)
                   constraints:
                     nullable: false
-
-
+              - column:
+                  name: species_id
+                  type: bigint
+                  constraints:
+                    nullable: false
