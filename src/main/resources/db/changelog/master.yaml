@@ -9,3 +9,5 @@ databaseChangeLog:
       file: classpath:db/changelog/004-create-pet-table.yaml
   - include:
       file: classpath:db/changelog/005-create-bill-table.yaml
+  - include:
+      file: classpath:db/changelog/006-create-vaccination-table.yaml
