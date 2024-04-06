@@ -1,0 +1,149 @@
+databaseChangeLog:
+  - changeSet:
+      id: fk-pet-owner
+      author: Japkutija
+      changes:
+        - addForeignKeyConstraint:
+            baseTableName: pet
+            baseColumnNames: owner_id
+            referencedTableName: owner
+            referencedColumnNames: owner_id
+            constraintName: fk_pet_owner
+            onDelete: CASCADE
+            onUpdate: CASCADE
+
+  - changeSet:
+      id: fk-pet-species
+      author: Japkutija
+      changes:
+        - addForeignKeyConstraint:
+            baseTableName: pet
+            baseColumnNames: species_id
+            referencedTableName: species
+            referencedColumnNames: species_id
+            constraintName: fk_pet_species
+            onDelete: CASCADE
+            onUpdate: CASCADE
+
+  - changeSet:
+      id: fk-pet-breed
+      author: Japkutija
+      changes:
+        - addForeignKeyConstraint:
+            baseTableName: pet
+            baseColumnNames: breed_id
+            referencedTableName: breed
+            referencedColumnNames: breed_id
+            constraintName: fk_pet_breed
+            onDelete: CASCADE
+            onUpdate: CASCADE
+
+  - changeSet:
+      id: fk-appointment-pet
+      author: Japkutija
+      changes:
+        - addForeignKeyConstraint:
+            baseTableName: appointment
+            baseColumnNames: pet_id
+            referencedTableName: pet
+            referencedColumnNames: pet_id
+            constraintName: fk_appointment_pet
+            onDelete: CASCADE
+            onUpdate: CASCADE
+
+  - changeSet:
+      id: fk-appointment-owner
+      author: Japkutija
+      changes:
+        - addForeignKeyConstraint:
+            baseTableName: appointment
+            baseColumnNames: owner_id
+            referencedTableName: owner
+            referencedColumnNames: owner_id
+            constraintName: fk_appointment_owner
+            onDelete: CASCADE
+            onUpdate: CASCADE
+
+  - changeSet:
+      id: fk-appointment-bill
+      author: Japkutija
+      changes:
+        - addForeignKeyConstraint:
+            baseTableName: appointment
+            baseColumnNames: bill_id
+            referencedTableName: bill
+            referencedColumnNames: bill_id
+            constraintName: fk_appointment_bill
+            onDelete: CASCADE
+            onUpdate: CASCADE
+
+
+  - changeSet:
+      id: fk-bill-owner
+      author: Japkutija
+      changes:
+        - addForeignKeyConstraint:
+            baseTableName: bill
+            baseColumnNames: owner_id
+            referencedTableName: owner
+            referencedColumnNames: owner_id
+            constraintName: fk_bill_owner
+            onDelete: CASCADE
+            onUpdate: CASCADE
+
+
+  - changeSet:
+      id: fk-breed-species
+      author: Japkutija
+      changes:
+        - addForeignKeyConstraint:
+            baseTableName: breed
+            baseColumnNames: species_id
+            referencedTableName: species
+            referencedColumnNames: species_id
+            constraintName: fk_breed_species
+            onDelete: CASCADE
+            onUpdate: CASCADE
+
+  - changeSet:
+      id: fk-medical-record-pet
+      author: Japkutija
+      changes:
+        - addForeignKeyConstraint:
+            baseTableName: medical_record
+            baseColumnNames: pet_id
+            referencedTableName: pet
+            referencedColumnNames: pet_id
+            constraintName: fk_medical_record_pet
+            onDelete: CASCADE
+            onUpdate: CASCADE
+
+
+  - changeSet:
+      id: fk-treatment-pet
+      author: Japkutija
+      changes:
+        - addForeignKeyConstraint:
+            baseTableName: treatment
+            baseColumnNames: pet_id
+            referencedTableName: pet
+            referencedColumnNames: pet_id
+            constraintName: fk_treatment_pet
+            onDelete: CASCADE
+            onUpdate: CASCADE
+
+
+  - changeSet:
+      id: fk-vaccination-pet
+      author: Japkutija
+      changes:
+        - addForeignKeyConstraint:
+            baseTableName: vaccination
+            baseColumnNames: pet_id
+            referencedTableName: pet
+            referencedColumnNames: pet_id
+            constraintName: fk_vaccination_pet
+            onDelete: CASCADE
+            onUpdate: CASCADE
+
+

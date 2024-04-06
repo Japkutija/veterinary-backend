@@ -8,7 +8,7 @@ import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
 import java.time.Instant;
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.UUID;
 
 @Data
@@ -29,7 +29,7 @@ public class Appointment {
 
     @Column(name = "appointment_date", nullable = false)
     @NotNull
-    private Date appointmentDate;
+    private LocalDate appointmentDate;
 
     @Column(name = "appointment_time", nullable = false)
     @NotNull

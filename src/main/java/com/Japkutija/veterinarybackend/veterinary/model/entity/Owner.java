@@ -8,6 +8,7 @@ import org.antlr.v4.runtime.misc.NotNull;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -23,7 +24,7 @@ public class Owner {
     @NotNull
     private Long id;
 
-    @Column(name = "event_uuid", nullable = false, unique = true)
+    @Column(name = "owner_uuid", nullable = false, unique = true)
     @NotNull
     @JdbcTypeCode(SqlTypes.VARCHAR)
     private UUID uuid;
@@ -52,6 +53,10 @@ public class Owner {
     @Column(name = "EMSO", length = 13, unique = true)
     @Size(min = 13, max = 13)
     private String EMSO;
+    
+    @Column(name = "date_of_birth", nullable = false)
+    @NotNull
+    private LocalDate dateOfBirth;
 
     @OneToMany(mappedBy = "owner")
     private List<Pet> pets = new ArrayList<>();

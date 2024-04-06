@@ -1,0 +1,31 @@
+medical_record_id,description,follow_up_required,treatment_discipline,medical_record_uuid,visit_date,pet_id
+1,Routine Checkup,0,General Health,352ab698-f940-4df2-888e-63fe3076984a,2023-01-10 00:00:00.000000,1
+2,Vaccination for Rabies,1,Vaccination,2a16c852-fd35-4bf1-b001-413f1088249a,2023-02-15 00:00:00.000000,2
+3,Spaying Surgery,1,Surgery,226a9ca4-e87b-4814-b034-8ec6712af689,2023-03-20 00:00:00.000000,3
+4,Dental Cleaning,0,Dental Care,7dbf998b-1c9f-4bbf-98a6-d60c699abcd7,2023-04-25 00:00:00.000000,4
+5,Allergy Treatment,1,Dermatology,c8962096-96bb-4d22-a83f-c03953d8127b,2023-05-30 00:00:00.000000,5
+6,Heartworm Testing,0,Cardiology,b8514fc6-d858-49e0-a68a-501fdd593030,2023-06-10 00:00:00.000000,6
+7,Eye Infection Treatment,1,Ophthalmology,64156401-56e4-4a17-8d7c-2e24af656e27,2023-07-15 00:00:00.000000,8
+8,Limping Diagnosis,1,Orthopedics,daa2ac82-6004-49da-8833-1f2f463e8ca2,2023-08-20 00:00:00.000000,8
+9,Skin Rash Examination,1,Dermatology,d02879a3-3c78-49bc-af40-0ccf556a70ed,2023-09-25 00:00:00.000000,9
+10,Diabetes Management,1,Endocrinology,876face5-47ab-4732-aff1-d03b456776d0,2023-10-30 00:00:00.000000,10
+11,Arthritis Treatment,1,Orthopedics,3d48b875-6f08-45a7-bcd5-671ff3c8b2f2,2023-11-10 00:00:00.000000,11
+12,Flea and Tick Treatment,0,Parasitology,a5290d83-a91e-4da5-891c-091d9da52b75,2023-12-15 00:00:00.000000,12
+13,Ear Infection Therapy,1,Otology,a2e11e93-0565-4ca2-800a-100126f6bf0a,2024-01-20 00:00:00.000000,13
+14,Weight Loss Plan,0,Nutrition,752c8f2d-7120-4069-af21-7fbbfa2b055c,2024-02-25 00:00:00.000000,14
+15,Cancer Screening,1,Oncology,2898c4cd-5b6f-4ab6-a5c6-f7c993761b66,2024-03-30 00:00:00.000000,15
+16,Anxiety Management,1,Behavioral,3418df24-8d01-41e0-b39d-294feed947c0,2024-04-10 00:00:00.000000,16
+17,Kidney Function Test,0,Nephrology,ebb072d5-094d-4b09-8e85-98314f9aaf02,2024-05-15 00:00:00.000000,15
+18,Seizure Evaluation,1,Neurology,8cf2fe2e-f3d3-4a28-99d9-f5c08f90336b,2024-06-20 00:00:00.000000,14
+19,Gastrointestinal Issue Consultation,1,Gastroenterology,4f63ea9c-eb13-41cf-b5b8-f80b2861afc1,2024-07-25 00:00:00.000000,13
+20,Hip Dysplasia Assessment,1,Orthopedics,3a8a7291-83d0-407d-b322-aace6700e403,2024-08-30 00:00:00.000000,12
+21,Thyroid Check,0,Endocrinology,8c87a0b7-7c79-4cfd-9c0b-ba4fc876fbdd,2024-09-10 00:00:00.000000,11
+22,Nail Trimming and Care,0,General Health,29d92499-c9bf-41ba-8605-7ac03a13f6ff,2024-10-15 00:00:00.000000,10
+23,Lung Function Test,1,Pulmonology,8138a5cd-71fb-49ff-92fc-9d5dd5da4c8a,2024-11-20 00:00:00.000000,9
+24,Preventive Health Checkup,0,General Health,c85db9e8-b8e7-4608-8e09-378ce45ac34a,2024-12-25 00:00:00.000000,8
+25,Urinary Tract Infection Treatment,1,Urology,cd28f8cf-ec0d-40a3-80c2-65a614b7f75b,2025-01-30 00:00:00.000000,7
+26,Blood Pressure Monitoring,0,Cardiology,3201ba2d-ff1d-4bb5-9e7e-854a69e489be,2025-02-10 00:00:00.000000,6
+27,Emergency Wound Care,1,Emergency,56161c03-948e-4734-878a-a914893ff4b2,2025-03-15 00:00:00.000000,5
+28,Rehabilitation Therapy,1,Physiotherapy,8736fd24-4373-470d-91da-3bcd8e2e5cbc,2025-04-20 00:00:00.000000,4
+29,Viral Disease Management,1,Infectious Diseases,7369ee5e-8b85-4b30-bc08-526c07a3415e,2025-05-25 00:00:00.000000,3
+30,Geriatric Care Consultation,1,Geriatrics,cc29178f-ac9c-463e-bad4-7df655b9b5ee,2025-06-30 00:00:00.000000,2

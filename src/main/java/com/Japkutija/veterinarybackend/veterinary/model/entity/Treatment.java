@@ -7,6 +7,7 @@ import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 import org.w3c.dom.Text;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.UUID;
 
@@ -36,7 +37,7 @@ public class Treatment {
 
     @Column(name = "treatment_date", nullable = false)
     @NotNull
-    private Date treatmentDate;
+    private LocalDate treatmentDate;
 
     @Column(name = "outcome", nullable = false, length = 255)
     @NotNull

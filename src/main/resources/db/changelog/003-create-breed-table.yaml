@@ -1,0 +1,31 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1-create-breed-table
+      author: Japkutija
+      changes:
+        - createTable:
+            tableName: breed
+            columns:
+              - column:
+                  name: breed_id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: breed_uuid
+                  type: uuid
+                  constraints:
+                    nullable: false
+                    unique: true
+              - column:
+                  name: breed_name
+                  type: varchar(50)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: species_id
+                  type: bigint
+                  constraints:
+                    nullable: false

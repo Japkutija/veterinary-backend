@@ -8,8 +8,8 @@ import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -53,7 +53,7 @@ public class Pet {
 
     @Column(name = "date_of_birth", nullable = false)
     @NotNull
-    private Date dateOfBirth;
+    private LocalDate dateOfBirth;
 
     @Column(name = "weight", nullable = false, precision = 5, scale = 2)
     @NotNull

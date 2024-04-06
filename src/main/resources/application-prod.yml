@@ -2,7 +2,7 @@ spring:
   jpa:
     database: MYSQL
     hibernate:
-      ddl-auto: update
+      ddl-auto: none
       logging:
         level:
           org:
