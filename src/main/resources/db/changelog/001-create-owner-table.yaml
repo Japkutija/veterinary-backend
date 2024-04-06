@@ -1,0 +1,53 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1
+      author: Japkutija
+      changes:
+        - createTable:
+            tableName: owner
+            columns:
+              - column:
+                  name: owner_id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: owner_uuid
+                  type: uuid
+                  constraints:
+                    nullable: false
+                    unique: true
+              - column:
+                  name: first_name
+                  type: varchar(50)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: last_name
+                  type: varchar(50)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: email
+                  type: varchar(50)
+              - column:
+                  name: phone_number
+                  type: varchar(20)
+              - column:
+                  name: address
+                  type: varchar(255)
+              - column:
+                  name: EMSO
+                  type: varchar(13)
+                  constraints:
+                    unique: true
+              - column:
+                  name: date_of_birth
+                  type: date
+                  constraints:
+                    nullable: false
+
+                
+

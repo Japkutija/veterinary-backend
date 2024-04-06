@@ -1,0 +1,9 @@
+databaseChangeLog:
+  - changeSet:
+      id: 012-alter-appointment-time-column
+      author: Japkutija
+      changes:
+        - modifyDataType:
+            tableName: appointment
+            columnName: appointment_time
+            newDataType: TIME

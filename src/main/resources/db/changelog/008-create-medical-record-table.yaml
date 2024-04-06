@@ -1,0 +1,46 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1-create-medical-record-table
+      author: Japkutija
+      changes:
+        - createTable:
+            tableName: medical_record
+            columns:
+              - column:
+                  name: medical_record_id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: medical_record_uuid
+                  type: uuid
+                  constraints:
+                    nullable: false
+                    unique: true
+              - column:
+                  name: description
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: visit_date
+                  type: date
+                  constraints:
+                    nullable: false
+              - column:
+                  name: treatment_discipline
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: follow_up_required
+                  type: boolean
+                  constraints:
+                    nullable: false
+              - column:
+                  name: pet_id
+                  type: bigint
+                  constraints:
+                    nullable: false

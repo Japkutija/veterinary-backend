@@ -1,0 +1,31 @@
+inventory_id,item_description,item_name,quantity_in_stock,reorder_level,inventory_uuid
+1,Standard Dog Food,Dog Food,100,20,203d8862-4774-4998-bd78-0729c41c094b
+2,Premium Cat Food,Cat Food,80,25,b694fa73-b2c1-4c3d-a69a-213321cae284
+3,Bird Seed Mix,Bird Seed,60,10,987abca0-5ca7-4ddb-a6fd-00b201ccf058
+4,Aquarium Filters,Aquarium Filter,40,15,dcb358ee-0786-4e7c-a85c-c0320578736b
+5,Rabbit Chew Toys,Rabbit Toy,50,20,d19e1b37-aa6c-4400-8a48-ab179cc44ded
+6,Hamster Wheel,Hamster Wheel,30,10,980fcbe4-d510-47e8-80bd-8386a6239e2e
+7,Turtle Food,Turtle Food,70,25,42b315a5-63e9-41b2-8ecf-804d2ec552ca
+8,Lizard Heating Lamp,Heating Lamp,20,5,658d6956-c120-4ff3-8121-1eb90050324d
+9,Snake Vivarium,Snake Vivarium,15,4,ce641071-1ace-47d5-8197-7d25ae2da7f8
+10,Frog Habitat Kit,Frog Habitat,10,3,e68bb755-82da-4431-8513-628e06ab8dc9
+11,Fish Tank,Fish Tank,25,8,0da8131f-569d-4049-a657-cd69919fcdff
+12,Horse Grooming Kit,Horse Grooming,35,12,9459a068-8018-4a45-8bf5-4dcc2f2fb6a2
+13,Goat Feed,Goat Feed,80,30,5caad13f-9c5e-481e-b085-7e5bd5154941
+14,Pig Mud Bath,Pig Mud Bath,20,6,606263b2-3c61-4d3c-843f-6fb795b687ad
+15,Ferret Play Tunnel,Ferret Tunnel,40,15,c6aad43c-ec6f-4811-bbfb-edf288e0b6ea
+16,Tiger Toy,Tiger Toy,5,2,1bede02b-5fed-4f27-a2b0-1731a91320d9
+17,Veterinary Stethoscope,Stethoscope,20,5,31fb1fb4-0973-4615-a585-0f5629d96dd7
+18,Pet Shampoo,Shampoo,100,30,5c5ee80e-c8e2-4f8e-a4a0-f46c006da990
+19,Dog Leash,Leash,75,20,91ef1235-ab67-423a-99b8-03384a89719b
+20,Cat Collar,Cat Collar,80,25,70656612-fb4d-4f7b-a19a-0d058c3293fd
+21,Bird Cage,Bird Cage,15,4,ade55fca-0836-48da-9dc5-0ce972d33181
+22,Rabbit Hutch,Rabbit Hutch,10,3,6a346988-a2dd-4bfa-bb36-ccef0397e4d0
+23,Aquarium Plants,Aquarium Plants,50,15,5eba3070-dd85-4830-984c-991af45d58f0
+24,Horse Saddle,Horse Saddle,8,2,8eabddc5-22b2-450e-8e90-181e8cd7e762
+25,Goat Milk Bottle,Goat Milk,60,20,f2d3617b-c0d9-4adb-9351-dc342b2fedd1
+26,Pig Toy,Pig Toy,30,10,e2ca4ca9-a3e8-4083-9b0d-b692b2b9e4d8
+27,Ferret Food,Ferret Food,50,20,d753ed35-1409-4438-a66f-d28d749a98a2
+28,Tiger Meat,Tiger Meat,20,6,6999691a-9558-4c9e-90df-b55d1719fb56
+29,Dog Toothpaste,Dog Toothpaste,100,25,4076a136-fcb1-46b3-bb96-5851e5491294
+30,Cat Litter,Cat Litter,90,30,460acb6f-98cf-4d03-9afe-9d7df4d4ed7f

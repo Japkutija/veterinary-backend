@@ -1,0 +1,67 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1-create-pet-table
+      author: Japkutija
+      changes:
+        - createTable:
+            tableName: pet
+            columns:
+              - column:
+                  name: pet_id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: pet_uuid
+                  type: uuid
+                  constraints:
+                    unique: true
+                    nullable: false
+              - column:
+                  name: chip_number
+                  type: varchar(20)
+                  constraints:
+                    unique: true
+                    nullable: false
+              - column:
+                  name: nickname
+                  type: varchar(20)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: gender
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: date_of_birth
+                  type: date
+                  constraints:
+                    nullable: false
+              - column:
+                  name: weight
+                  type: decimal(5,2)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: height
+                  type: decimal(5,2)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: owner_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+              - column:
+                  name: species_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+              - column:
+                  name: breed_id
+                  type: bigint
+                  constraints:
+                    nullable: false
