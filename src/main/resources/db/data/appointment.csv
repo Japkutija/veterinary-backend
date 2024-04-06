@@ -1,4 +1,17 @@
-appointment_id,appointment_date,appointment_time,reason, status,appointment_uuid,bill_id,pet_id
-1,2024-04-02
-2,,,,,,,
-3,,,,,,,
+appointment_id,appointment_date,appointment_time,reason,status,appointment_uuid,bill_id,pet_id,owner_id
+1,2023-03-16,09:00:00,Routine Checkup,SCHEDULED,d59c16cf-1b07-4384-a03c-4d6af281994c,1,1,1
+2,2023-03-17,10:00:00,Vaccination,COMPLETED,628ba48c-d8da-4a17-80d8-9cbd4ce93276,2,2,2
+3,2023-03-18,11:00:00,General Consultation,CANCELLED,0222a051-6aef-4d42-b88a-d431007ba7b7,3,3,3
+4,2023-03-19,13:00:00,Dental Cleaning,SCHEDULED,e8728499-6b60-42e7-a37a-4ab7a7631d07,4,4,4
+5,2023-03-20,14:00:00,Skin Allergy Treatment,RESCHEDULED,2c717801-8a5d-4962-a26c-d5894cc47996,5,5,1
+6,2023-03-21,15:00:00,Annual Health Check,CONFIRMED,7fc45e32-f5c9-4668-a173-c9e7d24b68c4,6,6,2
+7,2023-03-22,16:00:00,Emergency Care,COMPLETED,14062b91-3c01-4cdc-a748-563a4df5d5b7,7,7,3
+8,2023-03-23,09:30:00,Neutering,SCHEDULED,346b5cca-7769-4943-93ec-c03400690d78,8,8,4
+9,2023-03-24,10:30:00,Vaccination Follow-up,COMPLETED,949cd793-5913-45d3-93a8-1d20840c43f1,9,9,1
+10,2023-03-25,11:30:00,Nutrition Consultation,NO_SHOW,0961edfc-7fd9-4eea-8fa9-3ab3db2dbd6a,10,10,2
+11,2023-03-26,13:30:00,Behavioral Consultation,IN_PROGRESS,385e11a3-e0b4-4f7a-9ba7-739fbef2e59e,11,11,3
+12,2023-03-27,14:30:00,Post-surgery Follow-up,CONFIRMED,98bb04d0-f5c0-489b-a1bf-b5e82e6a5222,12,12,4
+13,2023-03-28,15:30:00,Ear Infection Treatment,CANCELLED,3b4d868c-4417-4ce1-aab6-ca010da52150,13,13,1
+14,2023-03-29,16:30:00,Limping Assessment,COMPLETED,bf7a0c0b-ac83-4508-b008-04d9d51fedd2,14,14,2
+15,2023-03-30,09:00:00,Routine Checkup,RESCHEDULED,496380a4-79ab-4aa2-9efe-cf92fa746c90,15,15,3
+16,2023-03-31,10:00:00,Vaccination,COMPLETED,a196fb88-d68e-40f7-a271-ec6c82ea69ee,16,16,4
