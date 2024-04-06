@@ -1,17 +1,17 @@
-"breed_id";"breed_name";"breed_uuid";"species_id"
-1;"Beagle";"c0f9df56-d5a0-47eb-b73e-732947488e6c";1
-2;"Siamese";"8e4570fb-5b3c-490e-84dc-f185dfb683b0";2
-3;"Parakeet";"f06266cd-a919-4459-af33-381de9db6c94";3
-4;"Holland Lop";"42de33d1-46df-4f94-b368-ed8edb6fb049";4
-5;"Abyssinian";"faa9a45b-a63f-4d86-8732-f209ec383348";5
-6;"Syrian Hamster";"d7b78639-412e-4629-97a9-be41bf35d57e";6
-7;"Red-Eared Slider";"dbeecdf3-cca1-430d-bb84-031442635faf";7
-8;"Green Anole";"5540c967-476e-484a-b7db-d3394894e13b";8
-9;"Corn Snake";"a9ca9bc6-3de7-4511-bfcb-2f2dcf87aae1";9
-10;"Dart Frog";"fb366214-2443-470e-8788-f43a205d7100";10
-11;"Goldfish";"c2bc64d6-f2f6-4239-a7b9-c6ce20e68bf0";11
-12;"Arabian Horse";"271cbf40-1f6d-4b17-8ae6-b422a9c11e53";12
-13;"Nubian Goat";"b9666e3d-8957-4dd8-8e19-79e7b0730525";13
-14;"Yorkshire Pig";"1b65e930-2f90-40f1-a02a-2bacb868b7ee";14
-15;"Sable Ferret";"de360abc-310d-4626-9c28-3ce9120384b2";15
-16;"Bengal Tiger";"61373d73-91d5-4536-82cb-3e21c9b3456f";16
+breed_id,breed_name,breed_uuid,species_id
+1,Beagle,c0f9df56-d5a0-47eb-b73e-732947488e6c,1
+2,Siamese,8e4570fb-5b3c-490e-84dc-f185dfb683b0,2
+3,Parakeet,f06266cd-a919-4459-af33-381de9db6c94,3
+4,Holland Lop,42de33d1-46df-4f94-b368-ed8edb6fb049,4
+5,Abyssinian,faa9a45b-a63f-4d86-8732-f209ec383348,5
+6,Syrian Hamster,d7b78639-412e-4629-97a9-be41bf35d57e,6
+7,Red-Eared Slider,dbeecdf3-cca1-430d-bb84-031442635faf,7
+8,Green Anole,5540c967-476e-484a-b7db-d3394894e13b,8
+9,Corn Snake,a9ca9bc6-3de7-4511-bfcb-2f2dcf87aae1,9
+10,Dart Frog,fb366214-2443-470e-8788-f43a205d7100,10
+11,Goldfish,c2bc64d6-f2f6-4239-a7b9-c6ce20e68bf0,11
+12,Arabian Horse,271cbf40-1f6d-4b17-8ae6-b422a9c11e53,12
+13,Nubian Goat,b9666e3d-8957-4dd8-8e19-79e7b0730525,13
+14,Yorkshire Pig,1b65e930-2f90-40f1-a02a-2bacb868b7ee,14
+15,Sable Ferret,de360abc-310d-4626-9c28-3ce9120384b2,15
+16,Bengal Tiger,61373d73-91d5-4536-82cb-3e21c9b3456f,16

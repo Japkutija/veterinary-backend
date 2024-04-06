@@ -20,4 +20,8 @@ databaseChangeLog:
   - include:
       file: classpath:db/changelog/010-create-treatment-table.yaml
   - include:
-        file: classpath:db/changelog/011-add-foreign-key-constraints.yaml
+      file: classpath:db/changelog/011-add-foreign-key-constraints.yaml
+  - include:
+      file: classpath:db/changelog/012-alter-appointment-time-column.yaml
+  - include:
+      file: classpath:db/changelog/csv-setup.yaml
