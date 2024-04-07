@@ -11,8 +11,10 @@ import java.util.List;
 @Mapper(componentModel = "spring")
 public interface MedicalRecordMapper {
 
+    @Mapping(source = "petUuid", target = "pet.uuid")
     MedicalRecord toMedicalRecord(MedicalRecordDTO medicalRecordDTO);
 
+    @Mapping(source = "pet.uuid", target = "petUuid")
     MedicalRecordDTO toMedicalRecordDTO(MedicalRecord medicalRecord);
 
     List<MedicalRecord> toMedicalRecordList(List<MedicalRecordDTO> medicalRecordDTOs);
