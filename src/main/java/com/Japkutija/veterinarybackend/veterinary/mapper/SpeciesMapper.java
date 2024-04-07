@@ -3,6 +3,7 @@ package com.Japkutija.veterinarybackend.veterinary.mapper;
 import com.Japkutija.veterinarybackend.veterinary.model.dto.SpeciesDTO;
 import com.Japkutija.veterinarybackend.veterinary.model.entity.Species;
 import org.mapstruct.Mapper;
+import org.mapstruct.MappingTarget;
 
 import java.util.List;
 
@@ -16,5 +17,7 @@ public interface SpeciesMapper {
     List<Species> toSpeciesList(List<SpeciesDTO> speciesDTOs);
 
     List<SpeciesDTO> toSpeciesDTOList(List<Species> species);
+
+    Species updateSpeciesFromDto(SpeciesDTO speciesDTO, @MappingTarget Species species);
 }
 
