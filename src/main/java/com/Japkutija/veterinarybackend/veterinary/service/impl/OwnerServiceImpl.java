@@ -1,6 +1,8 @@
 package com.Japkutija.veterinarybackend.veterinary.service.impl;
 
+import com.Japkutija.veterinarybackend.veterinary.exception.BadRequestException;
 import com.Japkutija.veterinarybackend.veterinary.exception.EntityNotFoundException;
+import com.Japkutija.veterinarybackend.veterinary.mapper.OwnerMapper;
 import com.Japkutija.veterinarybackend.veterinary.model.dto.OwnerDTO;
 import com.Japkutija.veterinarybackend.veterinary.model.entity.Owner;
 import com.Japkutija.veterinarybackend.veterinary.repository.OwnerRepository;
@@ -18,32 +20,62 @@ import java.util.UUID;
 public class OwnerServiceImpl implements com.Japkutija.veterinarybackend.veterinary.service.OwnerService {
 
     private final OwnerRepository ownerRepository;
+    private final OwnerMapper ownerMapper;
 
     @Override
     public Owner createOwner(OwnerDTO ownerDTO) {
-        return null;
+
+        var owner = ownerMapper.toOwner(ownerDTO);
+
+        return saveOwner(owner);
+    }
+
+    @Override
+    public Owner saveOwner(Owner owner) {
+        try {
+            return ownerRepository.save(owner);
+        } catch (Exception ex) {
+            log.error("Error saving owner: {}", ex.getMessage());
+            throw new EntitySavingException("Failed to save owner", Owner.class, ex);
+        }
     }
 
     @Override
     public Owner getOwnerByUuid(UUID uuid) {
 
-        Optional<Owner> owner = ownerRepository.findByUuid(uuid);
+        var owner = ownerRepository.findByUuid(uuid);
 
         return owner.orElseThrow(() -> new EntityNotFoundException(Owner.class, uuid));
     }
 
+
     @Override
     public List<Owner> getAllOwners() {
-        return null;
+        var owners = ownerRepository.findAll();
+
+        if (owners.isEmpty()) {
+            return List.of();
+        } else {
+            return owners;
+        }
     }
 
     @Override
     public Owner updateOwner(UUID uuid, OwnerDTO ownerDTO) {
-        return null;
+
+        var owner = getOwnerByUuid(uuid);
+
+        ownerMapper.updateOwnerFromDto(ownerDTO, owner);
+
+        return ownerRepository.save(owner);
     }
 
     @Override
     public void deleteOwner(UUID uuid) {
+
+        var owner = getOwnerByUuid(uuid);
+
+        ownerRepository.delete(owner);
 
     }
 }

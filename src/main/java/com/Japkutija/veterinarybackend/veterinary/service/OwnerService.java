@@ -12,6 +12,8 @@ public interface OwnerService {
 
     Owner getOwnerByUuid(UUID uuid);
 
+    Owner saveOwner(Owner owner);
+
     List<Owner> getAllOwners();
 
     Owner updateOwner(UUID uuid, OwnerDTO ownerDTO);
