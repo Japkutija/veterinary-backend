@@ -8,7 +8,7 @@ import java.util.UUID;
 
 @Getter
 public class EntityNotFoundException extends RuntimeException {
-    
+
     public EntityNotFoundException(String message) {
         super(message);
     }
@@ -17,7 +17,7 @@ public class EntityNotFoundException extends RuntimeException {
         super(message, exception);
     }
 
-    public EntityNotFoundException(Class<?> entityClass, UUID uuid) {
-        super(String.format("Entity %s with uuid %s not found", entityClass.getSimpleName(), uuid));
+    public EntityNotFoundException(Class<?> entityClass, Object identifier) {
+        super(String.format("Entity %s with identifier %s not found", entityClass.getSimpleName(), identifier.toString()));
     }
 }

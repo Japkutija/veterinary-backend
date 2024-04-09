@@ -36,7 +36,7 @@ public class OwnerServiceImpl implements com.Japkutija.veterinarybackend.veterin
             return ownerRepository.save(owner);
         } catch (Exception ex) {
             log.error("Error saving owner: {}", ex.getMessage());
-            throw new EntitySavingException("Failed to save owner", Owner.class, ex);
+            throw new EntitySavingException(Owner.class, ex);
         }
     }
 
