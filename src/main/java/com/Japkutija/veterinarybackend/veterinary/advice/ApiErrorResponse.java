@@ -2,11 +2,13 @@ package com.Japkutija.veterinarybackend.veterinary.advice;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
 
 
 @Getter
+@Setter
 @RequiredArgsConstructor
 public final class ApiErrorResponse {
 
