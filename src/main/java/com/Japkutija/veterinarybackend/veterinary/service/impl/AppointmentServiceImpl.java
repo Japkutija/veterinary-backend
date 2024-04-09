@@ -43,7 +43,7 @@ public class AppointmentServiceImpl implements AppointmentService {
             return appointmentRepository.save(appointment);
         } catch (Exception ex) {
             log.error("Error saving appointment: {}", ex.getMessage());
-            throw new EntitySavingException("Failed to save appointment", Appointment.class, ex);
+            throw new EntitySavingException(Appointment.class, ex);
         }
     }
 
@@ -51,11 +51,10 @@ public class AppointmentServiceImpl implements AppointmentService {
     public List<Appointment> getAllAppointments() {
         var appointments = appointmentRepository.findAll();
 
-        if (appointments.isEmpty()) {
+        if (appointments.isEmpty())
             return List.of();
-        } else {
-            return appointments;
-        }
+
+        return appointments;
     }
 
     @Override
@@ -67,33 +66,33 @@ public class AppointmentServiceImpl implements AppointmentService {
         return saveAppointment(appointment);
     }
 
-    @Override
-    public void deleteAppointment(UUID uuid) {
-
-        var appointment = getAppointmentByUuid(uuid);
-        appointmentRepository.delete(appointment);
-
-    }
 
     @Override
     public List<Appointment> getAppointmentsByOwner(UUID ownerUuid) {
         var appointments = appointmentRepository.findByOwnerUuid(ownerUuid);
 
-        if (appointments.isEmpty()) {
+        if (appointments.isEmpty())
             return List.of();
-        } else {
-            return appointments;
-        }
+
+        return appointments;
     }
 
     @Override
     public List<Appointment> getAppointmentsByPet(UUID petUuid) {
         var appointments = appointmentRepository.findByPetUuid(petUuid);
 
-        if (appointments.isEmpty()) {
+        if (appointments.isEmpty())
             return List.of();
-        } else {
-            return appointments;
-        }
+
+        return appointments;
+    }
+
+
+    @Override
+    public void deleteAppointment(UUID uuid) {
+
+        var appointment = getAppointmentByUuid(uuid);
+        appointmentRepository.delete(appointment);
+
     }
 }

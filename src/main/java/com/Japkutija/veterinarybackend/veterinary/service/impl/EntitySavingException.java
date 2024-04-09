@@ -10,6 +10,10 @@ public class EntitySavingException extends RuntimeException {
         super(message);
     }
 
+    public EntitySavingException(Class<?> entityClass, Exception ex) {
+        super(String.format("Failed to save: %s", entityClass.getSimpleName()));
+    }
+
     public EntitySavingException(String message, Class<?> entityClass, Exception ex) {
         super(String.format("Failed to save: %s", entityClass.getSimpleName()), ex);
     }
