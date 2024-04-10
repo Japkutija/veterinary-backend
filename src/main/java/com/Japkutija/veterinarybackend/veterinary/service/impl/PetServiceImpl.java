@@ -9,6 +9,7 @@ import com.Japkutija.veterinarybackend.veterinary.repository.PetRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.UUID;
@@ -22,6 +23,7 @@ public class PetServiceImpl implements com.Japkutija.veterinarybackend.veterinar
     private final PetMapper petMapper;
 
     @Override
+    @Transactional
     public Pet createPet(PetDTO petDTO) {
         var pet = petMapper.toPet(petDTO);
 
@@ -29,6 +31,7 @@ public class PetServiceImpl implements com.Japkutija.veterinarybackend.veterinar
     }
 
     @Override
+    @Transactional
     public Pet savePet(Pet pet) {
         try {
             return petRepository.save(pet);
@@ -39,6 +42,7 @@ public class PetServiceImpl implements com.Japkutija.veterinarybackend.veterinar
     }
 
     @Override
+    @Transactional
     public Pet updatePet(PetDTO petDTO, UUID uuid) {
         var pet = getPetByUuid(uuid);
 
@@ -48,6 +52,7 @@ public class PetServiceImpl implements com.Japkutija.veterinarybackend.veterinar
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Pet getPetByUuid(UUID uuid) {
         var pet = petRepository.findByUuid(uuid);
 
@@ -55,6 +60,7 @@ public class PetServiceImpl implements com.Japkutija.veterinarybackend.veterinar
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Pet getPetById(Long id) {
         var pet = petRepository.findById(id);
 
@@ -62,6 +68,7 @@ public class PetServiceImpl implements com.Japkutija.veterinarybackend.veterinar
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<Pet> getAllPets() {
         var pets = petRepository.findAll();
 
@@ -72,6 +79,7 @@ public class PetServiceImpl implements com.Japkutija.veterinarybackend.veterinar
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<Pet> getPetsByOwner(UUID ownerUuid) {
         var pets = petRepository.findByOwnerUuid(ownerUuid);
 
@@ -83,6 +91,7 @@ public class PetServiceImpl implements com.Japkutija.veterinarybackend.veterinar
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<Pet> getPetsBySpecies(String species) {
         var pets = petRepository.findBySpecies(species);
 
@@ -93,6 +102,7 @@ public class PetServiceImpl implements com.Japkutija.veterinarybackend.veterinar
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<Pet> getPetsByBreed(String breed) {
         var pets = petRepository.findByBreed(breed);
 
@@ -103,6 +113,7 @@ public class PetServiceImpl implements com.Japkutija.veterinarybackend.veterinar
     }
 
     @Override
+    @Transactional
     public void deletePet(UUID uuid) {
 
         var pet = getPetByUuid(uuid);

@@ -9,6 +9,7 @@ import com.Japkutija.veterinarybackend.veterinary.repository.BreedRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.UUID;
@@ -16,12 +17,13 @@ import java.util.UUID;
 @Service
 @Slf4j
 @RequiredArgsConstructor
-public class BreedService implements com.Japkutija.veterinarybackend.veterinary.service.BreedService {
+public class BreedServiceImpl implements com.Japkutija.veterinarybackend.veterinary.service.BreedService {
 
     private final BreedRepository breedRepository;
     private final BreedMapper breedMapper;
 
     @Override
+    @Transactional
     public Breed createBreed(BreedDTO breedDTO) {
         var breed = breedMapper.toBreed(breedDTO);
 
@@ -29,6 +31,7 @@ public class BreedService implements com.Japkutija.veterinarybackend.veterinary.
     }
 
     @Override
+    @Transactional
     public Breed saveBreed(Breed breed) {
 
         try {
@@ -41,6 +44,7 @@ public class BreedService implements com.Japkutija.veterinarybackend.veterinary.
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Breed getBreedByUuid(UUID uuid) {
         var breed = breedRepository.findByUuid(uuid);
 
@@ -48,6 +52,7 @@ public class BreedService implements com.Japkutija.veterinarybackend.veterinary.
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<Breed> getAllBreeds() {
         var breeds = breedRepository.findAll();
 
@@ -58,6 +63,7 @@ public class BreedService implements com.Japkutija.veterinarybackend.veterinary.
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<Breed> getBreedsBySpeciesUuid(UUID speciesUuid) {
         var breeds = breedRepository.findAllBySpeciesUuid(speciesUuid);
 
@@ -69,6 +75,7 @@ public class BreedService implements com.Japkutija.veterinarybackend.veterinary.
     }
 
     @Override
+    @Transactional
     public Breed updateBreed(UUID uuid, BreedDTO breedDTO) {
 
         var breed = getBreedByUuid(uuid);
@@ -80,6 +87,7 @@ public class BreedService implements com.Japkutija.veterinarybackend.veterinary.
     }
 
     @Override
+    @Transactional
     public void deleteBreed(UUID uuid) {
 
         var breed = getBreedByUuid(uuid);

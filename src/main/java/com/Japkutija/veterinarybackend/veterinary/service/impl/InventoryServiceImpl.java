@@ -9,6 +9,7 @@ import com.Japkutija.veterinarybackend.veterinary.repository.InventoryRepository
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.UUID;
@@ -23,6 +24,7 @@ public class InventoryServiceImpl implements com.Japkutija.veterinarybackend.vet
 
 
     @Override
+    @Transactional
     public Inventory createInventory(InventoryDTO inventoryDTO) {
 
         var inventory = inventoryMapper.toInventory(inventoryDTO);
@@ -31,6 +33,7 @@ public class InventoryServiceImpl implements com.Japkutija.veterinarybackend.vet
     }
 
     @Override
+    @Transactional
     public Inventory saveInventory(Inventory inventory) {
 
         try {
@@ -42,6 +45,7 @@ public class InventoryServiceImpl implements com.Japkutija.veterinarybackend.vet
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Inventory getInventoryByUuid(UUID uuid) {
 
         var inventory = inventoryRepository.findByUuid(uuid);
@@ -50,6 +54,7 @@ public class InventoryServiceImpl implements com.Japkutija.veterinarybackend.vet
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<Inventory> getAllInventories() {
 
         var inventories = inventoryRepository.findAll();
@@ -61,6 +66,7 @@ public class InventoryServiceImpl implements com.Japkutija.veterinarybackend.vet
     }
 
     @Override
+    @Transactional
     public Inventory updateInventory(UUID uuid, InventoryDTO inventoryDTO) {
 
         var inventory = getInventoryByUuid(uuid);
@@ -71,6 +77,7 @@ public class InventoryServiceImpl implements com.Japkutija.veterinarybackend.vet
     }
 
     @Override
+    @Transactional
     public void deleteInventory(UUID uuid) {
 
         var inventory = getInventoryByUuid(uuid);

@@ -65,7 +65,6 @@ public class OwnerServiceImpl implements com.Japkutija.veterinarybackend.veterin
 
     @Override
     @Transactional
-
     public Owner updateOwner(UUID uuid, OwnerDTO ownerDTO) {
 
         var owner = getOwnerByUuid(uuid);

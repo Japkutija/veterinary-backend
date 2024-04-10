@@ -9,6 +9,7 @@ import com.Japkutija.veterinarybackend.veterinary.repository.BillRepository;
 import com.Japkutija.veterinarybackend.veterinary.service.BillService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.UUID;
@@ -21,6 +22,7 @@ public class BillServiceImpl implements BillService {
     private final BillMapper billMapper;
 
     @Override
+    @Transactional
     public Bill createBill(BillDTO billDTO) {
         var bill = billMapper.toBill(billDTO);
 
@@ -28,6 +30,7 @@ public class BillServiceImpl implements BillService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Bill getBillByUuid(UUID uuid) {
         var bill = billRepository.findByUuid(uuid);
 
@@ -35,6 +38,7 @@ public class BillServiceImpl implements BillService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Bill getBillByBillNumber(String billNumber) {
 
         var bill = billRepository.findByBillNumber(billNumber);
@@ -43,6 +47,7 @@ public class BillServiceImpl implements BillService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<Bill> getBillsByOwnerUuid(String ownerUuid) {
 
         var bills = billRepository.findAllByOwnerUuid(ownerUuid);
@@ -55,6 +60,7 @@ public class BillServiceImpl implements BillService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<Bill> getAllBills() {
         var bills = billRepository.findAll();
 
@@ -66,6 +72,7 @@ public class BillServiceImpl implements BillService {
     }
 
     @Override
+    @Transactional
     public Bill saveBill(Bill bill) {
         try {
             return billRepository.save(bill);
@@ -75,6 +82,7 @@ public class BillServiceImpl implements BillService {
     }
 
     @Override
+    @Transactional
     public Bill updateBill(UUID uuid, BillDTO billDTO) {
 
         var bill = getBillByUuid(uuid);
@@ -85,6 +93,7 @@ public class BillServiceImpl implements BillService {
     }
 
     @Override
+    @Transactional
     public void deleteBill(UUID uuid) {
 
         var bill = getBillByUuid(uuid);

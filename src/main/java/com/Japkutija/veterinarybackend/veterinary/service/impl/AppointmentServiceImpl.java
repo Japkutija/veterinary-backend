@@ -10,6 +10,7 @@ import com.Japkutija.veterinarybackend.veterinary.service.AppointmentService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.UUID;
@@ -23,6 +24,7 @@ public class AppointmentServiceImpl implements AppointmentService {
     private final AppointmentMapper appointmentMapper;
 
     @Override
+    @Transactional
     public Appointment createAppointment(AppointmentDTO appointmentDTO) {
 
         var appointment = appointmentMapper.toAppointment(appointmentDTO);
@@ -31,6 +33,7 @@ public class AppointmentServiceImpl implements AppointmentService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Appointment getAppointmentByUuid(UUID uuid) {
 
         var appointment = appointmentRepository.findByUuid(uuid);
@@ -39,6 +42,7 @@ public class AppointmentServiceImpl implements AppointmentService {
     }
 
     @Override
+    @Transactional
     public Appointment saveAppointment(Appointment appointment) {
         try {
             return appointmentRepository.save(appointment);
@@ -49,6 +53,7 @@ public class AppointmentServiceImpl implements AppointmentService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<Appointment> getAllAppointments() {
         var appointments = appointmentRepository.findAll();
 
@@ -59,6 +64,7 @@ public class AppointmentServiceImpl implements AppointmentService {
     }
 
     @Override
+    @Transactional
     public Appointment updateAppointment(UUID uuid, AppointmentDTO appointmentDTO) {
 
         var appointment = getAppointmentByUuid(uuid);
@@ -69,6 +75,7 @@ public class AppointmentServiceImpl implements AppointmentService {
 
 
     @Override
+    @Transactional(readOnly = true)
     public List<Appointment> getAppointmentsByOwner(UUID ownerUuid) {
         var appointments = appointmentRepository.findByOwnerUuid(ownerUuid);
 
@@ -79,6 +86,7 @@ public class AppointmentServiceImpl implements AppointmentService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<Appointment> getAppointmentsByPet(UUID petUuid) {
         var appointments = appointmentRepository.findByPetUuid(petUuid);
 
@@ -90,6 +98,7 @@ public class AppointmentServiceImpl implements AppointmentService {
 
 
     @Override
+    @Transactional
     public void deleteAppointment(UUID uuid) {
 
         var appointment = getAppointmentByUuid(uuid);

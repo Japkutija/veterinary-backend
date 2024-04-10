@@ -10,6 +10,7 @@ import com.Japkutija.veterinarybackend.veterinary.service.MedicalRecordService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.UUID;
@@ -23,6 +24,7 @@ public class MedicalServiceImpl implements MedicalRecordService {
     private final MedicalRecordMapper medicalRecordMapper;
 
     @Override
+    @Transactional
     public MedicalRecord createMedicalRecord(MedicalRecordDTO medicalRecordDTO) {
         var medicalRecord = medicalRecordMapper.toMedicalRecord(medicalRecordDTO);
 
@@ -30,6 +32,7 @@ public class MedicalServiceImpl implements MedicalRecordService {
     }
 
     @Override
+    @Transactional
     public MedicalRecord saveMedicalRecord(MedicalRecord medicalRecord) {
 
         try {
@@ -41,6 +44,7 @@ public class MedicalServiceImpl implements MedicalRecordService {
     }
 
     @Override
+    @Transactional
     public MedicalRecord updateMedicalRecord(MedicalRecordDTO medicalRecordDTO, UUID uuid) {
 
         var medicalRecord = getMedicalRecordByUuid(uuid);
@@ -51,6 +55,7 @@ public class MedicalServiceImpl implements MedicalRecordService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public MedicalRecord getMedicalRecordByUuid(UUID uuid) {
         var medicalRecord = medicalRecordRepository.findByUuid(uuid);
 
@@ -58,6 +63,7 @@ public class MedicalServiceImpl implements MedicalRecordService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<MedicalRecord> getMedicalRecordsByPetUuid(UUID petUuid) {
         var medicalRecords = medicalRecordRepository.findAllByPetUuid(petUuid);
 
@@ -69,6 +75,7 @@ public class MedicalServiceImpl implements MedicalRecordService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<MedicalRecord> getAllMedicalRecords() {
         var medicalRecords = medicalRecordRepository.findAll();
 
@@ -80,6 +87,7 @@ public class MedicalServiceImpl implements MedicalRecordService {
     }
 
     @Override
+    @Transactional
     public void deleteMedicalRecordByUuid(UUID uuid) {
 
         var medicalRecord = getMedicalRecordByUuid(uuid);
