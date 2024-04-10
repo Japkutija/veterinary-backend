@@ -6,9 +6,11 @@ import com.Japkutija.veterinarybackend.veterinary.mapper.OwnerMapper;
 import com.Japkutija.veterinarybackend.veterinary.model.dto.OwnerDTO;
 import com.Japkutija.veterinarybackend.veterinary.model.entity.Owner;
 import com.Japkutija.veterinarybackend.veterinary.repository.OwnerRepository;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.UUID;
@@ -22,6 +24,7 @@ public class OwnerServiceImpl implements com.Japkutija.veterinarybackend.veterin
     private final OwnerMapper ownerMapper;
 
     @Override
+    @Transactional
     public Owner createOwner(OwnerDTO ownerDTO) {
 
         var owner = ownerMapper.toOwner(ownerDTO);
@@ -30,6 +33,7 @@ public class OwnerServiceImpl implements com.Japkutija.veterinarybackend.veterin
     }
 
     @Override
+    @Transactional
     public Owner saveOwner(Owner owner) {
         try {
             return ownerRepository.save(owner);
@@ -40,15 +44,15 @@ public class OwnerServiceImpl implements com.Japkutija.veterinarybackend.veterin
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Owner getOwnerByUuid(UUID uuid) {
-
         var owner = ownerRepository.findByUuid(uuid);
-
         return owner.orElseThrow(() -> new EntityNotFoundException(Owner.class, uuid));
     }
 
 
     @Override
+    @Transactional(readOnly = true)
     public List<Owner> getAllOwners() {
         var owners = ownerRepository.findAll();
 
@@ -60,6 +64,8 @@ public class OwnerServiceImpl implements com.Japkutija.veterinarybackend.veterin
     }
 
     @Override
+    @Transactional
+
     public Owner updateOwner(UUID uuid, OwnerDTO ownerDTO) {
 
         var owner = getOwnerByUuid(uuid);
@@ -70,6 +76,7 @@ public class OwnerServiceImpl implements com.Japkutija.veterinarybackend.veterin
     }
 
     @Override
+    @Transactional
     public void deleteOwner(UUID uuid) {
 
         var owner = getOwnerByUuid(uuid);
