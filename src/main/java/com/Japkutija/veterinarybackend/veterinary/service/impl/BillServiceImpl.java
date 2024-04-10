@@ -1,6 +1,7 @@
 package com.Japkutija.veterinarybackend.veterinary.service.impl;
 
 import com.Japkutija.veterinarybackend.veterinary.exception.EntityNotFoundException;
+import com.Japkutija.veterinarybackend.veterinary.exception.EntitySavingException;
 import com.Japkutija.veterinarybackend.veterinary.mapper.BillMapper;
 import com.Japkutija.veterinarybackend.veterinary.model.dto.BillDTO;
 import com.Japkutija.veterinarybackend.veterinary.model.entity.Bill;

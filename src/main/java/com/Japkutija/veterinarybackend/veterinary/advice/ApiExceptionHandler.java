@@ -2,7 +2,7 @@ package com.Japkutija.veterinarybackend.veterinary.advice;
 
 import com.Japkutija.veterinarybackend.veterinary.exception.BadRequestException;
 import com.Japkutija.veterinarybackend.veterinary.exception.EntityNotFoundException;
-import com.Japkutija.veterinarybackend.veterinary.service.impl.EntitySavingException;
+import com.Japkutija.veterinarybackend.veterinary.exception.EntitySavingException;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;

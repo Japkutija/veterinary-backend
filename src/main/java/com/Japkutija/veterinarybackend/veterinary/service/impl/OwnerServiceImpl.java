@@ -1,7 +1,7 @@
 package com.Japkutija.veterinarybackend.veterinary.service.impl;
 
-import com.Japkutija.veterinarybackend.veterinary.exception.BadRequestException;
 import com.Japkutija.veterinarybackend.veterinary.exception.EntityNotFoundException;
+import com.Japkutija.veterinarybackend.veterinary.exception.EntitySavingException;
 import com.Japkutija.veterinarybackend.veterinary.mapper.OwnerMapper;
 import com.Japkutija.veterinarybackend.veterinary.model.dto.OwnerDTO;
 import com.Japkutija.veterinarybackend.veterinary.model.entity.Owner;
@@ -11,7 +11,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 @Service

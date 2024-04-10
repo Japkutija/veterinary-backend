@@ -1,4 +1,4 @@
-package com.Japkutija.veterinarybackend.veterinary.service.impl;
+package com.Japkutija.veterinarybackend.veterinary.exception;
 
 import com.Japkutija.veterinarybackend.veterinary.model.entity.Owner;
 import lombok.Getter;
