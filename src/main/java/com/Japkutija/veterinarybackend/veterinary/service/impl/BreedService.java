@@ -1,9 +1,9 @@
 package com.Japkutija.veterinarybackend.veterinary.service.impl;
 
 import com.Japkutija.veterinarybackend.veterinary.exception.EntityNotFoundException;
+import com.Japkutija.veterinarybackend.veterinary.exception.EntitySavingException;
 import com.Japkutija.veterinarybackend.veterinary.mapper.BreedMapper;
 import com.Japkutija.veterinarybackend.veterinary.model.dto.BreedDTO;
-import com.Japkutija.veterinarybackend.veterinary.model.entity.Bill;
 import com.Japkutija.veterinarybackend.veterinary.model.entity.Breed;
 import com.Japkutija.veterinarybackend.veterinary.repository.BreedRepository;
 import lombok.RequiredArgsConstructor;
