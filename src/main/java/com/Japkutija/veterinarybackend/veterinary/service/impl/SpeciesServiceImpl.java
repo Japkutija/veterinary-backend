@@ -9,6 +9,7 @@ import com.Japkutija.veterinarybackend.veterinary.repository.SpeciesRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.UUID;
@@ -22,6 +23,7 @@ public class SpeciesServiceImpl implements com.Japkutija.veterinarybackend.veter
     private final SpeciesMapper speciesMapper;
 
     @Override
+    @Transactional
     public Species saveSpecies(Species species) {
         try {
             return speciesRepository.save(species);
@@ -32,6 +34,7 @@ public class SpeciesServiceImpl implements com.Japkutija.veterinarybackend.veter
     }
 
     @Override
+    @Transactional
     public Species createSpecies(SpeciesDTO speciesDTO) {
         var species = speciesMapper.toSpecies(speciesDTO);
 
@@ -39,6 +42,7 @@ public class SpeciesServiceImpl implements com.Japkutija.veterinarybackend.veter
     }
 
     @Override
+    @Transactional
     public Species updateSpecies(SpeciesDTO speciesDTO, UUID uuid) {
         var species = getSpeciesByUuid(uuid);
 
@@ -48,6 +52,7 @@ public class SpeciesServiceImpl implements com.Japkutija.veterinarybackend.veter
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Species getSpeciesByUuid(UUID uuid) {
         var species = speciesRepository.findByUuid(uuid);
 
@@ -56,6 +61,7 @@ public class SpeciesServiceImpl implements com.Japkutija.veterinarybackend.veter
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Species getSpeciesById(Long id) {
         var species = speciesRepository.findById(id);
 
@@ -63,6 +69,7 @@ public class SpeciesServiceImpl implements com.Japkutija.veterinarybackend.veter
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<Species> getSpeciesByName(String speciesName) {
         var species = speciesRepository.findByName(speciesName);
 
@@ -74,6 +81,7 @@ public class SpeciesServiceImpl implements com.Japkutija.veterinarybackend.veter
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<Species> getAllSpecies() {
         var species = speciesRepository.findAll();
 
@@ -84,6 +92,7 @@ public class SpeciesServiceImpl implements com.Japkutija.veterinarybackend.veter
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<Species> getSpeciesByBreed(String breed) {
         var species = speciesRepository.findByBreed(breed);
 
@@ -94,6 +103,7 @@ public class SpeciesServiceImpl implements com.Japkutija.veterinarybackend.veter
     }
 
     @Override
+    @Transactional
     public void deleteSpecies(UUID uuid) {
 
         var species = getSpeciesByUuid(uuid);
