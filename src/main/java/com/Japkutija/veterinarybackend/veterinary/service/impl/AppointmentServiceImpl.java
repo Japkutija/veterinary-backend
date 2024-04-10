@@ -62,9 +62,9 @@ public class AppointmentServiceImpl implements AppointmentService {
     public Appointment updateAppointment(UUID uuid, AppointmentDTO appointmentDTO) {
 
         var appointment = getAppointmentByUuid(uuid);
-        appointmentMapper.updateAppointmentFromDto(appointmentDTO, appointment);
+        var updatedAppointment = appointmentMapper.updateAppointmentFromDto(appointmentDTO, appointment);
 
-        return saveAppointment(appointment);
+        return saveAppointment(updatedAppointment);
     }
 
 

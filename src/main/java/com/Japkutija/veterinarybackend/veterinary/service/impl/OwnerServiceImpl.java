@@ -64,9 +64,9 @@ public class OwnerServiceImpl implements com.Japkutija.veterinarybackend.veterin
 
         var owner = getOwnerByUuid(uuid);
 
-        ownerMapper.updateOwnerFromDto(ownerDTO, owner);
+        var updatedOwner = ownerMapper.updateOwnerFromDto(ownerDTO, owner);
 
-        return ownerRepository.save(owner);
+        return ownerRepository.save(updatedOwner);
     }
 
     @Override

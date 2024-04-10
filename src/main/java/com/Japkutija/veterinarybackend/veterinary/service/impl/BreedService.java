@@ -73,9 +73,9 @@ public class BreedService implements com.Japkutija.veterinarybackend.veterinary.
 
         var breed = getBreedByUuid(uuid);
 
-        breedMapper.updateBreedFromDto(breedDTO, breed);
+        var updatedBreed = breedMapper.updateBreedFromDto(breedDTO, breed);
 
-        return saveBreed(breed);
+        return saveBreed(updatedBreed);
 
     }
 

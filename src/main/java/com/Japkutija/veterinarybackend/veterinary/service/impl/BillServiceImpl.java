@@ -79,9 +79,9 @@ public class BillServiceImpl implements BillService {
 
         var bill = getBillByUuid(uuid);
 
-        billMapper.updateBillFromDto(billDTO, bill);
+        var updatedBill = billMapper.updateBillFromDto(billDTO, bill);
 
-        return saveBill(bill);
+        return saveBill(updatedBill);
     }
 
     @Override

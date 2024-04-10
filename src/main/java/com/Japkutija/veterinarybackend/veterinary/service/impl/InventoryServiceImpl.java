@@ -65,9 +65,9 @@ public class InventoryServiceImpl implements com.Japkutija.veterinarybackend.vet
 
         var inventory = getInventoryByUuid(uuid);
 
-        inventoryMapper.updateInventoryFromDto(inventoryDTO, inventory);
+        var updatedInventory = inventoryMapper.updateInventoryFromDto(inventoryDTO, inventory);
 
-        return inventoryRepository.save(inventory);
+        return inventoryRepository.save(updatedInventory);
     }
 
     @Override
