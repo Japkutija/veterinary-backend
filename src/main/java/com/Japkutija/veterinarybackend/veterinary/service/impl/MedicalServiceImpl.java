@@ -44,9 +44,9 @@ public class MedicalServiceImpl implements MedicalRecordService {
     public MedicalRecord updateMedicalRecord(MedicalRecordDTO medicalRecordDTO, UUID uuid) {
 
         var medicalRecord = getMedicalRecordByUuid(uuid);
-        medicalRecord = medicalRecordMapper.updateMedicalRecordFromDto(medicalRecordDTO, medicalRecord);
+        var updatedMedicalRecord = medicalRecordMapper.updateMedicalRecordFromDto(medicalRecordDTO, medicalRecord);
 
-        return saveMedicalRecord(medicalRecord);
+        return saveMedicalRecord(updatedMedicalRecord);
 
     }
 
