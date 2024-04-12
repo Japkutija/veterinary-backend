@@ -72,6 +72,7 @@ public class TreatmentServiceImpl implements com.Japkutija.veterinarybackend.vet
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<Treatment> getTreatmentsByPetUuid(UUID petUUID) {
         var treatments = treatmentRepository.findAll();
 
