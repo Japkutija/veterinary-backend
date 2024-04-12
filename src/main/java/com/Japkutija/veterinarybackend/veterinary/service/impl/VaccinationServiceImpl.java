@@ -52,7 +52,7 @@ public class VaccinationServiceImpl implements com.Japkutija.veterinarybackend.v
     @Override
     @Transactional(readOnly = true)
     public Vaccination getVaccinationByUuid(UUID vaccinationUUID) {
-        return vaccinationRepository.findByUuid(vaccinationUUID).orElseThrow(() -> new EntityNotFoundException(Vaccination.class, vaccinationUUID);
+        return vaccinationRepository.findByUuid(vaccinationUUID).orElseThrow(() -> new EntityNotFoundException(Vaccination.class, vaccinationUUID));
     }
 
     @Override
