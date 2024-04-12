@@ -71,7 +71,7 @@ public class SpeciesServiceImpl implements com.Japkutija.veterinarybackend.veter
     @Override
     @Transactional(readOnly = true)
     public List<Species> getSpeciesByName(String speciesName) {
-        var species = speciesRepository.findByName(speciesName);
+        var species = speciesRepository.findBySpeciesName(speciesName);
 
         if (species.isEmpty())
             return List.of();
@@ -94,7 +94,7 @@ public class SpeciesServiceImpl implements com.Japkutija.veterinarybackend.veter
     @Override
     @Transactional(readOnly = true)
     public List<Species> getSpeciesByBreed(String breed) {
-        var species = speciesRepository.findByBreed(breed);
+        var species = speciesRepository.findByBreedsBreedName(breed);
 
         if (species.isEmpty())
             return List.of();
