@@ -92,8 +92,8 @@ public class PetServiceImpl implements com.Japkutija.veterinarybackend.veterinar
 
     @Override
     @Transactional(readOnly = true)
-    public List<Pet> getPetsBySpecies(String species) {
-        var pets = petRepository.findBySpecies(species);
+    public List<Pet> getPetsBySpecies(String speciesName) {
+        var pets = petRepository.findBySpeciesSpeciesName(speciesName);
 
         if (pets.isEmpty())
             return List.of();
@@ -104,7 +104,7 @@ public class PetServiceImpl implements com.Japkutija.veterinarybackend.veterinar
     @Override
     @Transactional(readOnly = true)
     public List<Pet> getPetsByBreed(String breed) {
-        var pets = petRepository.findByBreed(breed);
+        var pets = petRepository.findByBreedBreedName(breed);
 
         if (pets.isEmpty())
             return List.of();

@@ -12,7 +12,7 @@ import java.util.UUID;
 public interface SpeciesRepository extends JpaRepository<Species, Long> {
     Optional<Species> findByUuid(UUID uuid);
 
-    List<Species> findByName(String speciesName);
+    List<Species> findBySpeciesName(String speciesName);
 
-    List<Species> findByBreed(String breed);
+    List<Species> findByBreedsBreedName(String breed);
 }
