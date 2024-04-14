@@ -16,7 +16,7 @@ public interface BillService {
 
     Bill getBillByBillNumber(String billNumber);
 
-    List<Bill> getBillsByOwnerUuid(String ownerUuid);
+    List<Bill> getBillsByOwnerUuid(UUID ownerUuid);
 
     List<Bill> getAllBills();
 
