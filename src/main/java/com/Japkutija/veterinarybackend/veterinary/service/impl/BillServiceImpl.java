@@ -48,7 +48,7 @@ public class BillServiceImpl implements BillService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<Bill> getBillsByOwnerUuid(String ownerUuid) {
+    public List<Bill> getBillsByOwnerUuid(UUID ownerUuid) {
 
         var bills = billRepository.findAllByOwnerUuid(ownerUuid);
 
