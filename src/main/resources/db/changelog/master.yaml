@@ -25,3 +25,5 @@ databaseChangeLog:
       file: classpath:db/changelog/012-alter-appointment-time-column.yaml
   - include:
       file: classpath:db/changelog/csv-setup.yaml
+  - include:
+      file: classpath:db/changelog/013-create-user-table-column.yaml
