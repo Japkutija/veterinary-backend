@@ -1,6 +1,5 @@
-package com.Japkutija.veterinarybackend.veterinary.security;
+package com.Japkutija.veterinarybackend.veterinary.service.impl;
 
-import com.Japkutija.veterinarybackend.veterinary.model.entity.User;
 import com.Japkutija.veterinarybackend.veterinary.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
