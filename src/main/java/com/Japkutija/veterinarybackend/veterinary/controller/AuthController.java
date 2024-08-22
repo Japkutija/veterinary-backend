@@ -5,7 +5,7 @@ import com.Japkutija.veterinarybackend.veterinary.model.dto.request.Authenticati
 import com.Japkutija.veterinarybackend.veterinary.model.dto.request.UserRegistrationDto;
 import com.Japkutija.veterinarybackend.veterinary.model.dto.response.AuthenticationResponse;
 import com.Japkutija.veterinarybackend.veterinary.model.dto.response.ErrorResponseDto;
-import com.Japkutija.veterinarybackend.veterinary.security.CustomUserDetailsService;
+import com.Japkutija.veterinarybackend.veterinary.service.impl.CustomUserDetailsService;
 import com.Japkutija.veterinarybackend.veterinary.security.util.JwtUtil;
 import com.Japkutija.veterinarybackend.veterinary.service.impl.UserServiceImpl;
 import jakarta.validation.Valid;
@@ -64,6 +64,7 @@ public class AuthController {
     public ResponseEntity<AuthenticationResponse> createAuthenticationToken(@RequestBody AuthenticationRequest authRequest) throws Exception {
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(authRequest.getUsername(), authRequest.getPassword())
+
         );
 
         final var userDetails = customUserDetailsService.loadUserByUsername(authRequest.getUsername());
