@@ -9,6 +9,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -23,20 +24,20 @@ public class SecurityConfig {
     private final CustomUserDetailsService customUserDetailsService;
     private final JwtRequestFilter jwtRequestFilter;
 
-    // @Bean
-    // public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-    //     http
-    //             .authorizeHttpRequests(authorize -> authorize
-    //                     .anyRequest().permitAll()
-    //             )
-    //             .csrf(AbstractHttpConfigurer::disable); // Disable CSRF protection for APIs
-    //
-    //     // Disabling CRSF means that the application is vulnerable to CSRF attacks
-    //     // This is a security risk and should be fixed
-    //     // What CRSF simply means is that a malicious website can send a request to the application on behalf of the user
-    //
-    //     return http.build();
-    // }
+    /*@Bean
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+         http
+                 .authorizeHttpRequests(authorize -> authorize
+                         .anyRequest().permitAll()
+                 )
+                 .csrf(AbstractHttpConfigurer::disable); // Disable CSRF protection for APIs
+
+         // Disabling CRSF means that the application is vulnerable to CSRF attacks
+         // This is a security risk and should be fixed
+         // What CRSF simply means is that a malicious website can send a request to the application on behalf of the user
+
+         return http.build();
+    }*/
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -47,7 +48,7 @@ public class SecurityConfig {
                 )
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS) // Stateless session management
                 .and()
-                .csrf().disable(); // Disable CSRF protection
+                .csrf(AbstractHttpConfigurer::disable); // Disable CSRF protection
 
         // Add JWT filter before the default authentication filter
         http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
