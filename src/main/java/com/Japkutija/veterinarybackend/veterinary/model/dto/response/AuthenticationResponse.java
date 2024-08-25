@@ -10,4 +10,5 @@ import lombok.Data;
 @AllArgsConstructor
 public class AuthenticationResponse {
     private String jwt;
+    private String refreshToken;
 }
