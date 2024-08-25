@@ -1,17 +1,18 @@
 package com.Japkutija.veterinarybackend.veterinary.service.impl;
 
 import com.Japkutija.veterinarybackend.veterinary.exception.BadRequestException;
+import com.Japkutija.veterinarybackend.veterinary.exception.EntityNotFoundException;
 import com.Japkutija.veterinarybackend.veterinary.exception.UserAlreadyExistsException;
 import com.Japkutija.veterinarybackend.veterinary.model.entity.User;
 import com.Japkutija.veterinarybackend.veterinary.model.enums.Role;
 import com.Japkutija.veterinarybackend.veterinary.repository.UserRepository;
 import com.Japkutija.veterinarybackend.veterinary.service.UserService;
-import jakarta.transaction.Transactional;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @RequiredArgsConstructor
 @Service
@@ -45,5 +46,11 @@ public class UserServiceImpl implements UserService {
         } catch (Exception e) {
             throw new BadRequestException("User registration failed", e);
         }
+    }
+
+    @Override
+    public User findByUsername(String username) {
+        return userRepository.findByUsername(username)
+                .orElseThrow(() -> new EntityNotFoundException(User.class, username));
     }
 }

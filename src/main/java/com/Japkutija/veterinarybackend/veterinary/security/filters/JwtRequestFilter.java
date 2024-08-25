@@ -44,30 +44,36 @@ public class JwtRequestFilter extends OncePerRequestFilter {
         final var authorizationHeader = request.getHeader("Authorization");
 
         String username = null;
-        String jwt = null;
+        String jwt;
 
-        if (StringUtils.hasText(authorizationHeader) && authorizationHeader.startsWith("Bearer ")) {
-            jwt = authorizationHeader.substring(7);
-            try {
-                username = jwtUtil.extractUsername(jwt);
-            } catch (ExpiredJwtException e) {
-                log.error("JWT Token has expired");
-            } catch (MalformedJwtException e) {
-                log.error("JWT Token is malformed");
-            } catch (IllegalArgumentException e) {
-                log.error("JWT Token is null or empty");
-            }
+        if (!StringUtils.hasText(authorizationHeader) || !authorizationHeader.startsWith("Bearer ")) {
+            log.warn("JWT Token is missing or invalid");
+            chain.doFilter(request, response);
+            return;
+        }
+        jwt = authorizationHeader.substring(7);
+        try {
+            username = jwtUtil.extractUsername(jwt);
+        } catch (ExpiredJwtException e) {
+            log.error("JWT Token has expired");
+        } catch (MalformedJwtException e) {
+            log.error("JWT Token is malformed");
+        } catch (IllegalArgumentException e) {
+            log.error("JWT Token is null or empty");
         }
 
         // Validate token and set authentication
         // The reason we are checking for getAuthentication is to avoid re-authenticating the user
-        if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-            var userDetails = this.userDetailsService.loadUserByUsername(username);
-            if (jwtUtil.validateToken(jwt, userDetails.getUsername())) {
-                var authenticationToken = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-                authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-                SecurityContextHolder.getContext().setAuthentication(authenticationToken);
-            }
+        if (username == null || SecurityContextHolder.getContext().getAuthentication() != null) {
+            chain.doFilter(request, response);
+            return;
+        }
+
+        var userDetails = this.userDetailsService.loadUserByUsername(username);
+        if (Boolean.TRUE.equals(jwtUtil.validateToken(jwt, userDetails.getUsername()))) {
+            var authenticationToken = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+            authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+            SecurityContextHolder.getContext().setAuthentication(authenticationToken);
         }
 
         // Continue the filter chain, pass the request and response to the next filter

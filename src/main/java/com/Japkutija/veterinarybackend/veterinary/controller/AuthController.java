@@ -2,55 +2,32 @@ package com.Japkutija.veterinarybackend.veterinary.controller;
 
 import com.Japkutija.veterinarybackend.veterinary.mapper.UserMapper;
 import com.Japkutija.veterinarybackend.veterinary.model.dto.request.AuthenticationRequest;
+import com.Japkutija.veterinarybackend.veterinary.model.dto.request.RefreshTokenRequest;
 import com.Japkutija.veterinarybackend.veterinary.model.dto.request.UserRegistrationDto;
 import com.Japkutija.veterinarybackend.veterinary.model.dto.response.AuthenticationResponse;
-import com.Japkutija.veterinarybackend.veterinary.model.dto.response.ErrorResponseDto;
-import com.Japkutija.veterinarybackend.veterinary.service.impl.CustomUserDetailsService;
-import com.Japkutija.veterinarybackend.veterinary.security.util.JwtUtil;
-import com.Japkutija.veterinarybackend.veterinary.service.impl.UserServiceImpl;
+import com.Japkutija.veterinarybackend.veterinary.service.impl.AuthServiceImpl;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-import java.time.LocalDateTime;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
+@Tag(name = "Authentication API", description = "Operations for user authentication")
 @RequestMapping("/api/auth")
 @RequiredArgsConstructor
 public class AuthController {
-
-    private final AuthenticationManager authenticationManager;
-    private final CustomUserDetailsService customUserDetailsService;
-    private final UserServiceImpl userService;
-    private final UserMapper userMapper;
-    private final JwtUtil jwtUtil;
+    private final AuthServiceImpl authService;
 
     @PostMapping("/register")
+    @Operation(summary = "Register a new user", description = "Registers a new user")
     public ResponseEntity<?> registerUser(@Valid @RequestBody UserRegistrationDto registrationDto) {
-        if (!registrationDto.getPassword().equals(registrationDto.getConfirmPassword())) {
-            var errorResponseDto = ErrorResponseDto.builder()
-                    .timestamp(LocalDateTime.now())
-                    .message("Passwords do not match")
-                    .status(HttpStatus.BAD_REQUEST.value())
-                    .build();
-            return ResponseEntity.badRequest().body(errorResponseDto);
-        }
-
-        var registeredUser = userService.registerUser(
-                registrationDto.getUsername(),
-                registrationDto.getEmail(),
-                registrationDto.getPassword()
-        );
-
-        var registeredUserDto = userMapper.toUserDto(registeredUser);
-
-        return ResponseEntity.ok(registeredUserDto);
+        var response = authService.registerUser(registrationDto);
+        return ResponseEntity.ok(response);
     }
 
     /**
@@ -58,18 +35,26 @@ public class AuthController {
      *
      * @param authRequest the authentication request containing username and password
      * @return a ResponseEntity containing the authentication response with the JWT token
-     * @throws Exception if authentication fails
      */
+    @Operation(summary = "Login a user", description = "Logs in a user")
     @PostMapping("/login")
-    public ResponseEntity<AuthenticationResponse> createAuthenticationToken(@RequestBody AuthenticationRequest authRequest) throws Exception {
-        authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(authRequest.getUsername(), authRequest.getPassword())
+    public ResponseEntity<AuthenticationResponse> createAuthenticationToken(@RequestBody AuthenticationRequest authRequest) {
+        var response = authService.loginUser(authRequest.getUsername(), authRequest.getPassword());
 
-        );
+        return ResponseEntity.ok(response);
+    }
 
-        final var userDetails = customUserDetailsService.loadUserByUsername(authRequest.getUsername());
-        final var jwt = jwtUtil.generateToken(userDetails.getUsername());
+    /**
+     * Endpoint to refresh the access token using a provided refresh token.
+     *
+     * @param refreshTokenRequest the request containing the refresh token
+     * @return a ResponseEntity containing the new authentication response with the refreshed access token
+     */
+    @Operation(summary = "Refresh the access token", description = "Refreshes the access token")
+    @PostMapping("/refresh-token")
+    public ResponseEntity<AuthenticationResponse> refreshAccessToken(@RequestBody RefreshTokenRequest refreshTokenRequest) {
+        var response = authService.refreshAccessToken(refreshTokenRequest.getRefreshToken());
 
-        return ResponseEntity.ok(new AuthenticationResponse(jwt));
+        return ResponseEntity.ok(response);
     }
 }
