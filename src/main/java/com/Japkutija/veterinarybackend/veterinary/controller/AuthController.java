@@ -1,5 +1,7 @@
 package com.Japkutija.veterinarybackend.veterinary.controller;
 
+import com.Japkutija.veterinarybackend.veterinary.exception.RefreshTokenExpiredException;
+import com.Japkutija.veterinarybackend.veterinary.exception.RefreshTokenNotFoundException;
 import com.Japkutija.veterinarybackend.veterinary.mapper.UserMapper;
 import com.Japkutija.veterinarybackend.veterinary.model.dto.request.AuthenticationRequest;
 import com.Japkutija.veterinarybackend.veterinary.model.dto.request.RefreshTokenRequest;
@@ -25,7 +27,7 @@ public class AuthController {
 
     @PostMapping("/register")
     @Operation(summary = "Register a new user", description = "Registers a new user")
-    public ResponseEntity<?> registerUser(@Valid @RequestBody UserRegistrationDto registrationDto) {
+    public ResponseEntity<Object> registerUser(@Valid @RequestBody UserRegistrationDto registrationDto) {
         var response = authService.registerUser(registrationDto);
         return ResponseEntity.ok(response);
     }
@@ -52,7 +54,8 @@ public class AuthController {
      */
     @Operation(summary = "Refresh the access token", description = "Refreshes the access token")
     @PostMapping("/refresh-token")
-    public ResponseEntity<AuthenticationResponse> refreshAccessToken(@RequestBody RefreshTokenRequest refreshTokenRequest) {
+    public ResponseEntity<AuthenticationResponse> refreshAccessToken(@RequestBody RefreshTokenRequest refreshTokenRequest)
+            throws RefreshTokenExpiredException, RefreshTokenNotFoundException {
         var response = authService.refreshAccessToken(refreshTokenRequest.getRefreshToken());
 
         return ResponseEntity.ok(response);
