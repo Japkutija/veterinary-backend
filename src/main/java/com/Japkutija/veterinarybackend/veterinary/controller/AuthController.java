@@ -11,6 +11,7 @@ import com.Japkutija.veterinarybackend.veterinary.service.RefreshTokenService;
 import com.Japkutija.veterinarybackend.veterinary.service.impl.AuthServiceImpl;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -29,6 +30,7 @@ public class AuthController {
 
     @PostMapping("/register")
     @Operation(summary = "Register a new user", description = "Registers a new user")
+    @Tag(name = "Authentication API")
     public ResponseEntity<Object> registerUser(@Valid @RequestBody UserRegistrationDto registrationDto) {
         var response = authService.registerUser(registrationDto);
         return ResponseEntity.ok(response);
@@ -41,11 +43,12 @@ public class AuthController {
      * @return a ResponseEntity containing the authentication response with the JWT token
      */
     @Operation(summary = "Login a user", description = "Logs in a user")
+    @Tag(name = "Authentication API")
     @PostMapping("/login")
-    public ResponseEntity<AuthenticationResponse> createAuthenticationToken(@RequestBody AuthenticationRequest authRequest) {
-        var response = authService.loginUser(authRequest.getUsername(), authRequest.getPassword());
+    public ResponseEntity<AuthenticationResponse> createAuthenticationToken(@RequestBody AuthenticationRequest authRequest, HttpServletResponse response) {
+        var authResponse = authService.loginUser(authRequest.getUsername(), authRequest.getPassword(), response);
 
-        return ResponseEntity.ok(response);
+        return ResponseEntity.ok(authResponse);
     }
 
     @PostMapping("/logout")
@@ -62,11 +65,12 @@ public class AuthController {
      * @return a ResponseEntity containing the new authentication response with the refreshed access token
      */
     @Operation(summary = "Refresh the access token", description = "Refreshes the access token")
+    @Tag(name = "Authentication API")
     @PostMapping("/refresh-token")
-    public ResponseEntity<AuthenticationResponse> refreshAccessToken(@RequestBody RefreshTokenRequest refreshTokenRequest)
+    public ResponseEntity<AuthenticationResponse> refreshAccessToken(@RequestBody RefreshTokenRequest refreshTokenRequest, HttpServletResponse response)
             throws RefreshTokenExpiredException, RefreshTokenNotFoundException {
-        var response = authService.refreshAccessToken(refreshTokenRequest.getRefreshToken());
+        var authResponse = authService.refreshAccessToken(refreshTokenRequest.getRefreshToken(), response);
 
-        return ResponseEntity.ok(response);
+        return ResponseEntity.ok(authResponse);
     }
 }

@@ -24,21 +24,6 @@ public class SecurityConfig {
     private final CustomUserDetailsService customUserDetailsService;
     private final JwtRequestFilter jwtRequestFilter;
 
-    /*@Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-         http
-                 .authorizeHttpRequests(authorize -> authorize
-                         .anyRequest().permitAll()
-                 )
-                 .csrf(AbstractHttpConfigurer::disable); // Disable CSRF protection for APIs
-
-         // Disabling CRSF means that the application is vulnerable to CSRF attacks
-         // This is a security risk and should be fixed
-         // What CRSF simply means is that a malicious website can send a request to the application on behalf of the user
-
-         return http.build();
-    }*/
-
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
