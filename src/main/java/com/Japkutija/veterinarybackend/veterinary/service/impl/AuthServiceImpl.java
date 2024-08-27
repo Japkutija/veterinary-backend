@@ -18,6 +18,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -37,6 +38,9 @@ public class AuthServiceImpl {
     private final JwtUtil jwtUtil;
     private final RefreshTokenService refreshTokenService;
     private final UserMapper userMapper;
+
+    @Value("${jwt.refresh-token-expiration}") //JWT_REFRESH_TOKEN_EXPIRATION
+    private int refreshTokenExpirationInDays;
 
     public Object registerUser(UserRegistrationDto registrationDto) {
 
@@ -81,7 +85,6 @@ public class AuthServiceImpl {
 
             log.info("Login successful for user {}", username);
             return new AuthenticationResponse(jwt, refreshToken);
-
         } catch (BadCredentialsException ex) {
             log.error("Login failed: Incorrect credentials for user {}", username);
             throw new BadRequestException("Incorrect username or password");
@@ -98,7 +101,7 @@ public class AuthServiceImpl {
         return RefreshToken.builder()
                 .token(refreshToken)
                 .user(userEntity)
-                .expiryDate(Instant.now().plus(7, ChronoUnit.DAYS))
+                .expiryDate(Instant.now().plus(refreshTokenExpirationInDays, ChronoUnit.DAYS))
                 .build();
     }
 
@@ -113,15 +116,28 @@ public class AuthServiceImpl {
                 throw new RefreshTokenExpiredException("Refresh token expired. Please login again.");
             }
 
-            // Generate a new access token
+            // Invalidate the old refreshed token by deleting it from the database
+            refreshTokenService.deleteByToken(refreshToken);
+
+            // Generate a new access token and refresh token
             var newAccessToken = jwtUtil.generateToken(refreshTokenEntity.getUser().getUsername());
+            var newRefreshToken = UUID.randomUUID().toString();
+
+            // Save the new refresh token in the database
+            var newRefreshTokenEntity = RefreshToken.builder()
+                    .token(newRefreshToken)
+                    .user(refreshTokenEntity.getUser())
+                    .expiryDate(Instant.now().plus(refreshTokenExpirationInDays, ChronoUnit.DAYS))
+                    .build();
+
+            refreshTokenService.saveRefreshToken(newRefreshTokenEntity);
 
             // Return the new access token and refresh token
-            return new AuthenticationResponse(newAccessToken, refreshToken);
+            return new AuthenticationResponse(newAccessToken, newRefreshToken);
         } catch (RefreshTokenExpiredException ex) {
             log.error("Refresh token expired: `{}`", refreshToken);
             throw ex;
-        } catch (Exception ex) {  // Catch any other exceptions
+        } catch (Exception ex) {
             log.error("Failed to refresh access token: {}", ex.getMessage());
             throw new RefreshTokenNotFoundException("Refresh token not found");
         }

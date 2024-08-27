@@ -3,6 +3,8 @@ package com.Japkutija.veterinarybackend.veterinary.security.util;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import jakarta.annotation.PostConstruct;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -10,10 +12,16 @@ import java.util.Date;
 import java.util.function.Function;
 
 @Component
+@Slf4j
 public class JwtUtil {
 
     @Value("${JWT_SECRET_KEY}")
     private String secretKey;
+
+    @PostConstruct
+    public void logSecretKey() {
+        log.info("JWT Secret Key: {}", secretKey);
+    }
 
     // Extract username (subject) from the token
     public String extractUsername(String token) {
