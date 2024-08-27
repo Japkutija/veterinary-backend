@@ -7,6 +7,7 @@ import com.Japkutija.veterinarybackend.veterinary.model.dto.request.Authenticati
 import com.Japkutija.veterinarybackend.veterinary.model.dto.request.RefreshTokenRequest;
 import com.Japkutija.veterinarybackend.veterinary.model.dto.request.UserRegistrationDto;
 import com.Japkutija.veterinarybackend.veterinary.model.dto.response.AuthenticationResponse;
+import com.Japkutija.veterinarybackend.veterinary.service.RefreshTokenService;
 import com.Japkutija.veterinarybackend.veterinary.service.impl.AuthServiceImpl;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -24,6 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class AuthController {
     private final AuthServiceImpl authService;
+    private final RefreshTokenService refreshTokenService;
 
     @PostMapping("/register")
     @Operation(summary = "Register a new user", description = "Registers a new user")
@@ -45,6 +47,13 @@ public class AuthController {
 
         return ResponseEntity.ok(response);
     }
+
+    @PostMapping("/logout")
+    public ResponseEntity<?> logout(@RequestBody RefreshTokenRequest refreshTokenRequest) {
+        refreshTokenService.deleteByToken(refreshTokenRequest.getRefreshToken());
+        return ResponseEntity.ok("User logged out successfully");
+    }
+
 
     /**
      * Endpoint to refresh the access token using a provided refresh token.
