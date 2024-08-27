@@ -12,11 +12,14 @@ import com.Japkutija.veterinarybackend.veterinary.model.entity.RefreshToken;
 import com.Japkutija.veterinarybackend.veterinary.model.entity.User;
 import com.Japkutija.veterinarybackend.veterinary.security.util.JwtUtil;
 import com.Japkutija.veterinarybackend.veterinary.service.RefreshTokenService;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.time.Duration;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.Arrays;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -93,7 +96,7 @@ public class AuthServiceImpl {
             setRefreshTokenCookie(response, refreshToken);
 
             log.info("Login successful for user {}", username);
-            return new AuthenticationResponse(jwt, refreshToken);
+            return new AuthenticationResponse(jwt);
         } catch (BadCredentialsException ex) {
             log.error("Login failed: Incorrect credentials for user {}", username);
             throw new BadRequestException("Incorrect username or password");
@@ -163,7 +166,7 @@ public class AuthServiceImpl {
             refreshTokenService.saveRefreshToken(newRefreshTokenEntity);
 
             // Return the new access token and refresh token
-            return new AuthenticationResponse(newAccessToken, newRefreshToken);
+            return new AuthenticationResponse(newAccessToken);
         } catch (RefreshTokenExpiredException ex) {
             log.error("Refresh token expired: `{}`", refreshToken);
             throw ex;
@@ -171,5 +174,27 @@ public class AuthServiceImpl {
             log.error("Failed to refresh access token: {}", ex.getMessage());
             throw new RefreshTokenNotFoundException("Refresh token not found");
         }
+    }
+
+    /**
+     * Extracts the refresh token from the cookies in the HTTP request.
+     * <p>
+     * This method retrieves the refresh token from the cookies present in the HTTP request.
+     * If the cookies are null or the refresh token is not found, it logs an error and throws a BadRequestException.
+     *
+     * @param request the HttpServletRequest containing the cookies
+     * @return the value of the refresh token
+     * @throws BadRequestException if the refresh token is not found in the cookies
+     */
+    public String extractRefreshToken(HttpServletRequest request) {
+
+        if (request.getCookies() == null) {
+            log.error("Refresh token not found in cookies");
+        }
+        return Arrays.stream(request.getCookies())
+                .filter(cookie -> "refreshToken".equals(cookie.getName()))
+                .findFirst()
+                .map(Cookie::getValue)
+                .orElseThrow(() -> new BadRequestException("Refresh token not found in cookies"));
     }
 }
