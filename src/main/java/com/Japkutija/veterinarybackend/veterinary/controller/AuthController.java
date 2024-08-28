@@ -47,7 +47,7 @@ public class AuthController {
     @Tag(name = "Authentication API")
     @PostMapping("/login")
     public ResponseEntity<AuthenticationResponse> createAuthenticationToken(@RequestBody AuthenticationRequest authRequest, HttpServletResponse response) {
-        var authResponse = authService.loginUser(authRequest.getUsername(), authRequest.getPassword(), response);
+            var authResponse = authService.loginUser(authRequest.getUsername(), authRequest.getPassword(), response);
 
         return ResponseEntity.ok(authResponse);
     }
