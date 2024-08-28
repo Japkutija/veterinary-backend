@@ -15,6 +15,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 @Configuration
 @EnableWebSecurity
@@ -27,6 +30,8 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
+                .cors()
+                .and()
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/api/auth/**").permitAll()
                         .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
@@ -40,6 +45,28 @@ public class SecurityConfig {
         http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
+    }
+
+    /**
+     * Configures the CORS (Cross-Origin Resource Sharing) settings for the application.
+     *
+     * This method creates a CorsConfigurationSource bean that defines the CORS settings,
+     * including allowed origins, headers, methods, and credentials support.
+     *
+     * @return a CorsConfigurationSource configured with the specified CORS settings
+     */
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        var configuration = new CorsConfiguration();
+        configuration.addAllowedOrigin("http://localhost:4200"); // Allow your frontend origin
+        configuration.addAllowedHeader("*"); // Allow all headers
+        configuration.addAllowedMethod("*"); // Allow all methods (POST, GET, etc.)
+        configuration.setAllowCredentials(true); // Allow credentials (e.g., cookies)
+
+        var source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration); // Apply CORS settings to all endpoints
+
+        return source;
     }
 
     @Bean
