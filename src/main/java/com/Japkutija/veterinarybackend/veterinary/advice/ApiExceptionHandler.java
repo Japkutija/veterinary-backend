@@ -3,6 +3,8 @@ package com.Japkutija.veterinarybackend.veterinary.advice;
 import com.Japkutija.veterinarybackend.veterinary.exception.BadRequestException;
 import com.Japkutija.veterinarybackend.veterinary.exception.EntityNotFoundException;
 import com.Japkutija.veterinarybackend.veterinary.exception.EntitySavingException;
+import com.Japkutija.veterinarybackend.veterinary.exception.JwtTokenExpiredException;
+import com.Japkutija.veterinarybackend.veterinary.exception.JwtTokenMalformedException;
 import com.Japkutija.veterinarybackend.veterinary.exception.RefreshTokenExpiredException;
 import com.Japkutija.veterinarybackend.veterinary.exception.UserAlreadyExistsException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -27,6 +29,31 @@ public class ApiExceptionHandler {
                 ex.getMessage(),
                 request.getRequestURI());
     }
+
+    @ExceptionHandler(JwtTokenMalformedException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ResponseEntity<ApiErrorResponse> handleJwtTokenMalformedException(JwtTokenMalformedException ex, HttpServletRequest request) {
+        var response = new ApiErrorResponse(
+                HttpStatus.BAD_REQUEST.value(),
+                "Malformed JWT Token",
+                ex.getMessage(),
+                request.getRequestURI()
+        );
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(JwtTokenExpiredException.class)
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    public ResponseEntity<ApiErrorResponse> handleJwtTokenExpiredException(JwtTokenExpiredException ex, HttpServletRequest request) {
+        var response = new ApiErrorResponse(
+                HttpStatus.UNAUTHORIZED.value(),
+                "Expired JWT Token",
+                ex.getMessage(),
+                request.getRequestURI()
+        );
+        return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
+    }
+
 
     @ExceptionHandler(RuntimeException.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)

@@ -33,6 +33,7 @@ public class SecurityConfig {
                 .cors()
                 .and()
                 .authorizeHttpRequests(authorize -> authorize
+                        .requestMatchers("/api/auth/login/**").anonymous() // Only accessible to unauthenticated users
                         .requestMatchers("/api/auth/**").permitAll()
                         .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
                         .anyRequest().authenticated()
@@ -49,7 +50,7 @@ public class SecurityConfig {
 
     /**
      * Configures the CORS (Cross-Origin Resource Sharing) settings for the application.
-     *
+     * <p>
      * This method creates a CorsConfigurationSource bean that defines the CORS settings,
      * including allowed origins, headers, methods, and credentials support.
      *
