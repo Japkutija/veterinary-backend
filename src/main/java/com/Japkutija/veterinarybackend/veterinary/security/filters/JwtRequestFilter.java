@@ -98,6 +98,15 @@ public class JwtRequestFilter extends OncePerRequestFilter {
         chain.doFilter(request, response);
     }
 
+    /**
+     * Sends an error response with the specified status, message, and path.
+     *
+     * @param response the HTTP response
+     * @param status the HTTP status code
+     * @param message the error message
+     * @param path the request URI that caused the error
+     * @throws IOException if an I/O error occurs during writing the response
+     */
     private void sendErrorResponse(HttpServletResponse response, int status, String message, String path) throws IOException {
         var apiErrorResponse = new ApiErrorResponse(
                 status,

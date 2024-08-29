@@ -45,6 +45,8 @@ public class AuthServiceImpl {
     private final RefreshTokenService refreshTokenService;
     private final UserMapper userMapper;
 
+    public static final String REFRESH_TOKEN_COOKIE_NAME = "refreshToken";
+
     @Value("${jwt.refresh-token-expiration}") //JWT_REFRESH_TOKEN_EXPIRATION
     private int refreshTokenExpirationInDays;
 
@@ -79,9 +81,8 @@ public class AuthServiceImpl {
             );
 
             // Load user details from the database
-            // No need to load user details here, as the user is already authenticated!
+            // No need to load User Details here, as the user is already authenticated!
             // Still need to retrieve the user entity to create the refresh token!
-            //var userDetails = customUserDetailsService.loadUserByUsername(username);
 
             var userEntity = userService.findByUsername(username);
 
@@ -109,6 +110,20 @@ public class AuthServiceImpl {
         }
     }
 
+    public void logout(String refreshToken, HttpServletResponse response) {
+        refreshTokenService.deleteByToken(refreshToken);
+
+        var cookie = ResponseCookie.from(REFRESH_TOKEN_COOKIE_NAME, "")
+                .httpOnly(true)
+                .secure(true) // if using HTTPS
+                .path("/")
+                .maxAge(0) // expires immediately
+                .build();
+        response.addHeader("Set-Cookie", cookie.toString());
+
+        log.info("User logged out successfully and refresh token deleted");
+    }
+
     /**
      * Sets the refresh token as an HttpOnly cookie in the response.
      *
@@ -116,7 +131,7 @@ public class AuthServiceImpl {
      * @param refreshToken the refresh token to be set as a cookie
      */
     private void setRefreshTokenCookie(HttpServletResponse response, String refreshToken) {
-        var refreshTokenCookie = ResponseCookie.from("refreshToken", refreshToken)
+        var refreshTokenCookie = ResponseCookie.from(REFRESH_TOKEN_COOKIE_NAME, refreshToken)
                 .httpOnly(true)
                 .secure(true) // Only send over HTTPS
                 .path("/api/auth/refresh-token") // Scope the cookie to this path, so it's not sent with every request.
