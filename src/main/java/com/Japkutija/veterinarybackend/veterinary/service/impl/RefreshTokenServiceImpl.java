@@ -1,5 +1,6 @@
 package com.Japkutija.veterinarybackend.veterinary.service.impl;
 
+import com.Japkutija.veterinarybackend.veterinary.exception.GeneralRunTimeException;
 import com.Japkutija.veterinarybackend.veterinary.model.entity.RefreshToken;
 import com.Japkutija.veterinarybackend.veterinary.repository.RefreshTokenRepository;
 import com.Japkutija.veterinarybackend.veterinary.service.RefreshTokenService;
@@ -31,7 +32,12 @@ public class RefreshTokenServiceImpl implements RefreshTokenService {
 
     @Override
     public void deleteByToken(String refreshToken) {
-        refreshTokenRepository.deleteByToken(refreshToken);
+        try {
+            refreshTokenRepository.deleteByToken(refreshToken);
+        } catch (Exception e) {
+            log.error("Error deleting refresh token: {}", refreshToken);
+            throw new GeneralRunTimeException("Error deleting refresh token", e);
+        }
     }
 
 }
