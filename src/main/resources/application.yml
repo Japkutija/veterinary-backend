@@ -19,3 +19,7 @@ spring:
     password: admin
     driver-class-name: com.mysql.cj.jdbc.Driver
 
+
+cookie:
+  same-site: Lax
+  secure: false

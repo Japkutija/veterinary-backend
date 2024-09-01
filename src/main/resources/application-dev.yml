@@ -21,3 +21,6 @@ spring:
 jwt:
   refresh-token-expiration: 7
 
+cookie:
+  same-site: Lax
+  secure: false
