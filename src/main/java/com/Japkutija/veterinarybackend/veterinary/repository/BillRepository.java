@@ -14,5 +14,5 @@ public interface BillRepository extends JpaRepository<Bill, Long> {
 
     Optional<Bill> findByBillNumber(String billNumber);
 
-    List<Bill> findAllByOwnerUuid(String ownerUuid);
+    List<Bill> findAllByOwnerUuid(UUID ownerUuid);
 }
