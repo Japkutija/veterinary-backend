@@ -7,6 +7,7 @@ import com.Japkutija.veterinarybackend.veterinary.service.RefreshTokenService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Slf4j
@@ -31,9 +32,11 @@ public class RefreshTokenServiceImpl implements RefreshTokenService {
     }
 
     @Override
+    @Transactional
     public void deleteByToken(String refreshToken) {
         try {
             refreshTokenRepository.deleteByToken(refreshToken);
+            log.info("Refresh token deleted: `{}`", refreshToken);
         } catch (Exception e) {
             log.error("Error deleting refresh token: {}", refreshToken);
             throw new GeneralRunTimeException("Error deleting refresh token", e);

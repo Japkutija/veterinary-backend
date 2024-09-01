@@ -2,6 +2,7 @@ package com.Japkutija.veterinarybackend.veterinary.service.impl;
 
 import com.Japkutija.veterinarybackend.veterinary.exception.BadRequestException;
 import com.Japkutija.veterinarybackend.veterinary.exception.EntityNotFoundException;
+import com.Japkutija.veterinarybackend.veterinary.exception.GeneralRunTimeException;
 import com.Japkutija.veterinarybackend.veterinary.exception.RefreshTokenExpiredException;
 import com.Japkutija.veterinarybackend.veterinary.exception.RefreshTokenNotFoundException;
 import com.Japkutija.veterinarybackend.veterinary.mapper.UserMapper;
@@ -20,7 +21,11 @@ import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -46,6 +51,7 @@ public class AuthServiceImpl {
     private final UserMapper userMapper;
 
     public static final String REFRESH_TOKEN_COOKIE_NAME = "refreshToken";
+    public static final String REFRESH_TOKEN_NOT_FOUND = "Refresh token not found in cookies";
 
     @Value("${jwt.refresh-token-expiration}") //JWT_REFRESH_TOKEN_EXPIRATION
     private int refreshTokenExpirationInDays;
@@ -110,13 +116,30 @@ public class AuthServiceImpl {
         }
     }
 
-    public void logout(String refreshToken, HttpServletResponse response) {
+    public void logout(HttpServletRequest request, HttpServletResponse response) {
+
+        var refreshToken = Optional.ofNullable(request.getCookies())
+                .stream()
+                .flatMap(Arrays::stream)
+                .filter(cookie -> REFRESH_TOKEN_COOKIE_NAME.equals(cookie.getName()))
+                .map(Cookie::getValue)
+                .findFirst()
+                .orElse(null);
+
+
+        if (refreshToken == null) {
+            log.error(REFRESH_TOKEN_NOT_FOUND);
+            throw new GeneralRunTimeException("Refresh token is missing");
+        }
+
+        log.info("Deleting refresh token: {}", refreshToken);
         refreshTokenService.deleteByToken(refreshToken);
 
         var cookie = ResponseCookie.from(REFRESH_TOKEN_COOKIE_NAME, "")
                 .httpOnly(true)
-                .secure(true) // if using HTTPS
-                .path("/")
+                .secure(false) // if using HTTPS
+                .sameSite("Lax")
+                .path("/api/auth/")
                 .maxAge(0) // expires immediately
                 .build();
         response.addHeader("Set-Cookie", cookie.toString());
@@ -133,10 +156,10 @@ public class AuthServiceImpl {
     private void setRefreshTokenCookie(HttpServletResponse response, String refreshToken) {
         var refreshTokenCookie = ResponseCookie.from(REFRESH_TOKEN_COOKIE_NAME, refreshToken)
                 .httpOnly(true)
-                .secure(true) // Only send over HTTPS
-                .path("/api/auth/refresh-token") // Scope the cookie to this path, so it's not sent with every request.
+                .secure(false) // if using HTTPS, set to true
+                .path("/api/auth/") // Scope the cookie to this path, so it's not sent with every request.
                 .maxAge(Duration.ofDays(refreshTokenExpirationInDays)) // Set expiration time
-                .sameSite("Strict") // Prevent CSRF attacks
+                .sameSite("Lax") // Prevent CSRF attacks
                 .build();
 
         // Add the cookie to the response header
@@ -204,12 +227,12 @@ public class AuthServiceImpl {
     public String extractRefreshToken(HttpServletRequest request) {
 
         if (request.getCookies() == null) {
-            log.error("Refresh token not found in cookies");
+            log.error(REFRESH_TOKEN_NOT_FOUND);
         }
         return Arrays.stream(request.getCookies())
                 .filter(cookie -> "refreshToken".equals(cookie.getName()))
                 .findFirst()
                 .map(Cookie::getValue)
-                .orElseThrow(() -> new BadRequestException("Refresh token not found in cookies"));
+                .orElseThrow(() -> new BadRequestException(REFRESH_TOKEN_NOT_FOUND));
     }
 }

@@ -2,6 +2,8 @@ package com.Japkutija.veterinarybackend.veterinary.config;
 
 import com.Japkutija.veterinarybackend.veterinary.service.impl.CustomUserDetailsService;
 import com.Japkutija.veterinarybackend.veterinary.security.filters.JwtRequestFilter;
+import java.util.Arrays;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -63,6 +65,7 @@ public class SecurityConfig {
         configuration.addAllowedHeader("*"); // Allow all headers
         configuration.addAllowedMethod("*"); // Allow all methods (POST, GET, etc.)
         configuration.setAllowCredentials(true); // Allow credentials (e.g., cookies)
+        configuration.addExposedHeader("Set-Cookie"); // Ensure that Set-Cookie is exposed
 
         var source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration); // Apply CORS settings to all endpoints

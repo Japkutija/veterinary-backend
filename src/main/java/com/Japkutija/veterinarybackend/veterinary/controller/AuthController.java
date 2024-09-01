@@ -6,6 +6,7 @@ import com.Japkutija.veterinarybackend.veterinary.mapper.UserMapper;
 import com.Japkutija.veterinarybackend.veterinary.model.dto.request.AuthenticationRequest;
 import com.Japkutija.veterinarybackend.veterinary.model.dto.request.RefreshTokenRequest;
 import com.Japkutija.veterinarybackend.veterinary.model.dto.request.UserRegistrationDto;
+import com.Japkutija.veterinarybackend.veterinary.model.dto.response.ApiResponseDto;
 import com.Japkutija.veterinarybackend.veterinary.model.dto.response.AuthenticationResponse;
 import com.Japkutija.veterinarybackend.veterinary.service.RefreshTokenService;
 import com.Japkutija.veterinarybackend.veterinary.service.impl.AuthServiceImpl;
@@ -46,26 +47,27 @@ public class AuthController {
     @Operation(summary = "Login a user", description = "Logs in a user")
     @Tag(name = "Authentication API")
     @PostMapping("/login")
-    public ResponseEntity<AuthenticationResponse> createAuthenticationToken(@RequestBody AuthenticationRequest authRequest, HttpServletResponse response) {
-            var authResponse = authService.loginUser(authRequest.getUsername(), authRequest.getPassword(), response);
+    public ResponseEntity<AuthenticationResponse> createAuthenticationToken(
+            @RequestBody AuthenticationRequest authRequest,
+            HttpServletResponse response) {
+        var authResponse = authService.loginUser(authRequest.getUsername(), authRequest.getPassword(), response);
 
         return ResponseEntity.ok(authResponse);
     }
 
+    @Operation(summary = "Logout a user", description = "Logs out a user")
+    @Tag(name = "Authentication API")
     @PostMapping("/logout")
-    public ResponseEntity<?> logout(@RequestBody RefreshTokenRequest refreshTokenRequest, HttpServletResponse response) {
-        authService.logout(refreshTokenRequest.getRefreshToken(), response);
-        return ResponseEntity.ok("User logged out successfully");
+    public ResponseEntity<?> logout(HttpServletRequest request, HttpServletResponse response) {
+        authService.logout(request, response);
+        return ResponseEntity.ok(new ApiResponseDto("User logged out successfully"));
     }
-
-
 
     @Operation(summary = "Refresh the access token", description = "Refreshes the access token")
     @Tag(name = "Authentication API")
     @PostMapping("/refresh-token")
     public ResponseEntity<AuthenticationResponse> refreshAccessToken(@RequestBody HttpServletRequest request, HttpServletResponse response)
             throws RefreshTokenExpiredException, RefreshTokenNotFoundException {
-        //var refreshToken = request.getHeader("refresh-token");
         var refreshToken = authService.extractRefreshToken(request);
         var authResponse = authService.refreshAccessToken(refreshToken, response);
 
