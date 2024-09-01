@@ -58,8 +58,6 @@ public class JwtRequestFilter extends OncePerRequestFilter {
         String jwt;
 
         if (!StringUtils.hasText(authorizationHeader) || !authorizationHeader.startsWith("Bearer ")) {
-            log.info("Displaying the authorization header: {}", authorizationHeader);
-            log.warn("JWT Token is missing or invalid");
             chain.doFilter(request, response);
             return;
         }
@@ -119,5 +117,11 @@ public class JwtRequestFilter extends OncePerRequestFilter {
         // Write the text message of the response as JSON
         response.getWriter().write(objectMapper.writeValueAsString(apiErrorResponse));
     }
+
+    /*@Override
+    protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
+        var path = request.getRequestURI();
+        return path.equals("/api/auth/logout");
+    }*/
 
 }

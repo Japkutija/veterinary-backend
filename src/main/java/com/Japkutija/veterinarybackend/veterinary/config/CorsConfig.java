@@ -1,5 +1,6 @@
 package com.Japkutija.veterinarybackend.veterinary.config;
 
+import java.util.List;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.cors.CorsConfiguration;
@@ -23,10 +24,11 @@ public class CorsConfig {
     @Bean
     public CorsFilter corsFilter() {
         var config = new CorsConfiguration();
-        config.addAllowedOrigin("http://localhost:4200"); // Allow the frontend origin
+        config.addAllowedOrigin("http://localhost:4200"); // Allow the frontend origin,
         config.setAllowCredentials(true); // Allow credentials (e.g., cookies)
         config.addAllowedHeader("*"); // Allow all headers
         config.addAllowedMethod("*"); // Allow all methods (POST, GET, etc.)
+        config.addExposedHeader("Set-Cookie"); // Ensure that Set-Cookie is exposed
 
         var source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", config); // Apply CORS settings to all endpoints
