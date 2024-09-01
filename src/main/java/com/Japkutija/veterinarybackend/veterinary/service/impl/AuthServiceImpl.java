@@ -1,5 +1,6 @@
 package com.Japkutija.veterinarybackend.veterinary.service.impl;
 
+import com.Japkutija.veterinarybackend.veterinary.config.CookieConfig;
 import com.Japkutija.veterinarybackend.veterinary.exception.BadRequestException;
 import com.Japkutija.veterinarybackend.veterinary.exception.EntityNotFoundException;
 import com.Japkutija.veterinarybackend.veterinary.exception.GeneralRunTimeException;
@@ -21,11 +22,8 @@ import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -44,7 +42,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class AuthServiceImpl {
 
     private final AuthenticationManager authenticationManager;
-    private final CustomUserDetailsService customUserDetailsService;
+    private final CookieConfig cookieConfig;
     private final UserServiceImpl userService;
     private final JwtUtil jwtUtil;
     private final RefreshTokenService refreshTokenService;
@@ -126,7 +124,6 @@ public class AuthServiceImpl {
                 .findFirst()
                 .orElse(null);
 
-
         if (refreshToken == null) {
             log.error(REFRESH_TOKEN_NOT_FOUND);
             throw new GeneralRunTimeException("Refresh token is missing");
@@ -137,8 +134,8 @@ public class AuthServiceImpl {
 
         var cookie = ResponseCookie.from(REFRESH_TOKEN_COOKIE_NAME, "")
                 .httpOnly(true)
-                .secure(false) // if using HTTPS
-                .sameSite("Lax")
+                .secure(cookieConfig.isSecure())
+                .sameSite(cookieConfig.getSameSite())
                 .path("/api/auth/")
                 .maxAge(0) // expires immediately
                 .build();
@@ -156,10 +153,10 @@ public class AuthServiceImpl {
     private void setRefreshTokenCookie(HttpServletResponse response, String refreshToken) {
         var refreshTokenCookie = ResponseCookie.from(REFRESH_TOKEN_COOKIE_NAME, refreshToken)
                 .httpOnly(true)
-                .secure(false) // if using HTTPS, set to true
+                .secure(cookieConfig.isSecure())
                 .path("/api/auth/") // Scope the cookie to this path, so it's not sent with every request.
                 .maxAge(Duration.ofDays(refreshTokenExpirationInDays)) // Set expiration time
-                .sameSite("Lax") // Prevent CSRF attacks
+                .sameSite(cookieConfig.getSameSite()) //
                 .build();
 
         // Add the cookie to the response header
@@ -230,7 +227,7 @@ public class AuthServiceImpl {
             log.error(REFRESH_TOKEN_NOT_FOUND);
         }
         return Arrays.stream(request.getCookies())
-                .filter(cookie -> "refreshToken".equals(cookie.getName()))
+                .filter(cookie -> REFRESH_TOKEN_COOKIE_NAME.equals(cookie.getName()))
                 .findFirst()
                 .map(Cookie::getValue)
                 .orElseThrow(() -> new BadRequestException(REFRESH_TOKEN_NOT_FOUND));
