@@ -18,4 +18,9 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
   liquibase:
     change-log: classpath:db/changelog/master.yaml
+jwt:
+  refresh-token-expiration: 7
 
+cookie:
+  same-site: Lax
+  secure: false
