@@ -17,3 +17,11 @@ spring:
     password: admin
     driver-class-name: com.mysql.cj.jdbc.Driver
 
+
+jwt:
+  refresh-token-expiration: 7
+
+cookie:
+  same-site: Lax
+  secure: false
+
