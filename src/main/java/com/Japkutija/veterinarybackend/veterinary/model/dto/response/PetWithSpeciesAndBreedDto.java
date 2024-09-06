@@ -1,16 +1,15 @@
-package com.Japkutija.veterinarybackend.veterinary.model.dto;
+package com.Japkutija.veterinarybackend.veterinary.model.dto.response;
 
 import com.Japkutija.veterinarybackend.veterinary.model.enums.Gender;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import lombok.Data;
-
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.UUID;
+import lombok.Data;
 
 @Data
-public class PetDTO {
+public class PetWithSpeciesAndBreedDto {
 
     @NotNull
     private UUID uuid;
@@ -36,11 +35,11 @@ public class PetDTO {
     private BigDecimal height;
 
     @NotNull
-    private UUID ownerUuid;
+    private String ownerName;
 
     @NotNull
-    private UUID speciesUuid;
+    private String speciesName;
 
     @NotNull
-    private UUID breedUuid;
+    private String breedName;
 }

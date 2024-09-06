@@ -6,8 +6,11 @@ import com.Japkutija.veterinarybackend.veterinary.mapper.PetMapper;
 import com.Japkutija.veterinarybackend.veterinary.model.dto.PetDTO;
 import com.Japkutija.veterinarybackend.veterinary.model.entity.Pet;
 import com.Japkutija.veterinarybackend.veterinary.repository.PetRepository;
+import java.awt.print.Pageable;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -72,10 +75,25 @@ public class PetServiceImpl implements com.Japkutija.veterinarybackend.veterinar
     public List<Pet> getAllPets() {
         var pets = petRepository.findAll();
 
-        if (pets.isEmpty())
+        if (pets.isEmpty()) {
             return List.of();
+        }
 
         return pets;
+    }
+
+    /*@Override
+    @Transactional(readOnly = true)
+    public Page<Pet> getAllPets(int page, int size) {
+        return petRepository.findAll(PageRequest.of(page, size));
+    }*/
+
+    @Override
+    @Transactional(readOnly = true)
+    public Page<Pet> getPaginatedPets(int pageIndex, int pageSize) {
+        var pageable = PageRequest.of(pageIndex - 1, pageSize);
+
+        return petRepository.findAll(pageable);
     }
 
     @Override
@@ -83,11 +101,11 @@ public class PetServiceImpl implements com.Japkutija.veterinarybackend.veterinar
     public List<Pet> getPetsByOwner(UUID ownerUuid) {
         var pets = petRepository.findByOwnerUuid(ownerUuid);
 
-        if (pets.isEmpty())
+        if (pets.isEmpty()) {
             return List.of();
+        }
 
         return pets;
-
     }
 
     @Override
@@ -95,8 +113,9 @@ public class PetServiceImpl implements com.Japkutija.veterinarybackend.veterinar
     public List<Pet> getPetsBySpecies(String speciesName) {
         var pets = petRepository.findBySpeciesSpeciesName(speciesName);
 
-        if (pets.isEmpty())
+        if (pets.isEmpty()) {
             return List.of();
+        }
 
         return pets;
     }
@@ -106,8 +125,9 @@ public class PetServiceImpl implements com.Japkutija.veterinarybackend.veterinar
     public List<Pet> getPetsByBreed(String breed) {
         var pets = petRepository.findByBreedBreedName(breed);
 
-        if (pets.isEmpty())
+        if (pets.isEmpty()) {
             return List.of();
+        }
 
         return pets;
     }
