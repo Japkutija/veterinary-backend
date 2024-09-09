@@ -101,7 +101,7 @@ public class BreedController {
             @ApiResponse(responseCode = "404", description = "Breed not found")
     })
     @DeleteMapping("/{uuid}")
-    public ResponseEntity<Void> deleteBreed(@NotNull UUID uuid) {
+    public ResponseEntity<Void> deleteBreed(@NotNull @PathVariable UUID uuid) {
         breedService.deleteBreed(uuid);
 
         return ResponseEntity.ok().build();

@@ -1,5 +1,6 @@
 package com.Japkutija.veterinarybackend.veterinary.service.impl;
 
+import com.Japkutija.veterinarybackend.veterinary.exception.EntityDeletionException;
 import com.Japkutija.veterinarybackend.veterinary.exception.EntityNotFoundException;
 import com.Japkutija.veterinarybackend.veterinary.exception.EntitySavingException;
 import com.Japkutija.veterinarybackend.veterinary.mapper.PetMapper;
@@ -135,8 +136,14 @@ public class PetServiceImpl implements com.Japkutija.veterinarybackend.veterinar
     @Override
     @Transactional
     public void deletePet(UUID uuid) {
-
-        var pet = getPetByUuid(uuid);
-        petRepository.delete(pet);
+        log.info("Attempting to delete pet with UUID: {}", uuid);
+        try {
+            var pet = getPetByUuid(uuid);
+            petRepository.delete(pet);
+            log.info("Successfully deleted pet with UUID: {}", uuid);
+        } catch (Exception ex) {
+            log.error("Error occurred while deleting pet with UUID: {} {}", uuid, ex.getMessage());
+            throw new EntityDeletionException(Pet.class, "Error occurred while deleting pet", ex);
+        }
     }
 }

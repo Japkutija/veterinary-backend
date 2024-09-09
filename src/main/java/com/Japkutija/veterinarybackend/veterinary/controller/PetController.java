@@ -1,30 +1,21 @@
 package com.Japkutija.veterinarybackend.veterinary.controller;
 
-import com.Japkutija.veterinarybackend.veterinary.mapper.BreedMapper;
 import com.Japkutija.veterinarybackend.veterinary.mapper.PetMapper;
-import com.Japkutija.veterinarybackend.veterinary.model.dto.BreedDTO;
 import com.Japkutija.veterinarybackend.veterinary.model.dto.response.PetWithSpeciesAndBreedDto;
-import com.Japkutija.veterinarybackend.veterinary.service.BreedService;
 import com.Japkutija.veterinarybackend.veterinary.service.PetService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
-import java.util.List;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -52,7 +43,6 @@ public class PetController {
             return ResponseEntity.ok(petMapper.toPetWithSpeciesAndBreedDto(pet));
     }
 
-    // Retrieve all the pets (paginated)
     @GetMapping
     @Operation(summary = "Get all pets", description = "Returns all pets", tags = {"pets"})
     @ApiResponses(value = {
@@ -65,6 +55,18 @@ public class PetController {
 
             return ResponseEntity.ok(pets.map(petMapper::toPetWithSpeciesAndBreedDto));
 
+    }
+
+    @Operation(summary = "Delete a pet", description = "Deletes a pet by its uuid", tags = {"pets"})
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "204", description = "Pet deleted"),
+            @ApiResponse(responseCode = "404", description = "Pet not found")})
+    @DeleteMapping("/{uuid}")
+    public ResponseEntity<Void> deletePet(@PathVariable @NotNull UUID uuid) {
+
+            petService.deletePet(uuid);
+
+            return ResponseEntity.noContent().build();
     }
 
 }
