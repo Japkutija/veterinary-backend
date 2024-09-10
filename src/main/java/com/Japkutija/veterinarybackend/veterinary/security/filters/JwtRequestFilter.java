@@ -66,7 +66,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
             return;
         } catch (MalformedJwtException e) {
             log.error("JWT Token is malformed");
-            sendErrorResponse(response, HttpServletResponse.SC_BAD_REQUEST, "JWT Token is malformed", request.getRequestURI());
+            sendErrorResponse(response, HttpServletResponse.SC_FORBIDDEN, "JWT Token is malformed", request.getRequestURI());
             return;
         } catch (IllegalArgumentException e) {
             log.error("JWT Token is null or empty");
