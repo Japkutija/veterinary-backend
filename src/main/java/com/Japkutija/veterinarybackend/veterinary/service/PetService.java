@@ -7,6 +7,7 @@ import java.awt.print.Pageable;
 import java.util.List;
 import java.util.UUID;
 import org.springframework.data.domain.Page;
+import org.springframework.transaction.annotation.Transactional;
 
 public interface PetService {
 
@@ -22,7 +23,8 @@ public interface PetService {
 
     List<Pet> getAllPets();
 
-    Page<Pet> getPaginatedPets(int pageIndex, int pageSize);
+    @Transactional(readOnly = true)
+    Page<Pet> getPaginatedAndSortedPets(int pageIndex, int pageSize, String sortField, String sortOrder);
 
     List<Pet> getPetsByOwner(UUID ownerUuid);
 
