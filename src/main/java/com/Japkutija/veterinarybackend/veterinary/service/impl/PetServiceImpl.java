@@ -7,11 +7,11 @@ import com.Japkutija.veterinarybackend.veterinary.mapper.PetMapper;
 import com.Japkutija.veterinarybackend.veterinary.model.dto.PetDTO;
 import com.Japkutija.veterinarybackend.veterinary.model.entity.Pet;
 import com.Japkutija.veterinarybackend.veterinary.repository.PetRepository;
-import java.awt.print.Pageable;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -91,11 +91,20 @@ public class PetServiceImpl implements com.Japkutija.veterinarybackend.veterinar
 
     @Override
     @Transactional(readOnly = true)
-    public Page<Pet> getPaginatedPets(int pageIndex, int pageSize) {
-        var pageable = PageRequest.of(pageIndex - 1, pageSize);
+    public Page<Pet> getPaginatedAndSortedPets(int pageIndex, int pageSize, String sortField, String sortOrder) {
+        // Set the default sort direction if not provided
+        var direction = "desc".equalsIgnoreCase(sortOrder) ? Sort.Direction.DESC : Sort.Direction.ASC;
 
+        // Create the Sort object if sortField is provided, otherwise unsorted
+        var sort = (sortField != null) ? Sort.by(direction, sortField) : Sort.unsorted();
+
+        // Create pageable object with sorting and pagination
+        var pageable = PageRequest.of(pageIndex - 1, pageSize, sort);
+
+        // Fetch pets with pagination and sorting applied
         return petRepository.findAll(pageable);
     }
+
 
     @Override
     @Transactional(readOnly = true)

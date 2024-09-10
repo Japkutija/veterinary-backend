@@ -38,9 +38,9 @@ public class PetController {
             @ApiResponse(responseCode = "404", description = "Pet not found")})
     public ResponseEntity<PetWithSpeciesAndBreedDto> getPetByUuid(@PathVariable @NotNull UUID uuid) {
 
-            var pet = petService.getPetByUuid(uuid);
+        var pet = petService.getPetByUuid(uuid);
 
-            return ResponseEntity.ok(petMapper.toPetWithSpeciesAndBreedDto(pet));
+        return ResponseEntity.ok(petMapper.toPetWithSpeciesAndBreedDto(pet));
     }
 
     @GetMapping
@@ -49,12 +49,15 @@ public class PetController {
             @ApiResponse(responseCode = "200", description = "Pets found",
                     content = @io.swagger.v3.oas.annotations.media.Content(schema = @io.swagger.v3.oas.annotations.media.Schema(implementation = PetWithSpeciesAndBreedDto.class))),
             @ApiResponse(responseCode = "404", description = "Pets not found")})
-    public ResponseEntity<Page<PetWithSpeciesAndBreedDto>> getAllPets(@RequestParam(defaultValue = "1") int pageIndex, @RequestParam(defaultValue = "10") int pageSize) {
+    public ResponseEntity<Page<PetWithSpeciesAndBreedDto>> getAllPets(
+            @RequestParam(defaultValue = "1") int pageIndex,
+            @RequestParam(defaultValue = "10") int pageSize,
+            @RequestParam(required = false) String sortField,
+            @RequestParam(required = false, defaultValue = "asc") String sortOrder) {
 
-            var pets = petService.getPaginatedPets(pageIndex, pageSize);
+        var pets = petService.getPaginatedAndSortedPets(pageIndex, pageSize, sortField, sortOrder);
 
-            return ResponseEntity.ok(pets.map(petMapper::toPetWithSpeciesAndBreedDto));
-
+        return ResponseEntity.ok(pets.map(petMapper::toPetWithSpeciesAndBreedDto));
     }
 
     @Operation(summary = "Delete a pet", description = "Deletes a pet by its uuid", tags = {"pets"})
@@ -64,9 +67,8 @@ public class PetController {
     @DeleteMapping("/{uuid}")
     public ResponseEntity<Void> deletePet(@PathVariable @NotNull UUID uuid) {
 
-            petService.deletePet(uuid);
+        petService.deletePet(uuid);
 
-            return ResponseEntity.noContent().build();
+        return ResponseEntity.noContent().build();
     }
-
 }
