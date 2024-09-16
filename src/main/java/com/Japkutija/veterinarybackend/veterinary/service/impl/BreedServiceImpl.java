@@ -24,7 +24,16 @@ public class BreedServiceImpl implements com.Japkutija.veterinarybackend.veterin
     private final BreedMapper breedMapper;
 
     @Override
-    @Transactional
+    public List<Breed> getBreedsBySpeciesName(String speciesName) {
+        var breeds = breedRepository.findAllBySpecies_SpeciesName(speciesName);
+
+        if (breeds.isEmpty()) {
+            return List.of();
+        }
+        return breeds;
+    }
+
+    @Override
     public Breed createBreed(BreedDTO breedDTO) {
         var breed = breedMapper.toBreed(breedDTO);
 
