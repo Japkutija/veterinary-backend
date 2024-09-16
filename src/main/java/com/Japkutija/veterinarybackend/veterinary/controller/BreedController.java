@@ -2,7 +2,6 @@ package com.Japkutija.veterinarybackend.veterinary.controller;
 
 import com.Japkutija.veterinarybackend.veterinary.mapper.BreedMapper;
 import com.Japkutija.veterinarybackend.veterinary.model.dto.BreedDTO;
-import com.Japkutija.veterinarybackend.veterinary.model.entity.Breed;
 import com.Japkutija.veterinarybackend.veterinary.service.BreedService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -88,9 +87,21 @@ public class BreedController {
             @ApiResponse(responseCode = "200", description = "Breed retrieved"),
             @ApiResponse(responseCode = "404", description = "Breed not found")
     })
-    @GetMapping("/species/{speciesUuid}")
-    public List<BreedDTO> getBreedsBySpecies(@PathVariable @NotNull UUID speciesUuid) {
+    @GetMapping("/species/uuid/{speciesUuid}")
+    public List<BreedDTO> getBreedsBySpeciesName(@PathVariable @NotNull UUID speciesUuid) {
         var breeds = breedService.getBreedsBySpeciesUuid(speciesUuid);
+
+        return breedMapper.toBreedDTOList(breeds);
+    }
+
+    @Operation(summary = "Get a list of breeds by species name", description = "Gets a list of breeds by species name")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Breed retrieved"),
+            @ApiResponse(responseCode = "404", description = "Breed not found")
+    })
+    @GetMapping("/species/name/{speciesName}")
+    public List<BreedDTO> getBreedsBySpeciesName(@PathVariable @NotNull String speciesName) {
+        var breeds = breedService.getBreedsBySpeciesName(speciesName);
 
         return breedMapper.toBreedDTOList(breeds);
     }
@@ -100,6 +111,7 @@ public class BreedController {
             @ApiResponse(responseCode = "200", description = "Breed deleted"),
             @ApiResponse(responseCode = "404", description = "Breed not found")
     })
+
     @DeleteMapping("/{uuid}")
     public ResponseEntity<Void> deleteBreed(@NotNull @PathVariable UUID uuid) {
         breedService.deleteBreed(uuid);

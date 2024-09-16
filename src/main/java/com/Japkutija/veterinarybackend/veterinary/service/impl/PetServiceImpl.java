@@ -35,10 +35,12 @@ public class PetServiceImpl implements com.Japkutija.veterinarybackend.veterinar
     }
 
     @Override
-    @Transactional
     public Pet savePet(Pet pet) {
         try {
-            return petRepository.save(pet);
+            log.info("Attempting to save pet species name: {}", pet.getSpecies().getSpeciesName());
+            log.info("Attempting to save pet breed name: {}", pet.getBreed().getBreedName());
+            var result = petRepository.save(pet);
+            return result;
         } catch (Exception ex) {
             log.error("Error saving pet: {}", ex.getMessage());
             throw new EntitySavingException(Pet.class, ex);
@@ -50,9 +52,11 @@ public class PetServiceImpl implements com.Japkutija.veterinarybackend.veterinar
     public Pet updatePet(PetDTO petDTO, UUID uuid) {
         var pet = getPetByUuid(uuid);
 
-        petMapper.updatePetFromDto(petDTO, pet);
+        var result = petMapper.updatePetFromDto(petDTO, pet);
 
-        return savePet(pet);
+        log.info("Trying to save pet with species and breed: {} {}", result.getSpecies().getSpeciesName(), result.getBreed().getBreedName());
+        return savePet(result);
+
     }
 
     @Override
