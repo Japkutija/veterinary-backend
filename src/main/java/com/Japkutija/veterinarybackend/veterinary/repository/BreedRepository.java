@@ -13,4 +13,5 @@ public interface BreedRepository extends JpaRepository<Breed, Long> {
     Optional<Breed> findByUuid(UUID uuid);
 
     List<Breed> findAllBySpeciesUuid(UUID speciesUuid);
+    List<Breed> findAllBySpecies_SpeciesName(String speciesName);
 }

@@ -87,5 +87,22 @@ public class Pet {
     @NotNull
     private Breed breed;
 
+    @Override
+    public String toString() {
+        return "Pet{" +
+                "id=" + id +
+                ", uuid=" + uuid +
+                ", chipNumber='" + chipNumber + '\'' +
+                ", nickname='" + nickname + '\'' +
+                ", gender=" + gender +
+                ", dateOfBirth=" + dateOfBirth +
+                ", weight=" + weight +
+                ", height=" + height +
+                // Exclude owner and collections
+                '}';
+    }
+
+
+
 
 }
