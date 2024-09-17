@@ -42,5 +42,11 @@ public class PetDTO {
     private UUID speciesUuid;
 
     @NotNull
+    private String speciesName;
+
+    @NotNull
+    private String breedName;
+
+    @NotNull
     private UUID breedUuid;
 }

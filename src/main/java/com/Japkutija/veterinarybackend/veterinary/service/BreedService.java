@@ -8,6 +8,7 @@ import java.util.UUID;
 
 public interface BreedService {
 
+    List<Breed> getBreedsBySpeciesName(String speciesName);
     Breed createBreed(BreedDTO breedDTO);
 
     Breed saveBreed(Breed breed);
