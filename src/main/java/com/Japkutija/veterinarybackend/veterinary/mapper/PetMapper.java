@@ -19,6 +19,11 @@ public interface PetMapper {
     @Mapping(source = "species.speciesName", target = "speciesName")
     PetWithSpeciesAndBreedDto toPetWithSpeciesAndBreedDto(Pet pet);
 
+    PetWithSpeciesAndBreedDto fromPetDto(PetDTO petDTO);
+
+    //@Mapping(source = "speciesName", target = "")
+    PetDTO fromPetWithSpeciesAndBreedDto(PetWithSpeciesAndBreedDto petWithSpeciesAndBreedDto);
+
     @Named("mapOwnerName")
     default String mapOwnerName(Owner owner) {
         return owner.getFirstName() + " " + owner.getLastName();
@@ -38,6 +43,8 @@ public interface PetMapper {
 
     List<Pet> toPetList(List<PetDTO> petDTOs);
 
+    @Mapping(source = "speciesName", target = "species.speciesName")
+    @Mapping(source = "breedName", target = "breed.breedName")
     Pet updatePetFromDto(PetDTO petDTO, @MappingTarget Pet pet);
 }
 

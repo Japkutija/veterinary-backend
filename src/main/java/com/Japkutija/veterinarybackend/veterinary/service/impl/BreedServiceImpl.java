@@ -1,5 +1,6 @@
 package com.Japkutija.veterinarybackend.veterinary.service.impl;
 
+import com.Japkutija.veterinarybackend.veterinary.exception.EntityDeletionException;
 import com.Japkutija.veterinarybackend.veterinary.exception.EntityNotFoundException;
 import com.Japkutija.veterinarybackend.veterinary.exception.EntitySavingException;
 import com.Japkutija.veterinarybackend.veterinary.mapper.BreedMapper;
@@ -23,7 +24,16 @@ public class BreedServiceImpl implements com.Japkutija.veterinarybackend.veterin
     private final BreedMapper breedMapper;
 
     @Override
-    @Transactional
+    public List<Breed> getBreedsBySpeciesName(String speciesName) {
+        var breeds = breedRepository.findAllBySpecies_SpeciesName(speciesName);
+
+        if (breeds.isEmpty()) {
+            return List.of();
+        }
+        return breeds;
+    }
+
+    @Override
     public Breed createBreed(BreedDTO breedDTO) {
         var breed = breedMapper.toBreed(breedDTO);
 
@@ -89,10 +99,12 @@ public class BreedServiceImpl implements com.Japkutija.veterinarybackend.veterin
     @Override
     @Transactional
     public void deleteBreed(UUID uuid) {
-
-        var breed = getBreedByUuid(uuid);
-
-        breedRepository.delete(breed);
-
+        try {
+            var breed = getBreedByUuid(uuid);
+            breedRepository.delete(breed);
+        } catch (Exception ex) {
+            log.error("Error deleting breed: {}", ex.getMessage());
+            throw new EntityDeletionException(Breed.class, "Error occurred while deleting breed", ex);
+        }
     }
 }

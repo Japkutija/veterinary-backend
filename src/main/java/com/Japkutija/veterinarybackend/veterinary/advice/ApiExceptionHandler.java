@@ -1,6 +1,7 @@
 package com.Japkutija.veterinarybackend.veterinary.advice;
 
 import com.Japkutija.veterinarybackend.veterinary.exception.BadRequestException;
+import com.Japkutija.veterinarybackend.veterinary.exception.EntityDeletionException;
 import com.Japkutija.veterinarybackend.veterinary.exception.EntityNotFoundException;
 import com.Japkutija.veterinarybackend.veterinary.exception.EntitySavingException;
 import com.Japkutija.veterinarybackend.veterinary.exception.JwtTokenExpiredException;
@@ -30,6 +31,19 @@ public class ApiExceptionHandler {
                 request.getRequestURI());
     }
 
+    @ExceptionHandler(EntityDeletionException.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public ResponseEntity<ApiErrorResponse> handleEntityDeletionException(EntityDeletionException ex, HttpServletRequest request) {
+        var response = new ApiErrorResponse(
+                HttpStatus.INTERNAL_SERVER_ERROR.value(),
+                "Error occurred while deleting entity",
+                ex.getMessage(),
+                request.getRequestURI()
+        );
+
+        return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
     @ExceptionHandler(JwtTokenMalformedException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ResponseEntity<ApiErrorResponse> handleJwtTokenMalformedException(JwtTokenMalformedException ex, HttpServletRequest request) {
@@ -53,7 +67,6 @@ public class ApiExceptionHandler {
         );
         return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
     }
-
 
     @ExceptionHandler(RuntimeException.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -124,7 +137,6 @@ public class ApiExceptionHandler {
         );
         return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
     }
-
 
     @ExceptionHandler(BadRequestException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
