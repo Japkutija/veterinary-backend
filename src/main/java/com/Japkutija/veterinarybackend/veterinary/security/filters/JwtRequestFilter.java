@@ -1,9 +1,6 @@
 package com.Japkutija.veterinarybackend.veterinary.security.filters;
 
 import com.Japkutija.veterinarybackend.veterinary.advice.ApiErrorResponse;
-import com.Japkutija.veterinarybackend.veterinary.exception.JwtTokenExpiredException;
-import com.Japkutija.veterinarybackend.veterinary.exception.JwtTokenMalformedException;
-import com.Japkutija.veterinarybackend.veterinary.exception.JwtTokenMissingException;
 import com.Japkutija.veterinarybackend.veterinary.service.impl.CustomUserDetailsService;
 import com.Japkutija.veterinarybackend.veterinary.security.util.JwtUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -15,9 +12,8 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.security.SignatureException;
+import io.jsonwebtoken.security.SignatureException;
 import lombok.RequiredArgsConstructor;
-import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -70,11 +66,15 @@ public class JwtRequestFilter extends OncePerRequestFilter {
             return;
         } catch (MalformedJwtException e) {
             log.error("JWT Token is malformed");
-            sendErrorResponse(response, HttpServletResponse.SC_BAD_REQUEST, "JWT Token is malformed", request.getRequestURI());
+            sendErrorResponse(response, HttpServletResponse.SC_FORBIDDEN, "JWT Token is malformed", request.getRequestURI());
             return;
         } catch (IllegalArgumentException e) {
             log.error("JWT Token is null or empty");
             sendErrorResponse(response, HttpServletResponse.SC_BAD_REQUEST, "JWT Token is null or empty", request.getRequestURI());
+            return;
+        } catch (SignatureException e) {
+            log.error("JWT Token has an invalid signature");
+            sendErrorResponse(response, HttpServletResponse.SC_UNAUTHORIZED, "JWT has an invalid signature", request.getRequestURI());
             return;
         }
 

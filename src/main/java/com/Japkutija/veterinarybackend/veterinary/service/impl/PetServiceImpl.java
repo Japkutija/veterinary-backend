@@ -1,5 +1,6 @@
 package com.Japkutija.veterinarybackend.veterinary.service.impl;
 
+import com.Japkutija.veterinarybackend.veterinary.exception.EntityDeletionException;
 import com.Japkutija.veterinarybackend.veterinary.exception.EntityNotFoundException;
 import com.Japkutija.veterinarybackend.veterinary.exception.EntitySavingException;
 import com.Japkutija.veterinarybackend.veterinary.mapper.PetMapper;
@@ -8,6 +9,9 @@ import com.Japkutija.veterinarybackend.veterinary.model.entity.Pet;
 import com.Japkutija.veterinarybackend.veterinary.repository.PetRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -31,10 +35,12 @@ public class PetServiceImpl implements com.Japkutija.veterinarybackend.veterinar
     }
 
     @Override
-    @Transactional
     public Pet savePet(Pet pet) {
         try {
-            return petRepository.save(pet);
+            log.info("Attempting to save pet species name: {}", pet.getSpecies().getSpeciesName());
+            log.info("Attempting to save pet breed name: {}", pet.getBreed().getBreedName());
+            var result = petRepository.save(pet);
+            return result;
         } catch (Exception ex) {
             log.error("Error saving pet: {}", ex.getMessage());
             throw new EntitySavingException(Pet.class, ex);
@@ -46,9 +52,11 @@ public class PetServiceImpl implements com.Japkutija.veterinarybackend.veterinar
     public Pet updatePet(PetDTO petDTO, UUID uuid) {
         var pet = getPetByUuid(uuid);
 
-        petMapper.updatePetFromDto(petDTO, pet);
+        var result = petMapper.updatePetFromDto(petDTO, pet);
 
-        return savePet(pet);
+        log.info("Trying to save pet with species and breed: {} {}", result.getSpecies().getSpeciesName(), result.getBreed().getBreedName());
+        return savePet(result);
+
     }
 
     @Override
@@ -72,22 +80,46 @@ public class PetServiceImpl implements com.Japkutija.veterinarybackend.veterinar
     public List<Pet> getAllPets() {
         var pets = petRepository.findAll();
 
-        if (pets.isEmpty())
+        if (pets.isEmpty()) {
             return List.of();
+        }
 
         return pets;
     }
+
+    /*@Override
+    @Transactional(readOnly = true)
+    public Page<Pet> getAllPets(int page, int size) {
+        return petRepository.findAll(PageRequest.of(page, size));
+    }*/
+
+    @Override
+    @Transactional(readOnly = true)
+    public Page<Pet> getPaginatedAndSortedPets(int pageIndex, int pageSize, String sortField, String sortOrder) {
+        // Set the default sort direction if not provided
+        var direction = "desc".equalsIgnoreCase(sortOrder) ? Sort.Direction.DESC : Sort.Direction.ASC;
+
+        // Create the Sort object if sortField is provided, otherwise unsorted
+        var sort = (sortField != null) ? Sort.by(direction, sortField) : Sort.unsorted();
+
+        // Create pageable object with sorting and pagination
+        var pageable = PageRequest.of(pageIndex - 1, pageSize, sort);
+
+        // Fetch pets with pagination and sorting applied
+        return petRepository.findAll(pageable);
+    }
+
 
     @Override
     @Transactional(readOnly = true)
     public List<Pet> getPetsByOwner(UUID ownerUuid) {
         var pets = petRepository.findByOwnerUuid(ownerUuid);
 
-        if (pets.isEmpty())
+        if (pets.isEmpty()) {
             return List.of();
+        }
 
         return pets;
-
     }
 
     @Override
@@ -95,8 +127,9 @@ public class PetServiceImpl implements com.Japkutija.veterinarybackend.veterinar
     public List<Pet> getPetsBySpecies(String speciesName) {
         var pets = petRepository.findBySpeciesSpeciesName(speciesName);
 
-        if (pets.isEmpty())
+        if (pets.isEmpty()) {
             return List.of();
+        }
 
         return pets;
     }
@@ -106,8 +139,9 @@ public class PetServiceImpl implements com.Japkutija.veterinarybackend.veterinar
     public List<Pet> getPetsByBreed(String breed) {
         var pets = petRepository.findByBreedBreedName(breed);
 
-        if (pets.isEmpty())
+        if (pets.isEmpty()) {
             return List.of();
+        }
 
         return pets;
     }
@@ -115,8 +149,14 @@ public class PetServiceImpl implements com.Japkutija.veterinarybackend.veterinar
     @Override
     @Transactional
     public void deletePet(UUID uuid) {
-
-        var pet = getPetByUuid(uuid);
-        petRepository.delete(pet);
+        log.info("Attempting to delete pet with UUID: {}", uuid);
+        try {
+            var pet = getPetByUuid(uuid);
+            petRepository.delete(pet);
+            log.info("Successfully deleted pet with UUID: {}", uuid);
+        } catch (Exception ex) {
+            log.error("Error occurred while deleting pet with UUID: {} {}", uuid, ex.getMessage());
+            throw new EntityDeletionException(Pet.class, "Error occurred while deleting pet", ex);
+        }
     }
 }
