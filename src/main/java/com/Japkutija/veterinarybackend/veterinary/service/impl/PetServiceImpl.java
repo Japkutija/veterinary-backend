@@ -37,8 +37,6 @@ public class PetServiceImpl implements com.Japkutija.veterinarybackend.veterinar
     @Override
     public Pet savePet(Pet pet) {
         try {
-            log.info("Attempting to save pet species name: {}", pet.getSpecies().getSpeciesName());
-            log.info("Attempting to save pet breed name: {}", pet.getBreed().getBreedName());
             var result = petRepository.save(pet);
             return result;
         } catch (Exception ex) {
@@ -54,9 +52,7 @@ public class PetServiceImpl implements com.Japkutija.veterinarybackend.veterinar
 
         var result = petMapper.updatePetFromDto(petDTO, pet);
 
-        log.info("Trying to save pet with species and breed: {} {}", result.getSpecies().getSpeciesName(), result.getBreed().getBreedName());
         return savePet(result);
-
     }
 
     @Override
@@ -102,13 +98,12 @@ public class PetServiceImpl implements com.Japkutija.veterinarybackend.veterinar
         // Create the Sort object if sortField is provided, otherwise unsorted
         var sort = (sortField != null) ? Sort.by(direction, sortField) : Sort.unsorted();
 
-        // Create pageable object with sorting and pagination
-        var pageable = PageRequest.of(pageIndex - 1, pageSize, sort);
+        // Create pageRequest object with sorting and pagination
+        var pageRequest = PageRequest.of(pageIndex - 1, pageSize, sort);
 
         // Fetch pets with pagination and sorting applied
-        return petRepository.findAll(pageable);
+        return petRepository.findAll(pageRequest);
     }
-
 
     @Override
     @Transactional(readOnly = true)

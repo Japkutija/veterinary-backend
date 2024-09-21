@@ -9,6 +9,9 @@ import com.Japkutija.veterinarybackend.veterinary.repository.OwnerRepository;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,6 +25,7 @@ public class OwnerServiceImpl implements com.Japkutija.veterinarybackend.veterin
 
     private final OwnerRepository ownerRepository;
     private final OwnerMapper ownerMapper;
+
 
     @Override
     @Transactional
@@ -62,16 +66,30 @@ public class OwnerServiceImpl implements com.Japkutija.veterinarybackend.veterin
             return owners;
         }
     }
+    @Override
+    public Page<Owner> getPaginatedAndSortedOwners(int pageIndex, int pageSize, String sortField, String sortOrder) {
+        // Set the default sort direction if not provided
+        var direction = "desc".equalsIgnoreCase(sortOrder) ? Sort.Direction.DESC : Sort.Direction.ASC;
+
+        // Create the Sort object if sortField is provided, otherwise unsorted
+        var sort = (sortField != null) ? Sort.by(direction, sortField) : Sort.unsorted();
+
+        // Create pageRequest object with sorting and pagination
+        var pageRequest = PageRequest.of(pageIndex - 1, pageSize, sort);
+
+        // Fetch owners with pagination and sorting applied
+        return ownerRepository.findAll(pageRequest);
+    }
 
     @Override
     @Transactional
-    public Owner updateOwner(UUID uuid, OwnerDTO ownerDTO) {
+    public Owner updateOwner(UUID uuid, Owner ownerUpdates) {
 
-        var owner = getOwnerByUuid(uuid);
+        var existingOwner = getOwnerByUuid(uuid);
 
-        var updatedOwner = ownerMapper.updateOwnerFromDto(ownerDTO, owner);
+        ownerMapper.updateOwner(ownerUpdates, existingOwner);
 
-        return ownerRepository.save(updatedOwner);
+        return ownerRepository.save(existingOwner);
     }
 
     @Override

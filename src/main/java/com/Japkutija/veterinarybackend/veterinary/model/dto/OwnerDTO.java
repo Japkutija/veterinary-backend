@@ -23,6 +23,8 @@ public class OwnerDTO {
 
     private LocalDate dateOfBirth;
 
+    private String emso;
+
     List<UUID> petUuids;
 
 
