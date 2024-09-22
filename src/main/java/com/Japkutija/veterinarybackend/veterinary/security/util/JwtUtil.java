@@ -1,5 +1,6 @@
 package com.Japkutija.veterinarybackend.veterinary.security.util;
 
+import com.Japkutija.veterinarybackend.veterinary.model.enums.Role;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -48,9 +49,10 @@ public class JwtUtil {
     }
 
     // Generate token for user
-    public String generateToken(String username) {
+    public String generateToken(String username, Role role) {
         return Jwts.builder()
                 .setSubject(username)
+                .claim("role", role.name())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 10))  // Token valid for 10 hours
                 .signWith(SignatureAlgorithm.HS256, secretKey)

@@ -13,10 +13,12 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import io.jsonwebtoken.security.SignatureException;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
@@ -87,9 +89,13 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
         var userDetails = this.userDetailsService.loadUserByUsername(username);
         if (Boolean.TRUE.equals(jwtUtil.validateToken(jwt, userDetails.getUsername()))) {
-            var authenticationToken = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+
+            var role = jwtUtil.extractClaim(jwt, claims -> claims.get("role", String.class));
+            var authority = new SimpleGrantedAuthority("ROLE_" + role);
+            var authenticationToken = new UsernamePasswordAuthenticationToken(userDetails, null, List.of(authority));
             authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
             SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+            log.info("User's role: {}", userDetails.getAuthorities());
         }
 
         // Continue the filter chain, pass the request and response to the next filter

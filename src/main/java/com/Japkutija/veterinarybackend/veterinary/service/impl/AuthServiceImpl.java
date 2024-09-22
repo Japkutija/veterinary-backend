@@ -91,7 +91,7 @@ public class AuthServiceImpl {
             var userEntity = userService.findByUsername(username);
 
             // Generate JWT and refresh token
-            var jwt = jwtUtil.generateToken(username);
+            var jwt = jwtUtil.generateToken(username, userEntity.getRole());
             var refreshToken = UUID.randomUUID().toString();
             var refreshTokenEntity = createRefreshToken(refreshToken, userEntity);
 
@@ -186,7 +186,7 @@ public class AuthServiceImpl {
             refreshTokenService.deleteByToken(refreshToken);
 
             // Generate a new access token and refresh token
-            var newAccessToken = jwtUtil.generateToken(refreshTokenEntity.getUser().getUsername());
+            var newAccessToken = jwtUtil.generateToken(refreshTokenEntity.getUser().getUsername(), refreshTokenEntity.getUser().getRole());
             var newRefreshToken = UUID.randomUUID().toString();
 
             setRefreshTokenCookie(response, newRefreshToken);
