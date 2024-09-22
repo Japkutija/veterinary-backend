@@ -95,7 +95,6 @@ public class JwtRequestFilter extends OncePerRequestFilter {
             var authenticationToken = new UsernamePasswordAuthenticationToken(userDetails, null, List.of(authority));
             authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
             SecurityContextHolder.getContext().setAuthentication(authenticationToken);
-            log.info("User's role: {}", userDetails.getAuthorities());
         }
 
         // Continue the filter chain, pass the request and response to the next filter
