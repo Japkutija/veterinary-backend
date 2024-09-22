@@ -11,16 +11,16 @@ import lombok.Data;
 public class UserDto {
 
     @NotNull(message = "UUID cannot be null")
-    private UUID uuid;
+    private final UUID uuid;
 
     @NotNull(message = "Username cannot be null")
-    private String username;
+    private final String username;
 
     @NotNull(message = "Email cannot be null")
-    private String email;
+    private final String email;
 
     @NotNull(message = "Role cannot be null")
     @Enumerated(EnumType.STRING)
-    private Role role;
+    private final Role role;
 
 }
