@@ -32,6 +32,7 @@ import org.springframework.http.ResponseCookie;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -80,9 +81,12 @@ public class AuthServiceImpl {
     public AuthenticationResponse loginUser(String username, String password, HttpServletResponse response) {
         try {
             // Attempt to authenticate the user. Automatically invokes CustomUserDetailsService.loadUserByUsername to load user details
-            authenticationManager.authenticate(
+            var authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(username, password)
             );
+
+            // Set the Authentication object in SecurityContext
+            SecurityContextHolder.getContext().setAuthentication(authentication);
 
             // Load user details from the database
             // No need to load User Details here, as the user is already authenticated!
