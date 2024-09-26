@@ -34,7 +34,6 @@ public class JwtRequestFilter extends OncePerRequestFilter {
     private final CustomUserDetailsService userDetailsService;
     private final ObjectMapper objectMapper = new ObjectMapper().registerModule(new JavaTimeModule());
 
-
     /**
      * Filters each request to validate the JWT token and set the authentication in the security context.
      * If a valid token is found, it sets the user's authentication details in the security context.
@@ -51,7 +50,6 @@ public class JwtRequestFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
             throws ServletException, IOException {
         final var authorizationHeader = request.getHeader("Authorization");
-
         String username = null;
         String jwt;
 
@@ -90,8 +88,10 @@ public class JwtRequestFilter extends OncePerRequestFilter {
         var userDetails = this.userDetailsService.loadUserByUsername(username);
         if (Boolean.TRUE.equals(jwtUtil.validateToken(jwt, userDetails.getUsername()))) {
 
+            // Extract the role from the JWT
             var role = jwtUtil.extractClaim(jwt, claims -> claims.get("role", String.class));
             var authority = new SimpleGrantedAuthority("ROLE_" + role);
+
             var authenticationToken = new UsernamePasswordAuthenticationToken(userDetails, null, List.of(authority));
             authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
             SecurityContextHolder.getContext().setAuthentication(authenticationToken);
@@ -105,9 +105,9 @@ public class JwtRequestFilter extends OncePerRequestFilter {
      * Sends an error response with the specified status, message, and path.
      *
      * @param response the HTTP response
-     * @param status the HTTP status code
-     * @param message the error message
-     * @param path the request URI that caused the error
+     * @param status   the HTTP status code
+     * @param message  the error message
+     * @param path     the request URI that caused the error
      * @throws IOException if an I/O error occurs during writing the response
      */
     private void sendErrorResponse(HttpServletResponse response, int status, String message, String path) throws IOException {
@@ -128,5 +128,4 @@ public class JwtRequestFilter extends OncePerRequestFilter {
         var path = request.getRequestURI();
         return path.equals("/api/auth/logout");
     }*/
-
 }
