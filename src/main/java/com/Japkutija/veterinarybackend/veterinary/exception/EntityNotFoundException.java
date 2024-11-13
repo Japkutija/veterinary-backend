@@ -18,6 +18,6 @@ public class EntityNotFoundException extends RuntimeException {
     }
 
     public EntityNotFoundException(Class<?> entityClass, Object identifier) {
-        super(String.format("Entity %s with identifier %s not found", entityClass.getSimpleName(), identifier.toString()));
+        super(String.format("Entity '%s' with identifier '%s' not found", entityClass.getSimpleName(), identifier.toString()));
     }
 }

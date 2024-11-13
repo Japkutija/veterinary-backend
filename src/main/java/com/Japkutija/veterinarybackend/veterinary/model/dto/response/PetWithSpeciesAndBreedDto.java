@@ -11,7 +11,7 @@ import lombok.Data;
 @Data
 public class PetWithSpeciesAndBreedDto {
 
-    @NotNull
+    @NotNull(message = "UUID is required")
     private UUID uuid;
 
     @NotNull
@@ -40,6 +40,22 @@ public class PetWithSpeciesAndBreedDto {
     @NotNull
     private String speciesName;
 
-    @NotNull
+    @NotNull(message = "Breed name is required")
     private String breedName;
+
+    @Override
+    public String toString() {
+        return "PetWithSpeciesAndBreedDto{\n" +
+                "uuid=" + uuid + ",\n" +
+                "chipNumber='" + chipNumber + "',\n" +
+                "nickname='" + nickname + "',\n" +
+                "gender=" + gender + ",\n" +
+                "dateOfBirth=" + dateOfBirth + ",\n" +
+                "weight=" + weight + ",\n" +
+                "height=" + height + ",\n" +
+                "ownerName='" + ownerName + "',\n" +
+                "speciesName='" + speciesName + "',\n" +
+                "breedName='" + breedName + "'\n" +
+                '}';
+    }
 }

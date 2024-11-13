@@ -57,7 +57,6 @@ public class SpeciesServiceImpl implements com.Japkutija.veterinarybackend.veter
         var species = speciesRepository.findByUuid(uuid);
 
         return species.orElseThrow(() -> new EntityNotFoundException(Species.class, uuid));
-
     }
 
     @Override
@@ -70,14 +69,22 @@ public class SpeciesServiceImpl implements com.Japkutija.veterinarybackend.veter
 
     @Override
     @Transactional(readOnly = true)
-    public List<Species> getSpeciesByName(String speciesName) {
-        var species = speciesRepository.findBySpeciesName(speciesName);
+    public List<Species> getSpeciesListByName(String speciesName) {
+        var species = speciesRepository.findAllBySpeciesName(speciesName);
 
-        if (species.isEmpty())
+        if (species.isEmpty()) {
             return List.of();
+        }
 
         return species;
+    }
 
+    @Override
+    public Species getSpeciesByName(String speciesName) {
+        var species = speciesRepository.findBySpeciesName(speciesName);
+
+        log.info("Found species and its uuid: {} {}", species.get().getSpeciesName(), species.get().getUuid());
+        return species.orElseThrow(() -> new EntityNotFoundException(Species.class, speciesName));
     }
 
     @Override
@@ -85,8 +92,9 @@ public class SpeciesServiceImpl implements com.Japkutija.veterinarybackend.veter
     public List<Species> getAllSpecies() {
         var species = speciesRepository.findAll();
 
-        if (species.isEmpty())
+        if (species.isEmpty()) {
             return List.of();
+        }
 
         return species;
     }
@@ -96,8 +104,9 @@ public class SpeciesServiceImpl implements com.Japkutija.veterinarybackend.veter
     public List<Species> getSpeciesByBreed(String breed) {
         var species = speciesRepository.findByBreedsBreedName(breed);
 
-        if (species.isEmpty())
+        if (species.isEmpty()) {
             return List.of();
+        }
 
         return species;
     }
@@ -109,6 +118,5 @@ public class SpeciesServiceImpl implements com.Japkutija.veterinarybackend.veter
         var species = getSpeciesByUuid(uuid);
 
         speciesRepository.delete(species);
-
     }
 }

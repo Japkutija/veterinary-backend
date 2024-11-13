@@ -15,6 +15,7 @@ public interface BreedService {
 
     Breed getBreedByUuid(UUID uuid);
 
+    Breed getBreedByName(String name);
 
     List<Breed> getAllBreeds();
 

@@ -39,7 +39,6 @@ public class Owner {
     @Size(min = 2, max = 50)
     private String lastName;
 
-
     @Column(name = "email", length = 50)
     @Email
     private String email;

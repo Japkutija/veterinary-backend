@@ -8,12 +8,16 @@ import com.Japkutija.veterinarybackend.veterinary.exception.JwtTokenExpiredExcep
 import com.Japkutija.veterinarybackend.veterinary.exception.JwtTokenMalformedException;
 import com.Japkutija.veterinarybackend.veterinary.exception.RefreshTokenExpiredException;
 import com.Japkutija.veterinarybackend.veterinary.exception.UserAlreadyExistsException;
+import com.Japkutija.veterinarybackend.veterinary.model.dto.response.ValidationErrorResponse;
 import jakarta.servlet.http.HttpServletRequest;
+import java.util.List;
+import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -131,6 +135,7 @@ public class ApiExceptionHandler {
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ResponseEntity<ApiErrorResponse> handleEntityNotFoundException(EntityNotFoundException ex, HttpServletRequest request) {
 
+        log.info("Resource not found for request: {}", request.getRequestURI(), ex); // Centralized logging;
         var errorMessage = "Resource not found";
         var response = new ApiErrorResponse(
                 HttpStatus.NOT_FOUND.value(),
@@ -179,5 +184,27 @@ public class ApiExceptionHandler {
                 ex.getMessage(),
                 request.getRequestURI());
         return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ResponseEntity<ValidationErrorResponse> handleMethodArgumentNotValidException(
+            MethodArgumentNotValidException ex,
+            HttpServletRequest request) {
+        log.error("Validation error: ", ex);
+
+        var fieldErrors = ex.getBindingResult().getFieldErrors().stream()
+                .map(fieldError -> new ValidationErrorResponse.FieldError(fieldError.getField(), fieldError.getDefaultMessage()))
+                .collect(Collectors.toList());
+
+        var response = new ValidationErrorResponse(
+                HttpStatus.BAD_REQUEST.value(),
+                "Validation Error",
+                "Validation failed for one or more fields",
+                request.getRequestURI(),
+                fieldErrors
+        );
+
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 }

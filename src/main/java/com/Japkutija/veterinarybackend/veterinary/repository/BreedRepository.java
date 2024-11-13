@@ -11,6 +11,7 @@ import java.util.UUID;
 @Repository
 public interface BreedRepository extends JpaRepository<Breed, Long> {
     Optional<Breed> findByUuid(UUID uuid);
+    Optional<Breed> findByBreedName(String breedName);
 
     List<Breed> findAllBySpeciesUuid(UUID speciesUuid);
     List<Breed> findAllBySpecies_SpeciesName(String speciesName);

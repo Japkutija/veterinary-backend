@@ -7,6 +7,7 @@ import com.Japkutija.veterinarybackend.veterinary.mapper.PetMapper;
 import com.Japkutija.veterinarybackend.veterinary.model.dto.PetDTO;
 import com.Japkutija.veterinarybackend.veterinary.model.entity.Pet;
 import com.Japkutija.veterinarybackend.veterinary.repository.PetRepository;
+import com.Japkutija.veterinarybackend.veterinary.service.SpeciesService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -25,11 +26,21 @@ public class PetServiceImpl implements com.Japkutija.veterinarybackend.veterinar
 
     private final PetRepository petRepository;
     private final PetMapper petMapper;
+    private final SpeciesService speciesService;
+    private final BreedServiceImpl breedService;
 
     @Override
     @Transactional
     public Pet createPet(PetDTO petDTO) {
         var pet = petMapper.toPet(petDTO);
+
+        // Find species by species name and assign it to the pet
+        /*var species = speciesService.getSpeciesByName(petDTO.getSpeciesName());
+        pet.setSpecies(species);*/
+
+        // Find breed by breed name and assign it to the pet
+        var breed = breedService.getBreedByName(petDTO.getBreedName());
+        pet.setBreed(breed);
 
         return savePet(pet);
     }
@@ -38,6 +49,7 @@ public class PetServiceImpl implements com.Japkutija.veterinarybackend.veterinar
     public Pet savePet(Pet pet) {
         try {
             var result = petRepository.save(pet);
+            log.info("Pet saved successfully: {}", result);
             return result;
         } catch (Exception ex) {
             log.error("Error saving pet: {}", ex.getMessage());

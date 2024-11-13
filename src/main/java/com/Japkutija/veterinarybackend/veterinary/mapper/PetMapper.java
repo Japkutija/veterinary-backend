@@ -46,5 +46,7 @@ public interface PetMapper {
     @Mapping(source = "speciesName", target = "species.speciesName")
     @Mapping(source = "breedName", target = "breed.breedName")
     Pet updatePetFromDto(PetDTO petDTO, @MappingTarget Pet pet);
+
+
 }
 
