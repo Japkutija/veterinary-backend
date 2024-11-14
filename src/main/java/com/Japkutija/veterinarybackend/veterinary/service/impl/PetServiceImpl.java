@@ -42,6 +42,8 @@ public class PetServiceImpl implements com.Japkutija.veterinarybackend.veterinar
         var breed = breedService.getBreedByName(petDTO.getBreedName());
         pet.setBreed(breed);
 
+        breed.setUuid(UUID.randomUUID());
+
         return savePet(pet);
     }
 

@@ -1,17 +1,22 @@
 package com.Japkutija.veterinarybackend.veterinary.model.dto.response;
 
+import com.Japkutija.veterinarybackend.veterinary.model.dto.groups.OnCreate;
+import com.Japkutija.veterinarybackend.veterinary.model.dto.groups.OnUpdate;
 import com.Japkutija.veterinarybackend.veterinary.model.enums.Gender;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Null;
 import jakarta.validation.constraints.Size;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.UUID;
 import lombok.Data;
 
+
 @Data
 public class PetWithSpeciesAndBreedDto {
 
-    @NotNull(message = "UUID is required")
+    @NotNull(message = "UUID is required", groups = {OnUpdate.class})
+    @Null(message = "UUID must be null", groups = {OnCreate.class})
     private UUID uuid;
 
     @NotNull

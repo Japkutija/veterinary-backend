@@ -1,6 +1,8 @@
 package com.Japkutija.veterinarybackend.veterinary.controller;
 
 import com.Japkutija.veterinarybackend.veterinary.mapper.PetMapper;
+import com.Japkutija.veterinarybackend.veterinary.model.dto.groups.OnCreate;
+import com.Japkutija.veterinarybackend.veterinary.model.dto.groups.OnUpdate;
 import com.Japkutija.veterinarybackend.veterinary.model.dto.response.PetWithSpeciesAndBreedDto;
 import com.Japkutija.veterinarybackend.veterinary.service.PetService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -16,6 +18,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -32,6 +35,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/pets")
 @Tag(name = "CRUD Operations on Pets", description = "Pets API")
 @RequiredArgsConstructor
+@Validated
 public class PetController {
 
     private final PetService petService;
@@ -85,7 +89,7 @@ public class PetController {
             @ApiResponse(responseCode = "204", description = "Pet updated"),
             @ApiResponse(responseCode = "404", description = "Pet not found")})
     @PutMapping("/{uuid}")
-    public ResponseEntity<PetWithSpeciesAndBreedDto> updatePet(@PathVariable @NotNull UUID uuid, @RequestBody PetWithSpeciesAndBreedDto petDto) {
+    public ResponseEntity<PetWithSpeciesAndBreedDto> updatePet(@PathVariable @NotNull UUID uuid, @Validated(OnUpdate.class) @RequestBody PetWithSpeciesAndBreedDto petDto) {
 
         var updateEntity = petMapper.fromPetWithSpeciesAndBreedDto(petDto);
 
@@ -100,7 +104,7 @@ public class PetController {
             @ApiResponse(responseCode = "201", description = "Pet created",
                     content = @io.swagger.v3.oas.annotations.media.Content(schema = @io.swagger.v3.oas.annotations.media.Schema(implementation = PetWithSpeciesAndBreedDto.class)))})
     @PostMapping
-    public ResponseEntity<PetWithSpeciesAndBreedDto> createPet(@Valid @RequestBody PetWithSpeciesAndBreedDto petDto) {
+    public ResponseEntity<PetWithSpeciesAndBreedDto> createPet(@Valid @RequestBody @Validated(OnCreate.class) PetWithSpeciesAndBreedDto petDto) {
 
         log.info("Creating pet: {}", petDto.toString());
         var pet = petMapper.fromPetWithSpeciesAndBreedDto(petDto);
