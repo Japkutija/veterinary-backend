@@ -14,7 +14,7 @@ import org.mapstruct.Named;
 @Mapper(componentModel = "spring")
 public interface PetMapper {
 
-    @Mapping(source = "owner", target = "ownerName", qualifiedByName = "mapOwnerName")
+    @Mapping(source = "owner.uuid", target = "ownerUuid")
     @Mapping(source = "breed.breedName", target = "breedName")
     @Mapping(source = "species.speciesName", target = "speciesName")
     PetWithSpeciesAndBreedDto toPetWithSpeciesAndBreedDto(Pet pet);

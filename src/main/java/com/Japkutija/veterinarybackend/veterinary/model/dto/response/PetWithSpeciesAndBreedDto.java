@@ -21,10 +21,6 @@ public class PetWithSpeciesAndBreedDto {
 
     @NotNull
     @Size(max = 20)
-    private String chipNumber;
-
-    @NotNull
-    @Size(max = 20)
     private String nickname;
 
     @NotNull
@@ -39,8 +35,8 @@ public class PetWithSpeciesAndBreedDto {
     @NotNull
     private BigDecimal height;
 
-    @NotNull
-    private String ownerName;
+    @NotNull(message = "Owner UUID is required")
+    private UUID ownerUuid;
 
     @NotNull
     private String speciesName;
@@ -52,13 +48,12 @@ public class PetWithSpeciesAndBreedDto {
     public String toString() {
         return "PetWithSpeciesAndBreedDto{\n" +
                 "uuid=" + uuid + ",\n" +
-                "chipNumber='" + chipNumber + "',\n" +
                 "nickname='" + nickname + "',\n" +
                 "gender=" + gender + ",\n" +
                 "dateOfBirth=" + dateOfBirth + ",\n" +
                 "weight=" + weight + ",\n" +
                 "height=" + height + ",\n" +
-                "ownerName='" + ownerName + "',\n" +
+                "ownerName='" + ownerUuid + "',\n" +
                 "speciesName='" + speciesName + "',\n" +
                 "breedName='" + breedName + "'\n" +
                 '}';

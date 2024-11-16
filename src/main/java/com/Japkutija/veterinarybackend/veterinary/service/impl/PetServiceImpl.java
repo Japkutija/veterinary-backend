@@ -7,7 +7,9 @@ import com.Japkutija.veterinarybackend.veterinary.mapper.PetMapper;
 import com.Japkutija.veterinarybackend.veterinary.model.dto.PetDTO;
 import com.Japkutija.veterinarybackend.veterinary.model.entity.Pet;
 import com.Japkutija.veterinarybackend.veterinary.repository.PetRepository;
+import com.Japkutija.veterinarybackend.veterinary.service.OwnerService;
 import com.Japkutija.veterinarybackend.veterinary.service.SpeciesService;
+import java.util.Random;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -28,23 +30,33 @@ public class PetServiceImpl implements com.Japkutija.veterinarybackend.veterinar
     private final PetMapper petMapper;
     private final SpeciesService speciesService;
     private final BreedServiceImpl breedService;
+    private final OwnerService ownerService;
+    private final Random random = new Random();
 
     @Override
     @Transactional
     public Pet createPet(PetDTO petDTO) {
         var pet = petMapper.toPet(petDTO);
-
-        // Find species by species name and assign it to the pet
-        /*var species = speciesService.getSpeciesByName(petDTO.getSpeciesName());
-        pet.setSpecies(species);*/
-
-        // Find breed by breed name and assign it to the pet
         var breed = breedService.getBreedByName(petDTO.getBreedName());
-        pet.setBreed(breed);
+        var owner = ownerService.getOwnerByUuid(petDTO.getOwnerUuid());
+        var species = speciesService.getSpeciesByName(petDTO.getSpeciesName());
 
         breed.setUuid(UUID.randomUUID());
+        pet.setBreed(breed);
+        pet.setOwner(owner);
+        pet.setUuid(UUID.randomUUID());
+        pet.setChipNumber(generateChipNumber());
+        pet.setSpecies(species);
 
         return savePet(pet);
+    }
+
+    private String generateChipNumber() {
+        var sb = new StringBuilder();
+        for (var i = 0; i < 20; i++) {
+            sb.append(this.random.nextInt(10));
+        }
+        return sb.toString();
     }
 
     @Override

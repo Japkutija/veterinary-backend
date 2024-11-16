@@ -98,7 +98,6 @@ public class Pet {
                 ", dateOfBirth=" + dateOfBirth +
                 ", weight=" + weight +
                 ", height=" + height +
-                // Exclude owner and collections
                 '}';
     }
 
