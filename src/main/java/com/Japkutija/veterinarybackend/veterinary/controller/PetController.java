@@ -106,7 +106,7 @@ public class PetController {
     @PostMapping
     public ResponseEntity<PetWithSpeciesAndBreedDto> createPet(@Valid @RequestBody @Validated(OnCreate.class) PetWithSpeciesAndBreedDto petDto) {
 
-        log.info("Creating pet: {}", petDto.toString());
+        log.debug("Creating pet: {}", petDto.toString());
         var pet = petMapper.fromPetWithSpeciesAndBreedDto(petDto);
 
         var result = petService.createPet(pet);

@@ -28,4 +28,8 @@ databaseChangeLog:
   - include:
       file: classpath:db/changelog/013-create-user-table-column.yaml
   - include:
-        file: classpath:db/changelog/014-create-RefreshToken-table.yaml
+      file: classpath:db/changelog/014-create-RefreshToken-table.yaml
+  - include:
+      file: classpath:db/changelog/015-add-pet-nickname-owner-constraint.yaml
+  - include:
+      file: classpath:db/changelog/016-create-pet-date-of-birth-triggers.yaml

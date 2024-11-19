@@ -2,6 +2,7 @@ package com.Japkutija.veterinarybackend.veterinary.model.entity;
 
 import com.Japkutija.veterinarybackend.veterinary.model.enums.Gender;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.PastOrPresent;
 import lombok.Data;
 import org.antlr.v4.runtime.misc.NotNull;
 import org.hibernate.annotations.JdbcTypeCode;
@@ -53,6 +54,7 @@ public class Pet {
 
     @Column(name = "date_of_birth", nullable = false)
     @NotNull
+    @PastOrPresent(message = "Date must not be in the future")
     private LocalDate dateOfBirth;
 
     @Column(name = "weight", nullable = false, precision = 5, scale = 2)

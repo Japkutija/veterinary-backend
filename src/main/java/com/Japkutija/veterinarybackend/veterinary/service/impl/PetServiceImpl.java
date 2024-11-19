@@ -36,6 +36,11 @@ public class PetServiceImpl implements com.Japkutija.veterinarybackend.veterinar
     @Override
     @Transactional
     public Pet createPet(PetDTO petDTO) {
+
+        // Add a validation before creating
+        if (petRepository.existsByOwner_UuidAndNicknameIgnoreCase(petDTO.getOwnerUuid(), petDTO.getNickname())) {
+            throw new EntitySavingException(String.format("Pet with nickname '%s' already exists", petDTO.getNickname()));
+        }
         var pet = petMapper.toPet(petDTO);
         var breed = breedService.getBreedByName(petDTO.getBreedName());
         var owner = ownerService.getOwnerByUuid(petDTO.getOwnerUuid());
