@@ -18,6 +18,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -104,7 +105,8 @@ public class PetController {
             @ApiResponse(responseCode = "201", description = "Pet created",
                     content = @io.swagger.v3.oas.annotations.media.Content(schema = @io.swagger.v3.oas.annotations.media.Schema(implementation = PetWithSpeciesAndBreedDto.class)))})
     @PostMapping
-    public ResponseEntity<PetWithSpeciesAndBreedDto> createPet(@Valid @RequestBody @Validated(OnCreate.class) PetWithSpeciesAndBreedDto petDto) {
+    public ResponseEntity<PetWithSpeciesAndBreedDto> createPet(@Valid @RequestBody @Validated(OnCreate.class) PetWithSpeciesAndBreedDto petDto,
+            Authentication authentication) {
 
         log.debug("Creating pet: {}", petDto.toString());
         var pet = petMapper.fromPetWithSpeciesAndBreedDto(petDto);

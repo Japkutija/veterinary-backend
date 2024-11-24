@@ -75,9 +75,7 @@ public class AuthServiceImpl {
                 registrationDto.getFirstName(),
                 registrationDto.getLastName(),
                 registrationDto.getDateOfBirth(),
-                registrationDto.getEmso(),
-                registrationDto.getPhoneNumber(),
-                registrationDto.getAddress()
+                registrationDto.getEmso()
         );
 
         return userMapper.toUserDto(registeredUser);

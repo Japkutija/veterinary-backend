@@ -15,7 +15,9 @@ import java.util.List;
 import java.util.UUID;
 
 @Entity
-@Table(name = "pet")
+@Table(name = "pet", uniqueConstraints = {
+        @UniqueConstraint(name = "uk_pet_owner_nickname", columnNames = {"owner_id", "nickname"})
+})
 @Data
 public class Pet {
 
@@ -102,8 +104,4 @@ public class Pet {
                 ", height=" + height +
                 '}';
     }
-
-
-
-
 }

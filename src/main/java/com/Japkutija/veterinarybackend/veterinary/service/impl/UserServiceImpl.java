@@ -2,11 +2,15 @@ package com.Japkutija.veterinarybackend.veterinary.service.impl;
 
 import com.Japkutija.veterinarybackend.veterinary.exception.BadRequestException;
 import com.Japkutija.veterinarybackend.veterinary.exception.EntityNotFoundException;
+import com.Japkutija.veterinarybackend.veterinary.exception.EntitySavingException;
 import com.Japkutija.veterinarybackend.veterinary.exception.UserAlreadyExistsException;
+import com.Japkutija.veterinarybackend.veterinary.model.entity.Owner;
 import com.Japkutija.veterinarybackend.veterinary.model.entity.User;
 import com.Japkutija.veterinarybackend.veterinary.model.enums.Role;
+import com.Japkutija.veterinarybackend.veterinary.repository.OwnerRepository;
 import com.Japkutija.veterinarybackend.veterinary.repository.UserRepository;
 import com.Japkutija.veterinarybackend.veterinary.service.UserService;
+import java.time.LocalDate;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,10 +25,12 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final OwnerRepository ownerRepository;
 
     @Override
     @Transactional
-    public User registerUser(String username, String email, String password) {
+    public User registerUser(String username, String email, String password, String firstName, String lastName, LocalDate dateOfBirth, String emso,
+        String phoneNumber, String address) {
         if (userRepository.findByEmail(email).isPresent()) {
             throw new UserAlreadyExistsException("User with such email already exists");
         }
@@ -40,12 +46,32 @@ public class UserServiceImpl implements UserService {
         user.setPassword(passwordEncoder.encode(password));
         user.setRole(Role.USER);
 
-        log.info("User registration successful for username: `{}`", username);
+        User result;
         try {
-            return userRepository.save(user);
+            result = userRepository.save(user);
+            log.info("User registration successful for username: `{}`", username);
         } catch (Exception e) {
             throw new BadRequestException("User registration failed", e);
         }
+        // Now we need to create a new Owner
+        var owner = new Owner();
+        owner.setFirstName(firstName);
+        owner.setLastName(lastName);
+        owner.setDateOfBirth(dateOfBirth);
+        owner.setEMSO(emso);
+        owner.setUuid(UUID.randomUUID());
+        owner.setUser(user);
+        owner.setEmail(email);
+        owner.setPhoneNumber(phoneNumber);
+        owner.setAddress(address);
+
+        try {
+            ownerRepository.save(owner);
+            log.info("Owner created successfully for user: {}", user.getUuid());
+        } catch (Exception ex) {
+            throw new EntitySavingException(Owner.class, ex);
+        }
+        return result;
     }
 
     @Override

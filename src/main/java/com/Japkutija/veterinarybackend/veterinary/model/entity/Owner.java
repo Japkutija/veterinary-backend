@@ -63,4 +63,8 @@ public class Owner {
     @OneToMany(mappedBy = "owner")
     private List<Bill> bills = new ArrayList<>();
 
+    @OneToOne
+    @JoinColumn(name="user_id", referencedColumnName = "user_id")
+    private User user;
+
 }
