@@ -41,7 +41,7 @@ public class UserRegistrationDto {
     private String emso;
 
     @NotBlank(message = "Phone number is required")
-    @Size(min = 9, max = 20)
+    @Size(min = 10, max = 20)
     private String phoneNumber;
 
     @NotBlank(message = "Address is required")

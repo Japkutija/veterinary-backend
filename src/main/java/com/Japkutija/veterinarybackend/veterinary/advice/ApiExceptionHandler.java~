@@ -123,7 +123,7 @@ public class ApiExceptionHandler {
     public ResponseEntity<ApiErrorResponse> handleUserAlreadyExistsException(UserAlreadyExistsException ex, HttpServletRequest request) {
         log.error("Error: User already exists:", ex);
 
-        var errorMessage = "Error: " + ex.getMessage();
+        var errorMessage = "User already exists: " + ex.getMessage();
         var response = new ApiErrorResponse(
                 HttpStatus.CONFLICT.value(),
                 errorMessage,

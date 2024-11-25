@@ -37,7 +37,7 @@ public class UserServiceImpl implements UserService {
         }
 
         if (userRepository.existsByEmailIgnoreCase(email)) {
-            throw new UserAlreadyExistsException("Owner with such email already exists.");
+            throw new UserAlreadyExistsException("Email already exists.");
         }
 
         if (ownerRepository.existsByEMSO(emso)) {
@@ -45,7 +45,7 @@ public class UserServiceImpl implements UserService {
         }
 
         if(ownerRepository.existsByPhoneNumber(phoneNumber)) {
-            throw new UserAlreadyExistsException("Owner with such phone number already exists.", Owner.class, null);
+            throw new UserAlreadyExistsException("Phone number already exists.", Owner.class, null);
         }
 
         var user = new User();

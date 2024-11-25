@@ -34,4 +34,6 @@ databaseChangeLog:
   - include:
       file: classpath:db/changelog/016-create-pet-date-of-birth-triggers.yaml
   - include:
+      file: classpath:db/changelog/018-add-unique-constraints.yaml
+  - include:
       file: classpath:db/changelog/csv-setup.yaml
