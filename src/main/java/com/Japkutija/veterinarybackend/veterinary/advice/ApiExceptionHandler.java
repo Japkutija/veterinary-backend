@@ -10,6 +10,7 @@ import com.Japkutija.veterinarybackend.veterinary.exception.RefreshTokenExpiredE
 import com.Japkutija.veterinarybackend.veterinary.exception.UserAlreadyExistsException;
 import com.Japkutija.veterinarybackend.veterinary.model.dto.response.ValidationErrorResponse;
 import jakarta.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -120,15 +121,24 @@ public class ApiExceptionHandler {
 
     @ExceptionHandler(UserAlreadyExistsException.class)
     @ResponseStatus(HttpStatus.CONFLICT)
-    public ResponseEntity<ApiErrorResponse> handleUserAlreadyExistsException(UserAlreadyExistsException ex, HttpServletRequest request) {
+    public ResponseEntity<ValidationErrorResponse> handleUserAlreadyExistsException(UserAlreadyExistsException ex, HttpServletRequest request) {
         log.error("Error: User already exists:", ex);
 
+        List<ValidationErrorResponse.FieldError> fieldErrors = new ArrayList<>();
+
+        if (ex.getField() == null) {
+            fieldErrors.add(new ValidationErrorResponse.FieldError("general", ex.getMessage()));
+        } else {
+            fieldErrors.add(new ValidationErrorResponse.FieldError(ex.getField(), ex.getMessage()));
+        }
+
         var errorMessage = "Error: " + ex.getMessage();
-        var response = new ApiErrorResponse(
+        var response = new ValidationErrorResponse(
                 HttpStatus.CONFLICT.value(),
                 errorMessage,
                 ex.getMessage(),
-                request.getRequestURI());
+                request.getRequestURI(),
+                fieldErrors);
 
         return new ResponseEntity<>(response, HttpStatus.CONFLICT);
     }
@@ -187,7 +197,6 @@ public class ApiExceptionHandler {
 
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
-
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)

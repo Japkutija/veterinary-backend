@@ -41,11 +41,11 @@ public class UserServiceImpl implements UserService {
         }
 
         if (ownerRepository.existsByEMSO(emso)) {
-            throw new EntitySavingException("Owner with such EMSO already exists.", Owner.class, null);
+            throw new UserAlreadyExistsException("Owner with such EMSO already exists.", "emso");
         }
 
         if(ownerRepository.existsByPhoneNumber(phoneNumber)) {
-            throw new UserAlreadyExistsException("Owner with such phone number already exists.", Owner.class, null);
+            throw new UserAlreadyExistsException("Owner with such phone number already exists.", "phoneNumber");
         }
 
         var user = new User();

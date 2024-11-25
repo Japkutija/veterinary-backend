@@ -7,6 +7,7 @@ import lombok.Getter;
 public class UserAlreadyExistsException extends RuntimeException {
 
     private Class<Owner> ownerClass;
+    private String field;
 
 
     public UserAlreadyExistsException(String message) {
@@ -25,5 +26,10 @@ public class UserAlreadyExistsException extends RuntimeException {
         super(message, ex);
         this.ownerClass = ownerClass;
 
+    }
+
+    public UserAlreadyExistsException(String message, String field) {
+        super(message);
+        this.field = field;
     }
 }
