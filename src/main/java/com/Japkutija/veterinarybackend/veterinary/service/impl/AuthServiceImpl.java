@@ -97,7 +97,6 @@ public class AuthServiceImpl {
             // Load user details from the database
             // No need to load User Details here, as the user is already authenticated!
             // Still need to retrieve the user entity to create the refresh token!
-
             var userEntity = userService.findByUsername(username);
 
             // Generate JWT and refresh token

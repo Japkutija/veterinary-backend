@@ -8,7 +8,6 @@ import com.Japkutija.veterinarybackend.veterinary.exception.JwtTokenExpiredExcep
 import com.Japkutija.veterinarybackend.veterinary.exception.JwtTokenMalformedException;
 import com.Japkutija.veterinarybackend.veterinary.exception.RefreshTokenExpiredException;
 import com.Japkutija.veterinarybackend.veterinary.exception.UserAlreadyExistsException;
-import com.Japkutija.veterinarybackend.veterinary.exception.ValidationException;
 import com.Japkutija.veterinarybackend.veterinary.model.dto.response.ValidationErrorResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
@@ -221,20 +220,5 @@ public class ApiExceptionHandler {
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler(ValidationException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ResponseEntity<ValidationErrorResponse> handleValidationException(
-            ValidationException ex, HttpServletRequest request) {
-
-        var response = new ValidationErrorResponse(
-                HttpStatus.BAD_REQUEST.value(),
-                "Validation Error",
-                ex.getMessage(),
-                request.getRequestURI(),
-                ex.getFieldErrors()
-        );
-
-        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
-    }
-
+    
 }
