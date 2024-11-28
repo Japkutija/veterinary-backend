@@ -25,6 +25,7 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 @Service
 @Slf4j
+@Transactional
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
@@ -93,8 +94,8 @@ public class UserServiceImpl implements UserService {
 
             ownerRepository.save(owner);
             log.info("Owner created successfully for user: {}", user.getUuid());
-        } catch (Exception e) {
-            throw new EntitySavingException("User or Owner registration failed", e);
+        } catch (Exception ex) {
+            throw new BadRequestException("User or Owner registration failed", ex);
         }
         return result;
     }

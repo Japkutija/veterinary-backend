@@ -35,9 +35,9 @@ public class AuthController {
     @PostMapping("/register")
     @Operation(summary = "Register a new user", description = "Registers a new user")
     @Tag(name = "Authentication API")
-    public ResponseEntity<Object> registerUser(@Valid @RequestBody UserRegistrationDto registrationDto) {
-        var response = authService.registerUser(registrationDto);
-        return ResponseEntity.ok(response);
+    public ResponseEntity<Object> registerUser(@Valid @RequestBody UserRegistrationDto registrationDto, HttpServletResponse response) {
+        var responseEntity = authService.registerUser(registrationDto, response);
+        return ResponseEntity.ok(responseEntity);
     }
 
     /**
