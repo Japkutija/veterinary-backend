@@ -19,9 +19,11 @@ public class UserRegistrationDto {
     private String email;
 
     @NotBlank(message = "Password is required")
+    @Size(min = 6, message = "Password should be at least 6 characters")
     private String password;
 
     @NotBlank(message = "Confirm password is required")
+    @Size(min = 6, message = "Password should be at least 6 characters")
     private String confirmPassword;
 
     @NotBlank(message = "First name is required")
