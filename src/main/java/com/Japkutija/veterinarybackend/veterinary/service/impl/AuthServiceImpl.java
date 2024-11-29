@@ -60,6 +60,7 @@ public class AuthServiceImpl implements com.Japkutija.veterinarybackend.veterina
 
     public AuthenticationResponse registerUser(UserRegistrationDto registrationDto, HttpServletResponse response) {
 
+
         // Validate that the passwords match
         if (!registrationDto.getPassword().equals(registrationDto.getConfirmPassword())) {
             log.error("User registration failed: Passwords do not match");
