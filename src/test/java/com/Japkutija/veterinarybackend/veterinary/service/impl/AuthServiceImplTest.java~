@@ -161,7 +161,7 @@ class AuthServiceImplTest {
         var password = "wrongpassword";
 
         when(authenticationManager.authenticate(any(UsernamePasswordAuthenticationToken.class)))
-                .thenThrow(BadCredentialsException.class);
+                .thenThrow(new BadCredentialsException(anyString()));
 
         // Act & Assert
         assertThrows(BadRequestException.class, () -> {
