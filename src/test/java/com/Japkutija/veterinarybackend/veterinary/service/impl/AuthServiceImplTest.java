@@ -2,18 +2,25 @@ package com.Japkutija.veterinarybackend.veterinary.service.impl;
 
 import com.Japkutija.veterinarybackend.veterinary.config.CookieConfig;
 import com.Japkutija.veterinarybackend.veterinary.exception.BadRequestException;
+import com.Japkutija.veterinarybackend.veterinary.exception.EntityNotFoundException;
 import com.Japkutija.veterinarybackend.veterinary.exception.ErrorResponseException;
+import com.Japkutija.veterinarybackend.veterinary.exception.GeneralRunTimeException;
 import com.Japkutija.veterinarybackend.veterinary.mapper.UserMapper;
 import com.Japkutija.veterinarybackend.veterinary.model.dto.request.UserRegistrationDto;
 import com.Japkutija.veterinarybackend.veterinary.model.dto.response.AuthenticationResponse;
+import com.Japkutija.veterinarybackend.veterinary.model.entity.RefreshToken;
 import com.Japkutija.veterinarybackend.veterinary.model.entity.User;
 import com.Japkutija.veterinarybackend.veterinary.model.enums.Role;
 import com.Japkutija.veterinarybackend.veterinary.security.util.JwtUtil;
 import com.Japkutija.veterinarybackend.veterinary.service.RefreshTokenService;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.time.Instant;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Spy;
@@ -26,6 +33,7 @@ import org.springframework.security.core.Authentication;
 
 import java.time.LocalDate;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -50,6 +58,8 @@ class AuthServiceImplTest {
     private ApplicationContext applicationContext;
     @Mock
     private HttpServletResponse response;
+    @Mock
+    private HttpServletRequest request;
     @Mock
     private Authentication authentication;
 
@@ -136,7 +146,6 @@ class AuthServiceImplTest {
         when(authenticationManager.authenticate(any(UsernamePasswordAuthenticationToken.class)))
                 .thenReturn(new UsernamePasswordAuthenticationToken(username, password));
 
-
         when(userService.findByUsername(username)).thenReturn(user);
 
         when(jwtUtil.generateToken(username, user.getRole())).thenReturn(jwtToken);
@@ -151,7 +160,6 @@ class AuthServiceImplTest {
 
         // Clean up SecurityContextHolder
         SecurityContextHolder.clearContext();
-
     }
 
     @Test
@@ -171,45 +179,158 @@ class AuthServiceImplTest {
         // Verify that the response was not added to the cookie
         verify(response, never()).addHeader(anyString(), anyString());
 
+        // Clean up SecurityContextHolder
+        SecurityContextHolder.clearContext();
+    }
+
+    @Test
+    void loginUser_WithInvalidCredentials_ThrowsEntityNotFoundException() {
+        // Arrange
+        var username = "testuser";
+        var password = "wrongpassword";
+
+        when(authenticationManager.authenticate(any(UsernamePasswordAuthenticationToken.class)))
+                .thenThrow(UsernameNotFoundException.class);
+
+        // Act & Assert
+        assertThrows(EntityNotFoundException.class, () -> {
+            authService.loginUser(username, password, response);
+        });
+
+        // Verify that the response was not added to the cookie
+        verify(response, never()).addHeader(anyString(), anyString());
+
+        // Werify that we are not returning a token
+
+        verify(jwtUtil, never()).generateToken(anyString(), any(Role.class));
 
         // Clean up SecurityContextHolder
         SecurityContextHolder.clearContext();
     }
 
-
-   /* @Test
-    void loginUser_Success() {
+    // Unexpected exception during authentication is wrapped in RuntimeException
+    @Test
+    void loginUser_WhenUnexpectedExceptionOccurs_ThrowsRuntimeException() {
         // Arrange
-        String username = "testuser";
-        String password = "Password123!";
+        var username = "testUser";
+        var password = "password123";
 
         when(authenticationManager.authenticate(any(UsernamePasswordAuthenticationToken.class)))
-                .thenReturn(authentication);
-        when(userService.findByUsername(username)).thenReturn(registeredUser);
-        when(jwtUtil.generateToken(username, registeredUser.getRole())).thenReturn("test.jwt.token");
+                .thenThrow(new RuntimeException());
 
-        // Act
-        AuthenticationResponse result = authService.loginUser(username, password, response);
+        // Act & Assert
+        assertThrows(RuntimeException.class, () -> {
+            authService.loginUser(username, password, response);
+        });
 
-        // Assert
-        assertNotNull(result);
-        assertNotNull(result.getToken());
-        verify(authenticationManager).authenticate(any(UsernamePasswordAuthenticationToken.class));
-        verify(userService).findByUsername(username);
+        verifyNoInteractions(userService, jwtUtil, refreshTokenService);
+
+        SecurityContextHolder.clearContext();
     }
 
     @Test
-    void loginUser_InvalidCredentials() {
+    void logout_WithRefreshToken_SuccessfullyLogsOutUser() {
         // Arrange
-        String username = "testuser";
-        String password = "WrongPassword123!";
+        setupCookies("refreshToken", "valid-token");
 
-        when(authenticationManager.authenticate(any(UsernamePasswordAuthenticationToken.class)))
-                .thenThrow(new BadCredentialsException("Bad credentials"));
+        when(cookieConfig.isSecure()).thenReturn(true);
+        when(cookieConfig.getSameSite()).thenReturn("Strict");
+
+        // Act
+        assertDoesNotThrow(() -> authService.logout(request, response));
+
+        var cookieHeaderCaptor = ArgumentCaptor.forClass(String.class);
+
+        // Assert
+        verify(refreshTokenService).deleteByToken("valid-token");
+        verify(response).addHeader(eq("Set-Cookie"), cookieHeaderCaptor.capture());
+        assertCookieCleared(cookieHeaderCaptor.getValue());
+
+        // Verify SecurityContextHolder is cleared
+        assertNull(SecurityContextHolder.getContext().getAuthentication());
+    }
+
+    private void setupCookies(String name, String value) {
+        var refreshTokenCookie = new Cookie(name, value);
+        var cookies = new Cookie[] {refreshTokenCookie};
+        when(request.getCookies()).thenReturn(cookies);
+    }
+
+    private void assertCookieCleared(String cookieHeader) {
+        assertTrue(cookieHeader.contains("refreshToken="));
+        assertTrue(cookieHeader.contains("Max-Age=0"));
+        assertTrue(cookieHeader.contains("Path=/api/auth/"));
+        assertTrue(cookieHeader.contains("SameSite=Strict"));
+        assertTrue(cookieHeader.contains("Secure"));
+    }
+
+    @Test
+    void logout_WithoutRefreshToken_ThrowsException() {
+        // Arrange
+        when(request.getCookies()).thenReturn(null);
 
         // Act & Assert
-        assertThrows(
-                BadRequestException.class,
-                () -> authService.loginUser(username, password, response));
-    }*/
+        var exception = assertThrows(GeneralRunTimeException.class, () -> {
+            authService.logout(request, response);
+        });
+
+        assertEquals("Refresh token is missing", exception.getMessage());
+
+        // Verify that deleteByToken is not called
+        verify(refreshTokenService, never()).deleteByToken(anyString());
+
+        // Verify that no headers are added to the response
+        verify(response, never()).addHeader(anyString(), anyString());
+    }
+
+    @Test
+    void refreshAccessToken_WithValidRefreshToken_ReturnsNewAccessToken() {
+        // Arrange
+        var refreshTokenValue = "valid-refresh-token";
+        var newAccessToken = "new-access-token";
+
+        var user = User.builder()
+                .id(1L)
+                .username("testuser")
+                .role(Role.USER)
+                .build();
+
+        var refreshToken = RefreshToken.builder()
+                .token(refreshTokenValue)
+                .user(user)
+                .expiryDate(Instant.now().plusSeconds(3600))
+                .build();
+
+        when(refreshTokenService.findByToken(refreshTokenValue)).thenReturn(refreshToken);
+        when(jwtUtil.generateToken(user.getUsername(), user.getRole())).thenReturn(newAccessToken);
+
+        // Act
+        var authResponse = authService.refreshAccessToken(refreshTokenValue, response);
+
+        // Assert
+        assertDoesNotThrow(() -> authResponse);
+        assertEquals(newAccessToken, authResponse.getJwt());
+
+        // Verify that the refresh token was deleted
+        verify(refreshTokenService).findByToken(refreshTokenValue);
+        verify(refreshTokenService).deleteByToken(refreshTokenValue);
+        verify(refreshTokenService).saveRefreshToken(any(RefreshToken.class));
+        verify(response).addHeader(eq("Set-Cookie"), any(String.class));
+
+        // Verify SecurityContextHolder is cleared
+        assertNull(SecurityContextHolder.getContext().getAuthentication());
+    }
+
+    @Test
+    void refreshAccessToken_MissingRefreshToken_ThrowsException() {
+        // Arrange
+        when(request.getCookies()).thenReturn(null);
+
+        // Act & Assert
+        var exception = assertThrows(GeneralRunTimeException.class, () -> {
+            authService.refreshAccessToken(request);
+        });
+
+        assertEquals("Refresh token is missing", exception.getMessage());
+    }
 }
