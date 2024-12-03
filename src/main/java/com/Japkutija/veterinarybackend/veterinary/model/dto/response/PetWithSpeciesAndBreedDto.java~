@@ -39,7 +39,7 @@ public class PetWithSpeciesAndBreedDto {
 
     @NotNull(message = "Owner UUID is required")
     private UUID ownerUuid;
-
+    
     private String ownerName;
 
     @NotNull
