@@ -47,15 +47,15 @@ class UserServiceTest {
     @Test
     void registerUser_Success() {
         // Arrange
-        var username = "testuser";
-        var email = "test@example.com";
-        var password = "password123";
-        var firstName = "John";
-        var lastName = "Doe";
-        var dateOfBirth = LocalDate.of(1990, 1, 1);
-        var emso = "1234567890123";
-        var phoneNumber = "123456789";
-        var address = "Test Address";
+        String username = "testuser";
+        String email = "test@example.com";
+        String password = "password123";
+        String firstName = "John";
+        String lastName = "Doe";
+        LocalDate dateOfBirth = LocalDate.of(1990, 1, 1);
+        String emso = "1234567890123";
+        String phoneNumber = "123456789";
+        String address = "Test Address";
 
         when(userRepository.existsByUsernameIgnoreCase(anyString())).thenReturn(false);
         when(userRepository.existsByEmailIgnoreCase(anyString())).thenReturn(false);
@@ -66,7 +66,7 @@ class UserServiceTest {
         when(ownerRepository.save(any(Owner.class))).thenAnswer(invocation -> invocation.getArgument(0));
 
         // Act
-        var result = userService.registerUser(username, email, password, firstName, lastName,
+        User result = userService.registerUser(username, email, password, firstName, lastName, 
             dateOfBirth, emso, phoneNumber, address);
 
         // Assert
@@ -87,7 +87,7 @@ class UserServiceTest {
 
         // Act & Assert
         assertThrows(UserAlreadyExistsException.class, () ->
-            userService.registerUser("existinguser", "test@example.com", "password",
+            userService.registerUser("existinguser", "test@example.com", "password", 
                 "John", "Doe", LocalDate.now(), "1234567890123", "123456789", "address"));
 
         verify(userRepository, never()).save(any(User.class));
@@ -128,13 +128,13 @@ class UserServiceTest {
     @Test
     void findByUsername_Success() {
         // Arrange
-        var username = "testuser";
-        var mockUser = new User();
+        String username = "testuser";
+        User mockUser = new User();
         mockUser.setUsername(username);
         when(userRepository.findByUsername(username)).thenReturn(Optional.of(mockUser));
 
         // Act
-        var result = userService.findByUsername(username);
+        User result = userService.findByUsername(username);
 
         // Assert
         assertNotNull(result);
@@ -145,7 +145,7 @@ class UserServiceTest {
     @Test
     void findByUsername_UserNotFound_ThrowsException() {
         // Arrange
-        var username = "nonexistent";
+        String username = "nonexistent";
         when(userRepository.findByUsername(username)).thenReturn(Optional.empty());
 
         // Act & Assert

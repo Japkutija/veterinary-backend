@@ -240,7 +240,7 @@ public class AuthServiceImpl implements com.Japkutija.veterinarybackend.veterina
     public String extractRefreshToken(HttpServletRequest request) {
 
         if (request.getCookies() == null) {
-            log.error(REFRESH_TOKEN_NOT_FOUND);
+            throw new BadRequestException(REFRESH_TOKEN_NOT_FOUND);
         }
         return Arrays.stream(request.getCookies())
                 .filter(cookie -> REFRESH_TOKEN_COOKIE_NAME.equals(cookie.getName()))

@@ -5,6 +5,7 @@ import com.Japkutija.veterinarybackend.veterinary.exception.BadRequestException;
 import com.Japkutija.veterinarybackend.veterinary.exception.EntityNotFoundException;
 import com.Japkutija.veterinarybackend.veterinary.exception.ErrorResponseException;
 import com.Japkutija.veterinarybackend.veterinary.exception.GeneralRunTimeException;
+import com.Japkutija.veterinarybackend.veterinary.exception.RefreshTokenExpiredException;
 import com.Japkutija.veterinarybackend.veterinary.mapper.UserMapper;
 import com.Japkutija.veterinarybackend.veterinary.model.dto.request.UserRegistrationDto;
 import com.Japkutija.veterinarybackend.veterinary.model.dto.response.AuthenticationResponse;
@@ -35,6 +36,7 @@ import java.time.LocalDate;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
+import static com.Japkutija.veterinarybackend.veterinary.service.impl.AuthServiceImpl.REFRESH_TOKEN_NOT_FOUND;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
@@ -322,15 +324,58 @@ class AuthServiceImplTest {
     }
 
     @Test
-    void refreshAccessToken_MissingRefreshToken_ThrowsException() {
+    void extractRefreshToken_NoCookiesInRequest_ThrowsBadRequestException() {
         // Arrange
         when(request.getCookies()).thenReturn(null);
 
         // Act & Assert
-        var exception = assertThrows(GeneralRunTimeException.class, () -> {
-            authService.refreshAccessToken(request);
+        var exception = assertThrows(BadRequestException.class, () -> {
+            authService.extractRefreshToken(request);
         });
 
-        assertEquals("Refresh token is missing", exception.getMessage());
+        assertEquals(REFRESH_TOKEN_NOT_FOUND, exception.getMessage());
+        verify(request).getCookies();
+    }
+
+    @Test
+    void extractRefreshToken_RefreshTokenCookieMissing_ThrowsBadRequestException() {
+        // Arrange
+        var someOtherCookie = new Cookie("someOtherCookie", "someValue");
+        var cookies = new Cookie[] {someOtherCookie};
+
+        when(request.getCookies()).thenReturn(cookies);
+
+        // Act & Assert
+        var exception = assertThrows(BadRequestException.class, () -> {
+            authService.extractRefreshToken(request);
+        });
+
+        assertEquals("Refresh token not found in cookies", exception.getMessage());
+    }
+
+    @Test
+    void refreshAccessToken_WithExpiredRefreshToken_ThrowsRefreshTokenExpiredException() {
+        // Arrange
+        var refreshTokenValue = "expired-refresh-token";
+        var newAccessToken = "new-access-token";
+
+        var user = User.builder()
+                .id(1L)
+                .username("testuser")
+                .role(Role.USER)
+                .build();
+
+        var refreshToken = RefreshToken.builder()
+                .token(refreshTokenValue)
+                .user(user)
+                .expiryDate(Instant.now().minusSeconds(3600))
+                .build();
+
+        when(refreshTokenService.findByToken(refreshTokenValue)).thenReturn(refreshToken);
+
+        // Act & Assert
+        assertThrows(RefreshTokenExpiredException.class, () -> {
+            authService.refreshAccessToken(refreshTokenValue, response);
+        });
     }
 }
