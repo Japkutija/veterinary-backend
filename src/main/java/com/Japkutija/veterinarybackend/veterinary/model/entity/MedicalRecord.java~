@@ -58,10 +58,6 @@ public class MedicalRecord {
     @Enumerated(EnumType.STRING)
     private MedicalRecordStatus status;
 
-    private String labResults;
-    private String diagnosis;
-    private String notes;
-
 
     @PrePersist
     public void prePersist() {

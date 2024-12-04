@@ -1,0 +1,11 @@
+changeLogFile=classpath:db/changelog/master.yaml
+url=jdbc:mysql://localhost:3306/veterinary
+username=root
+password=admin
+driver=com.mysql.cj.jdbc.Driver
+referenceUrl=hibernate:spring:com.Japkutija.veterinarybackend.veterinary.model.entity?dialect=org.hibernate.dialect.MySQLDialect
+diffChangeLogFile=src/main/resources/db/changelog/diff-changelog.yaml
+
+# Additional Liquibase settings
+logLevel=INFO
+contexts=dev
