@@ -1,5 +1,14 @@
 databaseChangeLog:
   - changeSet:
+      id: load-user-data
+      author: Japkutija
+      changes:
+        - loadData:
+            file: classpath:db/data/user.csv
+            separator: ","
+            tableName: user
+
+  - changeSet:
       id: load-csv-data
       author: Japkutija
       changes:

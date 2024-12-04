@@ -1,0 +1,9 @@
+databaseChangeLog:
+  - changeSet:
+      id: add-pet-nickname-owner-constraint
+      author: Japkutija
+      changes:
+        - addUniqueConstraint:
+            tableName: pet
+            columnNames: owner_id, nickname
+            constraintName: uk_pet_owner_nickname

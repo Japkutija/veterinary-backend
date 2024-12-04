@@ -3,6 +3,7 @@ package com.Japkutija.veterinarybackend.veterinary.service.impl;
 import com.Japkutija.veterinarybackend.veterinary.config.CookieConfig;
 import com.Japkutija.veterinarybackend.veterinary.exception.BadRequestException;
 import com.Japkutija.veterinarybackend.veterinary.exception.EntityNotFoundException;
+import com.Japkutija.veterinarybackend.veterinary.exception.ErrorResponseException;
 import com.Japkutija.veterinarybackend.veterinary.exception.GeneralRunTimeException;
 import com.Japkutija.veterinarybackend.veterinary.exception.RefreshTokenExpiredException;
 import com.Japkutija.veterinarybackend.veterinary.exception.RefreshTokenNotFoundException;
@@ -27,11 +28,13 @@ import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.ApplicationContext;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -39,7 +42,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @RequiredArgsConstructor
 @Slf4j
-public class AuthServiceImpl {
+public class AuthServiceImpl implements com.Japkutija.veterinarybackend.veterinary.service.AuthService {
 
     private final AuthenticationManager authenticationManager;
     private final CookieConfig cookieConfig;
@@ -47,6 +50,7 @@ public class AuthServiceImpl {
     private final JwtUtil jwtUtil;
     private final RefreshTokenService refreshTokenService;
     private final UserMapper userMapper;
+    private final ApplicationContext applicationContext;
 
     public static final String REFRESH_TOKEN_COOKIE_NAME = "refreshToken";
     public static final String REFRESH_TOKEN_NOT_FOUND = "Refresh token not found in cookies";
@@ -54,44 +58,56 @@ public class AuthServiceImpl {
     @Value("${jwt.refresh-token-expiration}") //JWT_REFRESH_TOKEN_EXPIRATION
     private int refreshTokenExpirationInDays;
 
-    public Object registerUser(UserRegistrationDto registrationDto) {
+    public AuthenticationResponse registerUser(UserRegistrationDto registrationDto, HttpServletResponse response) {
 
         // Validate that the passwords match
         if (!registrationDto.getPassword().equals(registrationDto.getConfirmPassword())) {
             log.error("User registration failed: Passwords do not match");
-            return ErrorResponseDto.builder()
+            var errorResponseDto = ErrorResponseDto.builder()
                     .timestamp(LocalDateTime.now())
                     .message("Passwords do not match")
                     .status(HttpStatus.BAD_REQUEST.value())
                     .build();
+            throw new ErrorResponseException(errorResponseDto);
         }
 
         // Register the user
         var registeredUser = userService.registerUser(
                 registrationDto.getUsername(),
                 registrationDto.getEmail(),
-                registrationDto.getPassword()
+                registrationDto.getPassword(),
+                registrationDto.getFirstName(),
+                registrationDto.getLastName(),
+                registrationDto.getDateOfBirth(),
+                registrationDto.getEmso(),
+                registrationDto.getPhoneNumber(),
+                registrationDto.getAddress()
         );
 
-        return userMapper.toUserDto(registeredUser);
+        // Get the proxied instance of the AuthServiceImpl.
+        var self = applicationContext.getBean(AuthServiceImpl.class);
+
+        return self.loginUser(registeredUser.getUsername(), registrationDto.getPassword(), response);
     }
 
     @Transactional
     public AuthenticationResponse loginUser(String username, String password, HttpServletResponse response) {
         try {
             // Attempt to authenticate the user. Automatically invokes CustomUserDetailsService.loadUserByUsername to load user details
-            authenticationManager.authenticate(
+            var authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(username, password)
             );
+
+            // Set the Authentication object in SecurityContext
+            SecurityContextHolder.getContext().setAuthentication(authentication);
 
             // Load user details from the database
             // No need to load User Details here, as the user is already authenticated!
             // Still need to retrieve the user entity to create the refresh token!
-
             var userEntity = userService.findByUsername(username);
 
             // Generate JWT and refresh token
-            var jwt = jwtUtil.generateToken(username);
+            var jwt = jwtUtil.generateToken(username, userEntity.getRole());
             var refreshToken = UUID.randomUUID().toString();
             var refreshTokenEntity = createRefreshToken(refreshToken, userEntity);
 
@@ -150,7 +166,7 @@ public class AuthServiceImpl {
      * @param response     the HttpServletResponse to which the cookie will be added
      * @param refreshToken the refresh token to be set as a cookie
      */
-    private void setRefreshTokenCookie(HttpServletResponse response, String refreshToken) {
+    public void setRefreshTokenCookie(HttpServletResponse response, String refreshToken) {
         var refreshTokenCookie = ResponseCookie.from(REFRESH_TOKEN_COOKIE_NAME, refreshToken)
                 .httpOnly(true)
                 .secure(cookieConfig.isSecure())
@@ -163,7 +179,7 @@ public class AuthServiceImpl {
         response.addHeader("Set-Cookie", refreshTokenCookie.toString());
     }
 
-    private RefreshToken createRefreshToken(String refreshToken, User userEntity) {
+    public RefreshToken createRefreshToken(String refreshToken, User userEntity) {
         return RefreshToken.builder()
                 .token(refreshToken)
                 .user(userEntity)
@@ -186,7 +202,7 @@ public class AuthServiceImpl {
             refreshTokenService.deleteByToken(refreshToken);
 
             // Generate a new access token and refresh token
-            var newAccessToken = jwtUtil.generateToken(refreshTokenEntity.getUser().getUsername());
+            var newAccessToken = jwtUtil.generateToken(refreshTokenEntity.getUser().getUsername(), refreshTokenEntity.getUser().getRole());
             var newRefreshToken = UUID.randomUUID().toString();
 
             setRefreshTokenCookie(response, newRefreshToken);
@@ -224,7 +240,7 @@ public class AuthServiceImpl {
     public String extractRefreshToken(HttpServletRequest request) {
 
         if (request.getCookies() == null) {
-            log.error(REFRESH_TOKEN_NOT_FOUND);
+            throw new BadRequestException(REFRESH_TOKEN_NOT_FOUND);
         }
         return Arrays.stream(request.getCookies())
                 .filter(cookie -> REFRESH_TOKEN_COOKIE_NAME.equals(cookie.getName()))

@@ -17,6 +17,8 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -33,9 +35,9 @@ public class AuthController {
     @PostMapping("/register")
     @Operation(summary = "Register a new user", description = "Registers a new user")
     @Tag(name = "Authentication API")
-    public ResponseEntity<Object> registerUser(@Valid @RequestBody UserRegistrationDto registrationDto) {
-        var response = authService.registerUser(registrationDto);
-        return ResponseEntity.ok(response);
+    public ResponseEntity<Object> registerUser(@Valid @RequestBody UserRegistrationDto registrationDto, HttpServletResponse response) {
+        var responseEntity = authService.registerUser(registrationDto, response);
+        return ResponseEntity.ok(responseEntity);
     }
 
     /**
@@ -73,4 +75,6 @@ public class AuthController {
 
         return ResponseEntity.ok(authResponse);
     }
+
+
 }

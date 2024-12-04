@@ -7,6 +7,9 @@ import com.Japkutija.veterinarybackend.veterinary.mapper.PetMapper;
 import com.Japkutija.veterinarybackend.veterinary.model.dto.PetDTO;
 import com.Japkutija.veterinarybackend.veterinary.model.entity.Pet;
 import com.Japkutija.veterinarybackend.veterinary.repository.PetRepository;
+import com.Japkutija.veterinarybackend.veterinary.service.OwnerService;
+import com.Japkutija.veterinarybackend.veterinary.service.SpeciesService;
+import java.util.Random;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -25,21 +28,47 @@ public class PetServiceImpl implements com.Japkutija.veterinarybackend.veterinar
 
     private final PetRepository petRepository;
     private final PetMapper petMapper;
+    private final SpeciesService speciesService;
+    private final BreedServiceImpl breedService;
+    private final OwnerService ownerService;
+    private final Random random = new Random();
 
     @Override
     @Transactional
     public Pet createPet(PetDTO petDTO) {
+
+        // Add a validation before creating
+        if (petRepository.existsByOwner_UuidAndNicknameIgnoreCase(petDTO.getOwnerUuid(), petDTO.getNickname())) {
+            throw new EntitySavingException(String.format("Pet with nickname '%s' already exists", petDTO.getNickname()));
+        }
         var pet = petMapper.toPet(petDTO);
+        var breed = breedService.getBreedByName(petDTO.getBreedName());
+        var owner = ownerService.getOwnerByUuid(petDTO.getOwnerUuid());
+        var species = speciesService.getSpeciesByName(petDTO.getSpeciesName());
+
+        breed.setUuid(UUID.randomUUID());
+        pet.setBreed(breed);
+        pet.setOwner(owner);
+        pet.setUuid(UUID.randomUUID());
+        pet.setChipNumber(generateChipNumber());
+        pet.setSpecies(species);
 
         return savePet(pet);
+    }
+
+    private String generateChipNumber() {
+        var sb = new StringBuilder();
+        for (var i = 0; i < 20; i++) {
+            sb.append(this.random.nextInt(10));
+        }
+        return sb.toString();
     }
 
     @Override
     public Pet savePet(Pet pet) {
         try {
-            log.info("Attempting to save pet species name: {}", pet.getSpecies().getSpeciesName());
-            log.info("Attempting to save pet breed name: {}", pet.getBreed().getBreedName());
             var result = petRepository.save(pet);
+            log.info("Pet saved successfully: {}", result);
             return result;
         } catch (Exception ex) {
             log.error("Error saving pet: {}", ex.getMessage());
@@ -54,9 +83,7 @@ public class PetServiceImpl implements com.Japkutija.veterinarybackend.veterinar
 
         var result = petMapper.updatePetFromDto(petDTO, pet);
 
-        log.info("Trying to save pet with species and breed: {} {}", result.getSpecies().getSpeciesName(), result.getBreed().getBreedName());
         return savePet(result);
-
     }
 
     @Override
@@ -102,13 +129,12 @@ public class PetServiceImpl implements com.Japkutija.veterinarybackend.veterinar
         // Create the Sort object if sortField is provided, otherwise unsorted
         var sort = (sortField != null) ? Sort.by(direction, sortField) : Sort.unsorted();
 
-        // Create pageable object with sorting and pagination
-        var pageable = PageRequest.of(pageIndex - 1, pageSize, sort);
+        // Create pageRequest object with sorting and pagination
+        var pageRequest = PageRequest.of(pageIndex - 1, pageSize, sort);
 
         // Fetch pets with pagination and sorting applied
-        return petRepository.findAll(pageable);
+        return petRepository.findAll(pageRequest);
     }
-
 
     @Override
     @Transactional(readOnly = true)

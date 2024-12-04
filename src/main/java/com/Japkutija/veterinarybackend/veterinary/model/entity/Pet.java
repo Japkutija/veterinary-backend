@@ -2,6 +2,7 @@ package com.Japkutija.veterinarybackend.veterinary.model.entity;
 
 import com.Japkutija.veterinarybackend.veterinary.model.enums.Gender;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.PastOrPresent;
 import lombok.Data;
 import org.antlr.v4.runtime.misc.NotNull;
 import org.hibernate.annotations.JdbcTypeCode;
@@ -14,7 +15,9 @@ import java.util.List;
 import java.util.UUID;
 
 @Entity
-@Table(name = "pet")
+@Table(name = "pet", uniqueConstraints = {
+        @UniqueConstraint(name = "uk_pet_owner_nickname", columnNames = {"owner_id", "nickname"})
+})
 @Data
 public class Pet {
 
@@ -53,6 +56,7 @@ public class Pet {
 
     @Column(name = "date_of_birth", nullable = false)
     @NotNull
+    @PastOrPresent(message = "Date must not be in the future")
     private LocalDate dateOfBirth;
 
     @Column(name = "weight", nullable = false, precision = 5, scale = 2)
@@ -98,11 +102,6 @@ public class Pet {
                 ", dateOfBirth=" + dateOfBirth +
                 ", weight=" + weight +
                 ", height=" + height +
-                // Exclude owner and collections
                 '}';
     }
-
-
-
-
 }

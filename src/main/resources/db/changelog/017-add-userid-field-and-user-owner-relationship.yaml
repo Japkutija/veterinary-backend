@@ -1,0 +1,23 @@
+databaseChangeLog:
+  - changeSet:
+      id: 017-add-userid-field-and-user-owner-relationship
+      author: Japkutija
+      # Add a user_id field to the owner table and a user owner relationship
+      changes:
+        - addColumn:
+            tableName: owner
+            columns:
+              - column:
+                  name: user_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+        - addForeignKeyConstraint:
+            baseTableName: owner
+            baseColumnNames: user_id
+            referencedTableName: user
+            referencedColumnNames: user_id
+            constraintName: fk_owner_user
+            onDelete: CASCADE
+            onUpdate: CASCADE
+

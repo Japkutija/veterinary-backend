@@ -3,7 +3,12 @@ package com.Japkutija.veterinarybackend.veterinary.model.entity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.antlr.v4.runtime.misc.NotNull;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
@@ -15,7 +20,11 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "owner")
-@Data
+@Getter
+@Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class Owner {
 
     @Id
@@ -39,12 +48,11 @@ public class Owner {
     @Size(min = 2, max = 50)
     private String lastName;
 
-
-    @Column(name = "email", length = 50)
+    @Column(name = "email", length = 50, unique = true)
     @Email
     private String email;
 
-    @Column(name = "phone_number", length = 20)
+    @Column(name = "phone_number", length = 20, unique = true)
     private String phoneNumber;
 
     @Column(name = "address", length = 255)
@@ -63,5 +71,9 @@ public class Owner {
 
     @OneToMany(mappedBy = "owner")
     private List<Bill> bills = new ArrayList<>();
+
+    @OneToOne
+    @JoinColumn(name="user_id", referencedColumnName = "user_id")
+    private User user;
 
 }

@@ -25,6 +25,7 @@ public class CorsConfig {
     public CorsFilter corsFilter() {
         var config = new CorsConfiguration();
         config.addAllowedOrigin("http://localhost:4200"); // Allow the frontend origin,
+        config.addAllowedOrigin("http://localhost:64098");
         config.setAllowCredentials(true); // Allow credentials (e.g., cookies)
         config.addAllowedHeader("*"); // Allow all headers
         config.addAllowedMethod("*"); // Allow all methods (POST, GET, etc.)
