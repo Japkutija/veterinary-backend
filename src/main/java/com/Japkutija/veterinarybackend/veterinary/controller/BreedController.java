@@ -88,7 +88,7 @@ public class BreedController {
             @ApiResponse(responseCode = "404", description = "Breed not found")
     })
     @GetMapping("/species/uuid/{speciesUuid}")
-    public List<BreedDTO> getBreedsBySpeciesName(@PathVariable @NotNull UUID speciesUuid) {
+    public List<BreedDTO> getBreedsBySpeciesUuid(@PathVariable @NotNull UUID speciesUuid) {
         var breeds = breedService.getBreedsBySpeciesUuid(speciesUuid);
 
         return breedMapper.toBreedDTOList(breeds);
@@ -100,7 +100,7 @@ public class BreedController {
             @ApiResponse(responseCode = "404", description = "Breed not found")
     })
     @GetMapping("/species/name/{speciesName}")
-    public List<BreedDTO> getBreedsBySpeciesName(@PathVariable @NotNull String speciesName) {
+    public List<BreedDTO> getBreedsBySpeciesUuid(@PathVariable @NotNull String speciesName) {
         var breeds = breedService.getBreedsBySpeciesName(speciesName);
 
         return breedMapper.toBreedDTOList(breeds);

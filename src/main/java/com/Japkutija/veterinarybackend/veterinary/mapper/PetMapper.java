@@ -14,20 +14,20 @@ import org.mapstruct.Named;
 @Mapper(componentModel = "spring")
 public interface PetMapper {
 
-    @Mapping(source = "owner", target = "ownerName", qualifiedByName = "mapOwnerName")
+    @Mapping(source = "owner.uuid", target = "ownerUuid")
     @Mapping(source = "breed.breedName", target = "breedName")
     @Mapping(source = "species.speciesName", target = "speciesName")
+    @Mapping(source = "owner", target = "ownerName", qualifiedByName = "mapOwnerName")
     PetWithSpeciesAndBreedDto toPetWithSpeciesAndBreedDto(Pet pet);
-
-    PetWithSpeciesAndBreedDto fromPetDto(PetDTO petDTO);
-
-    //@Mapping(source = "speciesName", target = "")
-    PetDTO fromPetWithSpeciesAndBreedDto(PetWithSpeciesAndBreedDto petWithSpeciesAndBreedDto);
 
     @Named("mapOwnerName")
     default String mapOwnerName(Owner owner) {
         return owner.getFirstName() + " " + owner.getLastName();
     }
+    PetWithSpeciesAndBreedDto fromPetDto(PetDTO petDTO);
+
+    //@Mapping(source = "speciesName", target = "")
+    PetDTO fromPetWithSpeciesAndBreedDto(PetWithSpeciesAndBreedDto petWithSpeciesAndBreedDto);
 
     @Mapping(source = "owner.uuid", target = "ownerUuid")
     @Mapping(source = "breed.uuid", target = "breedUuid")
@@ -46,5 +46,7 @@ public interface PetMapper {
     @Mapping(source = "speciesName", target = "species.speciesName")
     @Mapping(source = "breedName", target = "breed.breedName")
     Pet updatePetFromDto(PetDTO petDTO, @MappingTarget Pet pet);
+
+
 }
 

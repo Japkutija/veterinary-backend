@@ -3,16 +3,12 @@ package com.Japkutija.veterinarybackend.veterinary.mapper;
 import com.Japkutija.veterinarybackend.veterinary.model.dto.OwnerDTO;
 import com.Japkutija.veterinarybackend.veterinary.model.entity.Owner;
 import com.Japkutija.veterinarybackend.veterinary.model.entity.Pet;
-import com.Japkutija.veterinarybackend.veterinary.service.PetService;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
-import org.mapstruct.Named;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Mapper(componentModel = "spring", uses = {PetMapper.class})
 public interface OwnerMapper {
@@ -22,6 +18,7 @@ public interface OwnerMapper {
 
 
     @Mapping(source = "pets", target = "petUuids")
+    @Mapping(target = "emso", source = "EMSO")
     OwnerDTO toOwnerDto(Owner owner);
 
     // Additional helper method to convert Pet to UUID
@@ -46,7 +43,8 @@ public interface OwnerMapper {
 
     List<OwnerDTO> toOwnerDTOList(List<Owner> owners);
 
-    Owner updateOwnerFromDto(OwnerDTO ownerDTO, @MappingTarget Owner owner);
+    @Mapping(target = "id", ignore = true)
+    void updateOwner(Owner ownerSource, @MappingTarget Owner owner);
 
 }
 

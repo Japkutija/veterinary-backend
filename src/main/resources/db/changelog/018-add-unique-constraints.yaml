@@ -1,0 +1,17 @@
+databaseChangeLog:
+  - changeSet:
+      id: 018-add-unique-constraints
+      author: jasko
+      changes:
+        - addUniqueConstraint:
+            tableName: owner
+            columnNames: EMSO
+            constraintName: UK_owner_emso
+        - addUniqueConstraint:
+            tableName: owner
+            columnNames: email
+            constraintName: UK_owner_email
+        - addUniqueConstraint:
+            tableName: owner
+            columnNames: phone_number
+            constraintName: UK_owner_phone

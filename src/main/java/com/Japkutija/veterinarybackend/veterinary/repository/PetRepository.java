@@ -1,6 +1,5 @@
 package com.Japkutija.veterinarybackend.veterinary.repository;
 
-import com.Japkutija.veterinarybackend.veterinary.model.entity.Breed;
 import com.Japkutija.veterinarybackend.veterinary.model.entity.Pet;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
@@ -21,4 +20,6 @@ public interface PetRepository extends JpaRepository<Pet, Long> {
     void deleteByUuid(UUID uuid);
 
     List<Pet> findBySpeciesSpeciesName(String species);
+
+    boolean existsByOwner_UuidAndNicknameIgnoreCase(UUID ownerUuid, String nickname);
 }

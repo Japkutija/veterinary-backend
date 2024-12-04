@@ -1,0 +1,32 @@
+databaseChangeLog:
+  - changeSet:
+      id: 016-create-date-of-birth-validation-procedure
+      author: Japkutija
+      changes:
+      # Trigger to ensure date_of_birth from pet is not in the future during inserts
+        - sql:
+            splitStatements: false
+            stripComments: true
+            sql: |
+              CREATE TRIGGER check_date_of_birth_before_insert
+                BEFORE INSERT ON pet
+                FOR EACH ROW
+                BEGIN
+                    IF NEW.date_of_birth > CURRENT_DATE THEN
+                        SIGNAL SQLSTATE '45000'
+                        SET MESSAGE_TEXT = 'Date of birth cannot be in the future';
+                    END IF;
+                END;
+        - sql:
+            splitStatements: false
+            stripComments: true
+            sql: |
+              CREATE TRIGGER check_date_of_birth_before_update
+                BEFORE UPDATE ON pet
+                FOR EACH ROW
+                BEGIN
+                    IF NEW.date_of_birth > CURRENT_DATE THEN
+                        SIGNAL SQLSTATE '45000'
+                        SET MESSAGE_TEXT = 'Date of birth cannot be in the future';
+                    END IF;
+                END;

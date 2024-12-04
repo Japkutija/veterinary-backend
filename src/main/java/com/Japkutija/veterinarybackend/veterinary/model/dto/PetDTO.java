@@ -2,6 +2,7 @@ package com.Japkutija.veterinarybackend.veterinary.model.dto;
 
 import com.Japkutija.veterinarybackend.veterinary.model.enums.Gender;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.PastOrPresent;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
 
@@ -27,6 +28,7 @@ public class PetDTO {
     private Gender gender;
 
     @NotNull
+    @PastOrPresent(message = "Date of birth cannot be in the future")
     private Date dateOfBirth;
 
     @NotNull

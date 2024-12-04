@@ -18,8 +18,9 @@ public interface SpeciesService {
 
     Species getSpeciesById(Long id);
 
-    List<Species> getSpeciesByName(String speciesName);
+    List<Species> getSpeciesListByName(String speciesName);
 
+    Species getSpeciesByName(String speciesName);
 
     List<Species> getAllSpecies();
 

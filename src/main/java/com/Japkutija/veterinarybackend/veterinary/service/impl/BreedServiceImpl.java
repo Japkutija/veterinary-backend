@@ -62,6 +62,13 @@ public class BreedServiceImpl implements com.Japkutija.veterinarybackend.veterin
     }
 
     @Override
+    public Breed getBreedByName(String name) {
+        var breed = breedRepository.findByBreedName(name);
+
+        return breed.orElseThrow(() -> new EntityNotFoundException(Breed.class, name));
+    }
+
+    @Override
     @Transactional(readOnly = true)
     public List<Breed> getAllBreeds() {
         var breeds = breedRepository.findAll();
