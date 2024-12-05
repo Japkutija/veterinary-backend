@@ -10,6 +10,8 @@ import java.util.UUID;
 @Data
 public class PrescriptionDTO {
     
+    private UUID uuid;
+    
     @NotBlank(message = "Medication name is required")
     private String medication;
     
@@ -30,6 +32,8 @@ public class PrescriptionDTO {
     @NotNull(message = "Medical record UUID is required")
     private UUID medicalRecordUuid;
     
-    @NotNull(message = "Prescribing veterinarian UUID is required")
-    private UUID prescribedByUuid;
+    @NotNull(message = "Veterinarian UUID is required")
+    private UUID veterinarianUuid;
+    
+    private boolean active = true;
 }

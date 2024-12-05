@@ -12,16 +12,18 @@ import java.util.List;
 public interface MedicalRecordMapper {
 
     @Mapping(source = "petUuid", target = "pet.uuid")
+    @Mapping(source = "veterinarianUuid", target = "veterinarian.uuid")
     MedicalRecord toMedicalRecord(MedicalRecordDTO medicalRecordDTO);
 
     @Mapping(source = "pet.uuid", target = "petUuid")
+    @Mapping(source = "veterinarian.uuid", target = "veterinarianUuid")
     MedicalRecordDTO toMedicalRecordDTO(MedicalRecord medicalRecord);
 
+    List<MedicalRecordDTO> toMedicalRecordDTOList(List<MedicalRecord> medicalRecords);
+    
     List<MedicalRecord> toMedicalRecordList(List<MedicalRecordDTO> medicalRecordDTOs);
 
-    List<MedicalRecordDTO> toMedicalRecordDTOList(List<MedicalRecord> medicalRecords);
-
-    
-    MedicalRecord updateMedicalRecordFromDto(MedicalRecordDTO medicalRecordDTO, @MappingTarget MedicalRecord medicalRecord);
+    @Mapping(source = "petUuid", target = "pet.uuid")
+    @Mapping(source = "veterinarianUuid", target = "veterinarian.uuid")
+    MedicalRecord updateMedicalRecordFromDTO(MedicalRecordDTO medicalRecordDTO, @MappingTarget MedicalRecord medicalRecord);
 }
-

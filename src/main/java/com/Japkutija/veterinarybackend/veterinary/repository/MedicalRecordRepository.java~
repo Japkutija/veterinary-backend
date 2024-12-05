@@ -14,7 +14,7 @@ public interface MedicalRecordRepository extends JpaRepository<MedicalRecord, Lo
 
     Optional<MedicalRecord> findByPetUuid(UUID petUuid);
 
-    void deleteByUuid(UUID uuid);
+    void deleteByUuid(MedicalRecord medicalRecord);
 
     Optional<List<MedicalRecord>> findAllByPetUuid(UUID petUuid);
 }

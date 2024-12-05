@@ -9,6 +9,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 public interface MedicalRecordService {
 
+    @Transactional
+    void deleteMedicalRecord(UUID uuid);
     MedicalRecord createMedicalRecord(MedicalRecordDTO medicalRecordDTO);
 
     MedicalRecord saveMedicalRecord(MedicalRecord medicalRecord);

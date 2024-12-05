@@ -20,6 +20,9 @@ public interface PrescriptionRepository extends JpaRepository<Prescription, Long
     Optional<List<Prescription>> findByMedicalRecordUuid(UUID medicalRecordUuid);
 
 
+    // Find by pet uuid and active status of prescription
+    Optional<List<Prescription>> findByMedicalRecord_Pet_UuidAndActiveTrue(UUID petUuid);
+
     @Query("SELECT p FROM Prescription p WHERE p.medicalRecord.pet.uuid = :petUuid AND p.isActive = true")
     Optional<List<Prescription>> findByMedicalRecord_Pet_UuidAndIsActiveIsTrue(@Param("petUuid") UUID petUuid);
 

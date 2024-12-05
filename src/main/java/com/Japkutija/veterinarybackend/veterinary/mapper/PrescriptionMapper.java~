@@ -12,9 +12,11 @@ import java.util.List;
 public interface PrescriptionMapper {
 
     @Mapping(source = "medicalRecordUuid", target = "medicalRecord.uuid")
+    @Mapping(source = "prescribedByUuid", target = "prescribedBy.uuid")
     Prescription toPrescription(PrescriptionDTO prescriptionDTO);
 
     @Mapping(source = "medicalRecord.uuid", target = "medicalRecordUuid")
+    @Mapping(source = "prescribedBy.uuid", target = "prescribedByUuid")
     PrescriptionDTO toPrescriptionDTO(Prescription prescription);
 
     List<PrescriptionDTO> toPrescriptionDTOList(List<Prescription> prescriptions);
@@ -22,5 +24,6 @@ public interface PrescriptionMapper {
     List<Prescription> toPrescriptionList(List<PrescriptionDTO> prescriptionDTOs);
 
     @Mapping(source = "medicalRecordUuid", target = "medicalRecord.uuid")
+    @Mapping(source = "prescribedByUuid", target = "prescribedBy.uuid")
     void updatePrescriptionFromDTO(PrescriptionDTO prescriptionDTO, @MappingTarget Prescription prescription);
 }

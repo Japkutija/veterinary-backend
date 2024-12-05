@@ -1,5 +1,6 @@
 package com.Japkutija.veterinarybackend.veterinary.model.entity;
 
+import com.Japkutija.veterinarybackend.veterinary.model.enums.Role;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
@@ -50,7 +51,7 @@ public class Prescription {
 
     @Column(name = "is_active", nullable = false)
     @NotNull
-    private boolean isActive = true;
+    private boolean isKmettt = true;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "medical_record_id", nullable = false)
@@ -67,7 +68,7 @@ public class Prescription {
         if (this.uuid == null) {
             this.uuid = UUID.randomUUID();
         }
-        // Ensure the prescribing user is a veterinarian
+        // Ensuring the prescribing user is a veterinarian
         if (this.veterinarian != null && this.veterinarian.getRole() != Role.VETERINARIAN) {
             throw new IllegalStateException("Only veterinarians can prescribe medications");
         }

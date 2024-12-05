@@ -5,6 +5,7 @@ import com.Japkutija.veterinarybackend.veterinary.model.entity.Prescription;
 
 import java.util.List;
 import java.util.UUID;
+import org.springframework.transaction.annotation.Transactional;
 
 public interface PrescriptionService {
     
@@ -17,11 +18,10 @@ public interface PrescriptionService {
     Prescription getPrescriptionByUuid(UUID uuid);
     
     List<Prescription> getPrescriptionsByMedicalRecordUuid(UUID medicalRecordUuid);
-    
-    List<Prescription> getPrescriptionsByPetUuid(UUID petUuid);
-    
-    List<Prescription> getActivePrescriptions();
-    
+
+    @Transactional(readOnly = true)
+    List<Prescription> getActivePrescriptionsByPetUuid(UUID petUuid);
+
     void deletePrescription(UUID uuid);
     
     Prescription deactivatePrescription(UUID uuid);
