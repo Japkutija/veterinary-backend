@@ -22,5 +22,5 @@ public interface PrescriptionMapper {
     List<Prescription> toPrescriptionList(List<PrescriptionDTO> prescriptionDTOs);
 
     @Mapping(source = "medicalRecordUuid", target = "medicalRecord.uuid")
-    void updatePrescriptionFromDTO(PrescriptionDTO prescriptionDTO, @MappingTarget Prescription prescription);
+    Prescription updatePrescriptionFromDTO(PrescriptionDTO prescriptionDTO, @MappingTarget Prescription prescription);
 }
