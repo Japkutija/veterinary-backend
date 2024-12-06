@@ -37,7 +37,6 @@ public class MedicalRecordServiceImpl implements MedicalRecordService {
 
         var pet = petRepository.findByUuid(medicalRecordDTO.getPetUuid())
                 .orElseThrow(() -> new EntityNotFoundException("Pet not found with UUID: " + medicalRecordDTO.getPetUuid()));
-        medicalRecord.setPet(pet);
 
         var veterinarian = userRepository.findByUuid(medicalRecordDTO.getVeterinarianUuid())
                 .orElseThrow(() -> new EntityNotFoundException("Veterinarian not found with UUID: " + medicalRecordDTO.getVeterinarianUuid()));
@@ -47,6 +46,7 @@ public class MedicalRecordServiceImpl implements MedicalRecordService {
         }
         medicalRecord.setVeterinarian(veterinarian);
         medicalRecord.setUuid(UUID.randomUUID());
+        medicalRecord.setPet(pet);
 
         return applicationContext.getBean(MedicalRecordService.class).saveMedicalRecord(medicalRecord);
     }
@@ -89,11 +89,8 @@ public class MedicalRecordServiceImpl implements MedicalRecordService {
         var existingRecord = medicalRecordRepository.findByUuid(uuid)
                 .orElseThrow(() -> new EntityNotFoundException("Medical record not found with UUID: " + uuid));
 
-        var user = userRepository.findByUuid(medicalRecordDTO.getVeterinarianUuid())
-                .orElseThrow(() -> new EntityNotFoundException("Veterinarian not found with UUID: " + medicalRecordDTO.getVeterinarianUuid()));
-
-        if (user.getRole() != Role.VETERINARIAN) {
-            throw new IllegalStateException("Only veterinarians can be assigned to medical records");
+        if(existingRecord.getVeterinarian().getRole() != Role.VETERINARIAN) {
+            throw new IllegalStateException("Only veterinarians can update medical records");
         }
         var updatedRecord = medicalRecordMapper.updateMedicalRecordFromDTO(medicalRecordDTO, existingRecord);
         return applicationContext.getBean(MedicalRecordService.class).saveMedicalRecord(updatedRecord);
