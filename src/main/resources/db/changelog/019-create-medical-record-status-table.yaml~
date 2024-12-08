@@ -1,0 +1,46 @@
+databaseChangeLog:
+  - changeSet:
+      id: 019-create-medical-record-status-table
+      author: Japkutija
+      changes:
+        - createTable:
+            tableName: medical_record_status
+            columns:
+              - column:
+                  name: status_id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: name
+                  type: varchar(50)
+                  constraints:
+                    nullable: false
+                    unique: true
+        # Insert the enum values
+        - insert:
+            tableName: medical_record_status
+            columns:
+              - column:
+                  name: name
+                  value: OPEN
+        - insert:
+            tableName: medical_record_status
+            columns:
+              - column:
+                  name: name
+                  value: IN_PROGRESS
+        - insert:
+            tableName: medical_record_status
+            columns:
+              - column:
+                  name: name
+                  value: COMPLETED
+        - insert:
+            tableName: medical_record_status
+            columns:
+              - column:
+                  name: name
+                  value: CLOSED

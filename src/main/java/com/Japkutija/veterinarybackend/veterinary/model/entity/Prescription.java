@@ -46,6 +46,7 @@ public class Prescription {
     @NotNull
     private LocalDate endDate;
 
+
     @Column(name = "instructions", columnDefinition = "TEXT")
     private String instructions;
 

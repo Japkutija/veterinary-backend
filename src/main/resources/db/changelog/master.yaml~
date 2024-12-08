@@ -36,8 +36,6 @@ databaseChangeLog:
   - include:
       file: classpath:db/changelog/018-add-unique-constraints.yaml
   - include:
-      file: classpath:db/changelog/019-create-medical-record-status-table.yaml
-  - include:
       file: classpath:db/changelog/020-update-medical-record-table.yaml
   - include:
       file: classpath:db/changelog/021-create-prescription-table.yaml

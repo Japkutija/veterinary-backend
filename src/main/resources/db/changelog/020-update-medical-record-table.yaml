@@ -1,0 +1,36 @@
+databaseChangeLog:
+  - changeSet:
+      id: 020-update-medical-record-table
+      author: Japkutija
+      changes:
+        - addColumn:
+            tableName: medical_record
+            columns:
+              - column:
+                  name: status_id
+                  type: bigint
+                  constraints:
+                    nullable: true
+                    foreignKeyName: fk_medical_record_status
+                    references: medical_record_status(id)
+              - column:
+                  name: diagnosis
+                  type: text
+              - column:
+                  name: notes
+                  type: text
+              - column:
+                  name: lab_results
+                  type: text
+              - column:
+                  name: veterinarian_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+                  defaultValue: "1"
+        - addForeignKeyConstraint:
+            baseTableName: medical_record
+            baseColumnNames: veterinarian_id
+            referencedTableName: user
+            referencedColumnNames: user_id
+            constraintName: fk_medical_record_veterinarian

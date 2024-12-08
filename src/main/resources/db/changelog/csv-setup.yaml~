@@ -55,5 +55,5 @@ databaseChangeLog:
         - loadData:
             file: classpath:db/data/prescription.csv
             separator: ","
-            tableName: prescription
             quotchar: '"'
+            tableName: prescription

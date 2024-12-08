@@ -1,0 +1,81 @@
+databaseChangeLog:
+  - changeSet:
+      id: 020-create-prescription-table
+      author: Japkutija
+      changes:
+        - createTable:
+            tableName: prescription
+            columns:
+              - column:
+                  name: prescription_id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: prescription_uuid
+                  type: uuid
+                  constraints:
+                    nullable: false
+                    unique: true
+              - column:
+                  name: medication
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: dosage
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: frequency
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: start_date
+                  type: date
+                  constraints:
+                    nullable: false
+              - column:
+                  name: end_date
+                  type: date
+                  constraints:
+                    nullable: false
+              - column:
+                  name: instructions
+                  type: varchar(255)
+                  constraints:
+                    nullable: true
+              - column:
+                  name: is_active
+                  type: boolean
+                  defaultValue: true
+                  constraints:
+                    nullable: false
+              - column:
+                  name: medical_record_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+              - column:
+                  name: veterinarian_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+        - addForeignKeyConstraint:
+            baseColumnNames: medical_record_id
+            baseTableName: prescription
+            constraintName: fk_prescription_medical_record
+            referencedColumnNames: medical_record_id
+            referencedTableName: medical_record
+            onDelete: CASCADE
+        - addForeignKeyConstraint:
+            baseColumnNames: veterinarian_id
+            baseTableName: prescription
+            constraintName: fk_prescription_veterinarian
+            referencedColumnNames: user_id
+            referencedTableName: user
+            onDelete: NO ACTION

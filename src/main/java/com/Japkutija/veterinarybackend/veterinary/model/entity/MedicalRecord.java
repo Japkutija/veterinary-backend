@@ -56,10 +56,16 @@ public class MedicalRecord {
     private User veterinarian;
 
     @Enumerated(EnumType.STRING)
+    @JoinColumn(name = "status_id")
     private MedicalRecordStatus status;
 
+    @Column(name = "lab_results")
     private String labResults;
+
+    @Column(name = "diagnosis")
     private String diagnosis;
+
+    @Column(name = "notes")
     private String notes;
 
 

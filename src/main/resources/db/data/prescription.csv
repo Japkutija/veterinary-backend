@@ -1,0 +1,2 @@
+prescription_id,prescription_uuid,medication,dosage,frequency,start_date,end_date,instructions,is_active,medical_record_id,veterinarian_id
+1,550e8400-e29b-41d4-a716-446655440000,Amoxicillin,500mg,Daily,2024-01-01,2024-01-07,"Take_with_food",true,1,1

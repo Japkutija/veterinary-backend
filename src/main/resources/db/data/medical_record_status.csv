@@ -1,0 +1,5 @@
+medical_record_id,status
+1,OPEN
+2,IN_PROGRESS
+3,COMPLETED
+4,CLOSED
