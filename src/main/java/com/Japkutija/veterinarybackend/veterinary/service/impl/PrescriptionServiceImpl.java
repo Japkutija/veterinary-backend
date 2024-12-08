@@ -47,6 +47,7 @@ public class PrescriptionServiceImpl implements PrescriptionService {
             throw new IllegalStateException("Only veterinarians can create prescriptions");
         }
         prescription.setVeterinarian(veterinarian);
+        prescription.setActive(true);
         prescription.setUuid(UUID.randomUUID());
 
         return savePrescription(prescription);
@@ -67,7 +68,6 @@ public class PrescriptionServiceImpl implements PrescriptionService {
     @Transactional
     public Prescription updatePrescription(PrescriptionDTO prescriptionDTO, UUID uuid) {
         var existingPrescription = prescriptionRepository.findByUuid(uuid)
-
                 .orElseThrow(() -> new EntityNotFoundException(MESSAGE_ENTITY_NOT_FOUND + uuid));
 
         if (prescriptionDTO.getVeterinarianUuid() == null) {

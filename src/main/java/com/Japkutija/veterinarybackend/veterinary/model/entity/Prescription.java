@@ -1,6 +1,9 @@
 package com.Japkutija.veterinarybackend.veterinary.model.entity;
 
 import com.Japkutija.veterinarybackend.veterinary.model.enums.Role;
+import com.Japkutija.veterinarybackend.veterinary.validation.DateRange;
+import com.Japkutija.veterinarybackend.veterinary.validation.DosageFormat;
+import com.Japkutija.veterinarybackend.veterinary.validation.FrequencyFormat;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
@@ -13,6 +16,7 @@ import java.util.UUID;
 @Entity
 @Table(name = "prescription")
 @Data
+@DateRange(message = "End date must be after start date")
 public class Prescription {
 
     @Id
@@ -32,10 +36,12 @@ public class Prescription {
 
     @Column(name = "dosage", nullable = false, length = 255)
     @NotNull
+    @DosageFormat
     private String dosage;
 
     @Column(name = "frequency", nullable = false, length = 255)
     @NotNull
+    @FrequencyFormat
     private String frequency;
 
     @Column(name = "start_date", nullable = false)
@@ -46,8 +52,8 @@ public class Prescription {
     @NotNull
     private LocalDate endDate;
 
-
     @Column(name = "instructions", columnDefinition = "TEXT")
+    @NotNull
     private String instructions;
 
     @Column(name = "is_active", nullable = false)

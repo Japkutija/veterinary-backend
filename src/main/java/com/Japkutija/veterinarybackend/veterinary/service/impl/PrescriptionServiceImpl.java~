@@ -11,6 +11,7 @@ import com.Japkutija.veterinarybackend.veterinary.repository.PrescriptionReposit
 import com.Japkutija.veterinarybackend.veterinary.repository.UserRepository;
 import com.Japkutija.veterinarybackend.veterinary.service.PrescriptionService;
 import jakarta.validation.Valid;
+import jakarta.validation.Validator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -28,6 +29,7 @@ public class PrescriptionServiceImpl implements PrescriptionService {
     private final PrescriptionMapper prescriptionMapper;
     private final MedicalRecordRepository medicalRecordRepository;
     private final UserRepository userRepository;
+    private final Validator validator;
 
     private static final String MESSAGE_ENTITY_NOT_FOUND = "Prescription not found with UUID: ";
 
@@ -35,6 +37,8 @@ public class PrescriptionServiceImpl implements PrescriptionService {
     @Transactional
     public Prescription createPrescription(@Valid PrescriptionDTO prescriptionDTO) {
         var prescription = prescriptionMapper.toPrescription(prescriptionDTO);
+
+        validator.validate(prescription, ValidationGroups.Final.class);
 
         var medicalRecord = medicalRecordRepository.findByUuid(prescriptionDTO.getMedicalRecordUuid())
                 .orElseThrow(() -> new EntityNotFoundException("Medical record not found with UUID: " + prescriptionDTO.getMedicalRecordUuid()));
@@ -47,6 +51,7 @@ public class PrescriptionServiceImpl implements PrescriptionService {
             throw new IllegalStateException("Only veterinarians can create prescriptions");
         }
         prescription.setVeterinarian(veterinarian);
+        prescription.setActive(true);
         prescription.setUuid(UUID.randomUUID());
 
         return savePrescription(prescription);
@@ -67,8 +72,9 @@ public class PrescriptionServiceImpl implements PrescriptionService {
     @Transactional
     public Prescription updatePrescription(PrescriptionDTO prescriptionDTO, UUID uuid) {
         var existingPrescription = prescriptionRepository.findByUuid(uuid)
-
                 .orElseThrow(() -> new EntityNotFoundException(MESSAGE_ENTITY_NOT_FOUND + uuid));
+
+        validator.validate(existingPrescription, ValidationGroups.Review.class);
 
         if (prescriptionDTO.getVeterinarianUuid() == null) {
             prescriptionMapper.updatePrescriptionFromDTO(prescriptionDTO, existingPrescription);
@@ -118,7 +124,7 @@ public class PrescriptionServiceImpl implements PrescriptionService {
     @Transactional(readOnly = true)
     @Override
     public List<Prescription> getActivePrescriptionsByPetUuid(UUID petUuid) {
-        return prescriptionRepository.findByMedicalRecord_Pet_UuidAndActiveTrue(petUuid)
+        return prescriptionRepository.findByMedicalRecord_Pet_UuidAndIsActiveIsTrue(petUuid)
                 .orElse(List.of());
     }
 
