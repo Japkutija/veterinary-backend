@@ -43,3 +43,5 @@ databaseChangeLog:
       file: classpath:db/changelog/021-create-prescription-table.yaml
   - include:
       file: classpath:db/changelog/csv-setup.yaml
+  - include:
+      file: classpath:db/changelog/022-create-and-insert-appointment-type-table.yaml

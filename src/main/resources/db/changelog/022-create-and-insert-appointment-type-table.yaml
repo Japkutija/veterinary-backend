@@ -1,0 +1,78 @@
+databaseChangeLog:
+  - changeSet:
+      id: 022-create-and-insert-appointment-type-table
+      author: Japkutija
+      changes:
+        - createTable:
+            tableName: appointment_type
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: name
+                  type: varchar(50)
+                  constraints:
+                    nullable: false
+                    unique: true
+              - column:
+                  name: default_duration
+                  type: int
+                  constraints:
+                    nullable: false
+
+  - changeSet:
+      id: 022-insert-appointment-types
+      author: Japkutija
+      changes:
+        - insert:
+            tableName: appointment_type
+            columns:
+              - column:
+                  name: name
+                  value: GENERAL_CHECKUP
+              - column:
+                  name: default_duration
+                  valueNumeric: "30"
+        - insert:
+            tableName: appointment_type
+            columns:
+              - column:
+                  name: name
+                  value: VACCINATION
+              - column:
+                  name: default_duration
+                  value: "15"
+        - insert:
+            tableName: appointment_type
+            columns:
+              - column:
+                  name: name
+                  value: COMPLEX_EXAMINATION
+              - column:
+                  name: default_duration
+                  value: "45"
+
+  - changeSet:
+      id: 022-add-appointment-type-column-to-appointment
+      author: Japkutija
+      changes:
+        - addColumn:
+            tableName: appointment
+            columns:
+              - column:
+                  name: appointment_type_id
+                  type: bigint
+
+        - addForeignKeyConstraint:
+            baseTableName: appointment
+            baseColumnNames: appointment_type_id
+            referencedTableName: appointment_type
+            referencedColumnNames: id
+            constraintName: fk_appointment_appointment_type
+            onDelete: CASCADE
+            onUpdate: CASCADE

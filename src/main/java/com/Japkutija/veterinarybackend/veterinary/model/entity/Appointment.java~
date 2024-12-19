@@ -1,7 +1,6 @@
 package com.Japkutija.veterinarybackend.veterinary.model.entity;
 
 import com.Japkutija.veterinarybackend.veterinary.model.enums.AppointmentStatus;
-import com.Japkutija.veterinarybackend.veterinary.model.enums.AppointmentType;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
@@ -35,11 +34,6 @@ public class Appointment {
     @Column(name = "appointment_time", nullable = false)
     @NotNull
     private Instant appointmentTime;
-
-    @Enumerated(EnumType.STRING)
-    @Column(name = "appointment_type", nullable = false)
-    @NotNull
-    private AppointmentType appointmentType;
 
 
     @Column(name = "reason", nullable = false, length = 255)
