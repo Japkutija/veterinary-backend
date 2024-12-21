@@ -1,6 +1,8 @@
 package com.Japkutija.veterinarybackend.veterinary.repository;
 
 import com.Japkutija.veterinarybackend.veterinary.model.entity.Appointment;
+import java.time.Instant;
+import java.time.LocalDate;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -15,4 +17,6 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Long> 
     List<Appointment> findByOwnerUuid(UUID ownerUuid);
 
     List<Appointment> findByPetUuid(UUID petUuid);
+
+    Optional<List<Appointment>> findByAppointmentDate(LocalDate appointmentDate);
 }

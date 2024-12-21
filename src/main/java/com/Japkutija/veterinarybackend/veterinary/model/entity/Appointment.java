@@ -4,7 +4,10 @@ import com.Japkutija.veterinarybackend.veterinary.model.enums.AppointmentStatus;
 import com.Japkutija.veterinarybackend.veterinary.model.enums.AppointmentType;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
@@ -15,6 +18,9 @@ import java.util.UUID;
 @Data
 @Entity
 @Table(name = "appointment")
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class Appointment {
 
     @Id
@@ -35,6 +41,10 @@ public class Appointment {
     @Column(name = "appointment_time", nullable = false)
     @NotNull
     private Instant appointmentTime;
+
+    @Column(name = "duration", nullable = false)
+    @NotNull
+    private int duration;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "appointment_type", nullable = false)

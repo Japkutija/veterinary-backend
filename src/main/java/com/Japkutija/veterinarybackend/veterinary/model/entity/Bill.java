@@ -3,7 +3,10 @@ package com.Japkutija.veterinarybackend.veterinary.model.entity;
 import com.Japkutija.veterinarybackend.veterinary.model.enums.BillStatus;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
@@ -14,6 +17,9 @@ import java.util.UUID;
 @Entity
 @Table(name = "bill")
 @Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class Bill {
 
     @Id

@@ -1,10 +1,15 @@
 package com.Japkutija.veterinarybackend.veterinary.model.dto;
 
 import com.Japkutija.veterinarybackend.veterinary.model.enums.AppointmentStatus;
+import com.Japkutija.veterinarybackend.veterinary.model.enums.AppointmentType;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
+import java.time.LocalDate;
+import lombok.Builder;
 import lombok.Data;
 
 import java.time.Instant;
@@ -12,6 +17,7 @@ import java.util.Date;
 import java.util.UUID;
 
 @Data
+@Builder
 public class AppointmentDTO {
 
     @NotNull(message = "UUID is required")
@@ -19,7 +25,7 @@ public class AppointmentDTO {
 
     @NotNull(message = "Appointment date is required")
     @FutureOrPresent(message = "Appointment date must be in the present or future")
-    private Date appointmentDate;
+    private LocalDate appointmentDate;
 
     @NotNull(message = "Appointment time is required")
     private Instant appointmentTime;
@@ -39,4 +45,11 @@ public class AppointmentDTO {
 
     @NotNull(message = "Bill UUID is required")
     private UUID billUuid;
+
+    @NotNull(message = "Duration is required")
+    private int duration;
+
+    @NotNull(message = "Appointment type is required")
+    @Enumerated(EnumType.STRING)
+    private AppointmentType appointmentType;
 }

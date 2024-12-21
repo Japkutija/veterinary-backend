@@ -5,10 +5,14 @@ import com.Japkutija.veterinarybackend.veterinary.model.entity.Appointment;
 
 import java.util.List;
 import java.util.UUID;
+import org.springframework.transaction.annotation.Transactional;
 
 public interface AppointmentService {
 
     Appointment createAppointment(AppointmentDTO appointmentDTO);
+
+    @Transactional
+    Appointment scheduleAppointment(AppointmentDTO appointmentDTO);
 
     Appointment getAppointmentByUuid(UUID uuid);
 
