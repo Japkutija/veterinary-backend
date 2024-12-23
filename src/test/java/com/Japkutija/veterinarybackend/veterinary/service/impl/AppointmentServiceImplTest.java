@@ -2,7 +2,9 @@ package com.Japkutija.veterinarybackend.veterinary.service.impl;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -13,12 +15,9 @@ import com.Japkutija.veterinarybackend.veterinary.model.entity.Owner;
 import com.Japkutija.veterinarybackend.veterinary.model.entity.Pet;
 import com.Japkutija.veterinarybackend.veterinary.model.enums.AppointmentStatus;
 import com.Japkutija.veterinarybackend.veterinary.model.enums.AppointmentType;
-import com.Japkutija.veterinarybackend.veterinary.model.enums.BillStatus;
 import com.Japkutija.veterinarybackend.veterinary.repository.AppointmentRepository;
 import com.Japkutija.veterinarybackend.veterinary.service.BillService;
 import com.Japkutija.veterinarybackend.veterinary.service.OwnerService;
-import com.Japkutija.veterinarybackend.veterinary.service.PetService;
-import java.math.BigDecimal;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
@@ -52,23 +51,16 @@ class AppointmentServiceImplTest {
 
     @Test
     @DisplayName("Successfully schedule appointment when time slot is available and all data is valid")
-    void test_schedule_appointment_success() {
+    void scheduleAppointmentSuccess() {
         // Arrange
         var appointmentDTO = AppointmentDTO.builder()
-            .appointmentDate(LocalDate.now().plusDays(1))
-            .appointmentTime(Instant.now().plus(1, ChronoUnit.DAYS))
-            .duration(30)
-            .petUuid(UUID.randomUUID())
-            .ownerUuid(UUID.randomUUID())
-            .appointmentType(AppointmentType.GENERAL_CHECKUP)
-            .reason("Regular checkup")
-            .build();
-
-        var bill = Bill.builder()
-                .uuid(UUID.randomUUID())
-                .totalAmount(BigDecimal.valueOf(30.00))
-                .status(BillStatus.PENDING)
-                .dateOfIssue(LocalDate.now())
+                .appointmentDate(LocalDate.now().plusDays(1))
+                .appointmentTime(Instant.now().plus(1, ChronoUnit.DAYS))
+                .duration(30)
+                .petUuid(UUID.randomUUID())
+                .ownerUuid(UUID.randomUUID())
+                .appointmentType(AppointmentType.GENERAL_CHECKUP)
+                .reason("Regular checkup")
                 .build();
 
         var mockPet = new Pet();
@@ -92,5 +84,36 @@ class AppointmentServiceImplTest {
         assertEquals(appointmentDTO.getAppointmentTime(), result.getAppointmentTime());
         verify(appointmentRepository).save(any(Appointment.class));
         verify(billService).saveBill(any(Bill.class));
+    }
+
+    @Test
+    @DisplayName("Throw exception when time slot is not available")
+    void scheduleAppointment_TimeSlotConflict_ThrowsAppointmentConflictException() {
+
+        var appointmentDate = LocalDate.now().plusDays(1);
+        var appointmentTime = Instant.now().plus(2, ChronoUnit.DAYS);
+
+        var appointmentDTO = AppointmentDTO.builder()
+                .appointmentDate(appointmentDate)
+                .appointmentTime(appointmentTime)
+                .duration(30)
+                .petUuid(UUID.randomUUID())
+                .ownerUuid(UUID.randomUUID())
+                .appointmentType(AppointmentType.GENERAL_CHECKUP)
+                .reason("Regular checkup")
+                .build();
+
+        var existingAppointment = Appointment.builder()
+                .uuid(UUID.randomUUID())
+                .appointmentDate(appointmentDate)
+                .appointmentTime(appointmentTime.minus(10, ChronoUnit.MINUTES))
+                .duration(30) // Overlaps
+                .build();
+
+        when(appointmentRepository.findByAppointmentDate(appointmentDate)).thenReturn(Optional.of(List.of(existingAppointment)));
+
+        assertThrows(AppointmentConflictException.class, () -> appointmentService.scheduleAppointment(appointmentDTO));
+        verify(appointmentRepository, never()).save(any(Appointment.class));
+        verify(billService, never()).saveBill(any(Bill.class));
     }
 }

@@ -12,6 +12,8 @@ import com.Japkutija.veterinarybackend.veterinary.model.enums.BillStatus;
 import com.Japkutija.veterinarybackend.veterinary.repository.AppointmentRepository;
 import com.Japkutija.veterinarybackend.veterinary.service.AppointmentService;
 import com.Japkutija.veterinarybackend.veterinary.service.BillService;
+import com.Japkutija.veterinarybackend.veterinary.service.OwnerService;
+import com.Japkutija.veterinarybackend.veterinary.service.PetService;
 import java.math.BigDecimal;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
@@ -32,8 +34,8 @@ public class AppointmentServiceImpl implements AppointmentService {
 
     private final AppointmentRepository appointmentRepository;
     private final AppointmentMapper appointmentMapper;
-    private final PetServiceImpl petService;
-    private final OwnerServiceImpl ownerService;
+    private final PetService petService;
+    private final OwnerService ownerService;
     private final BillService billService;
 
     @Override
@@ -90,7 +92,7 @@ public class AppointmentServiceImpl implements AppointmentService {
         };
     }
 
-    private boolean isTimeSlotAvailable(LocalDate appointmentDate, Instant appointmentTime, int duration) {
+    public boolean isTimeSlotAvailable(LocalDate appointmentDate, Instant appointmentTime, int duration) {
         // Calculate the end time of the appointment
         var endTime = appointmentTime.plus(Duration.ofMinutes(duration));
 
