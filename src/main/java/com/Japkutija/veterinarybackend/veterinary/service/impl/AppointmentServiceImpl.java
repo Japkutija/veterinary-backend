@@ -42,6 +42,7 @@ public class AppointmentServiceImpl implements AppointmentService {
     @Transactional
     public Appointment createAppointment(AppointmentDTO appointmentDTO) {
         var appointment = appointmentMapper.toAppointment(appointmentDTO);
+        appointment.setDuration(appointmentDTO.getAppointmentType().getDefaultDuration());
         return appointmentRepository.save(appointment);
     }
 
@@ -49,7 +50,8 @@ public class AppointmentServiceImpl implements AppointmentService {
     @Override
     public Appointment scheduleAppointment(AppointmentDTO appointmentDTO) {
         // Check for time slot conflicts
-        if (!isTimeSlotAvailable(appointmentDTO.getAppointmentDate(), appointmentDTO.getAppointmentTime(), appointmentDTO.getDuration())) {
+        if (!isTimeSlotAvailable(appointmentDTO.getAppointmentDate(), appointmentDTO.getAppointmentTime(), appointmentDTO.getAppointmentType()
+                .getDefaultDuration())) {
             throw new AppointmentConflictException("Appointment time slot is not available");
         }
 
@@ -61,7 +63,7 @@ public class AppointmentServiceImpl implements AppointmentService {
                 .uuid(UUID.randomUUID())
                 .appointmentDate(appointmentDTO.getAppointmentDate())
                 .appointmentTime(appointmentDTO.getAppointmentTime())
-                .duration(appointmentDTO.getDuration())
+                .duration(appointmentDTO.getAppointmentType().getDefaultDuration())
                 .appointmentType(appointmentDTO.getAppointmentType())
                 .reason(appointmentDTO.getReason())
                 .status(AppointmentStatus.SCHEDULED)

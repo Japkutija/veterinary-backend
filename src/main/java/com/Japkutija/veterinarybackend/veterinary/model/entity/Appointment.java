@@ -2,6 +2,7 @@ package com.Japkutija.veterinarybackend.veterinary.model.entity;
 
 import com.Japkutija.veterinarybackend.veterinary.model.enums.AppointmentStatus;
 import com.Japkutija.veterinarybackend.veterinary.model.enums.AppointmentType;
+import com.Japkutija.veterinarybackend.veterinary.model.enums.converter.AppointmentTypeConverter;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -46,8 +47,9 @@ public class Appointment {
     @NotNull
     private int duration;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "appointment_type", nullable = false)
+    //@Enumerated(EnumType.STRING)
+    @Convert(converter = AppointmentTypeConverter.class)
+    @Column(name = "appointment_type_id", nullable = false)
     @NotNull
     private AppointmentType appointmentType;
 
@@ -60,7 +62,6 @@ public class Appointment {
     @Column(name = "status", nullable = false, length = 50)
     @NotNull
     private AppointmentStatus status;
-
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "pet_id", nullable = false)

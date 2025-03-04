@@ -54,3 +54,9 @@ databaseChangeLog:
                   type: bigint
                   constraints:
                     nullable: false
+              - column:
+                  name: duration
+                  type: integer
+                  defaultValueNumeric: 30
+                  constraints:
+                    nullable: false

@@ -46,9 +46,6 @@ public class AppointmentDTO {
     @NotNull(message = "Bill UUID is required")
     private UUID billUuid;
 
-    @NotNull(message = "Duration is required")
-    private int duration;
-
     @NotNull(message = "Appointment type is required")
     @Enumerated(EnumType.STRING)
     private AppointmentType appointmentType;

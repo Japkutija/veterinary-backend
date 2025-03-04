@@ -2,12 +2,12 @@ package com.Japkutija.veterinarybackend.veterinary.model.entity;
 
 import com.Japkutija.veterinarybackend.veterinary.model.enums.MedicalRecordStatus;
 import com.Japkutija.veterinarybackend.veterinary.model.enums.Role;
+import com.Japkutija.veterinarybackend.veterinary.model.enums.converter.MedicalRecordStatusConverter;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
-import org.w3c.dom.Text;
 
 import java.util.Date;
 import java.util.UUID;
@@ -55,8 +55,8 @@ public class MedicalRecord {
     @NotNull
     private User veterinarian;
 
-    @Enumerated(EnumType.STRING)
-    @JoinColumn(name = "status_id")
+    @Convert(converter = MedicalRecordStatusConverter.class)
+    @Column(name = "status_id")
     private MedicalRecordStatus status;
 
     @Column(name = "lab_results")
